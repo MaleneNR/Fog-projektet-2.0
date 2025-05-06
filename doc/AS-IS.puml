@@ -1,0 +1,59 @@
+@startuml
+' https://plantuml.com/activity-diagram-beta
+
+|Customer|
+start
+:Create request;
+
+|Carportsite|
+|Salesman|
+|Mailsystem|
+:Created request]
+
+|Salesman|
+:Contact customer and accept request;
+
+|Customer|
+:Accepted request;
+
+if (Offer?) then (Yes)
+  |Salesman|
+  :Make offer;
+
+  |Calculating-system|
+  :Calculate material and price;
+
+  |Mailsystem|
+  :Send offer]
+else (No)
+  |Mailsystem|
+  :Denied offer;
+
+  |Salesman|
+  :Ask why / make new offer;
+endif
+
+' Shared customer decision point
+|Customer|
+:Get offer]
+
+if (Accept offer? With craftsmen?) then (Yes)
+  |Carportsite|
+  :Payment]
+
+  |Material-system|
+  :Make list for materials;
+
+  |Warehouse/craftsmen|
+  :If wanted, order craftsmen;
+
+  |Mailsystem|
+  :Send order details + material list;
+else (No)
+  :Declined offer;
+endif
+
+|Customer|
+stop
+
+@enduml

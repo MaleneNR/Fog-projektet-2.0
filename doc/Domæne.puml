@@ -1,0 +1,55 @@
+@startuml
+!pragma layout smetana
+
+hide circle
+hide method
+
+class Carportsite
+
+class Salesman{
+email
+password
+}
+class Admin{
+email
+password
+}
+class StandardCarport
+class SpecielDesignedCarport{
+length
+width
+height
+}
+
+class Customer{
+email
+password
+}
+class OrderDetails{
+quantity
+}
+class Basket
+
+class Order{
+length
+width
+height
+}
+class Material{
+price
+}
+
+
+
+
+Carportsite "1" -- "1" Admin
+Carportsite "1" -- "*" Salesman
+Carportsite "1" -- "*" StandardCarport
+Carportsite "1" -- "1" SpecielDesignedCarport
+StandardCarport "*" -- "1" Basket
+StandardCarport "1" -- "1" OrderDetails
+SpecielDesignedCarport "1" -- "1" OrderDetails
+Order "1" -- "*" OrderDetails
+Order "*" -- "1" Customer
+Material "*" -- "*" OrderDetails
+@enduml

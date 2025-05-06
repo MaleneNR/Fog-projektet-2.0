@@ -1,0 +1,50 @@
+@startuml
+'https://plantuml.com/activity-diagram-beta
+
+|Customer|
+start
+:Create request;
+|Carportsite|
+|Salesman|
+|Carportsite|
+:<<Document>> Created request;
+|Salesman|
+:Contact customer and accept request;
+|Customer|
+:<<Document>> Confirming request;
+
+if (Offer) then (Yes)
+    |Salesman|
+    :Make offer;
+    |Carportsite|
+    :Calculate material, price and craftsmen included;
+    |Mailsystem|
+    :Send offer;
+    |Carportsite|
+    :Show offer;
+    |Customer|
+    if (Accept offer?) then (yes)
+        |Carportsite|
+        :Payment]
+        :Send list of materials/order craftsmen;
+    else (no)
+        |Salesman|
+        :"Why?"/make new offer;
+        |Customer|
+        if (Accept new offer?) then (yes)
+            |Carportsite|
+            :Payment]
+            :Send list of materials/order craftsmen;
+        else (no)
+
+        endif
+    endif
+else (no)
+
+endif
+
+|Customer|
+stop
+
+@enduml
+
