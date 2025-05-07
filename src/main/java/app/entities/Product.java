@@ -5,6 +5,12 @@ public class Product {
     private int length;
     private int materialId;
 
+    public Product(int productId, int length, int materialId) {
+        this.productId = productId;
+        this.length = length;
+        this.materialId = materialId;
+    }
+
     public int getProductId() {
         return productId;
     }
