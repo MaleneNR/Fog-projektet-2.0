@@ -12,29 +12,19 @@ public class OrderController {
     }
 
     private static void makeRequest(Context ctx, ConnectionPool connectionPool){
+        //funktionen skal kunne, så en bruger ud fra egne valg af mål der bliver givet i dropdownmenuerne og derfra kunne gå videre og ligge en forespørgsel
+        //det som kunden vælger i menuerne bliver til en ordre og session som bliver tilkoblet på deres user_id når de logger ind
 
-        int length = Integer.parseInt(ctx.formParam("length"));
-        int width = Integer.parseInt(ctx.formParam("width"));
-        int height = Integer.parseInt(ctx.formParam("height"));
+        //funktionen skal tage en ctx og connection pool, så der er adgang til db og så der kan komunikeres med html ind og ud
 
+        //funktionen skal gemme de valgte oplysninger via session
 
+        //den skal i sidste ende retunere en ordre hvorpå alle oplysninger er gemt  evt gemmes i OrderMapper.addRequest()
 
-
-
-
-
-
+        //routes til loginEllerOpretBruger.html
 
 
-        //som kunde kan jeg ud fra dropdown menuer vælge bestemte mål på carport
-        //det som kunden indtaser bliver til session atributter der bliver henteet ind i controlleren og gemmes på brugeren når der er logget ind
-        //gemmes i en ordre
-
-        Order currentOrder = ctx.sessionAttribute("currentOrder");
-        OrderMapper.addRequest(currentOrder, connectionPool);
-        User currrentUser = ctx.sessionAttribute("currentUser");
-
-        /*
+          /*
           Basket currentBasket = ctx.sessionAttribute("currentBasket");
         OrderMapper.addOrder(currentBasket, connectionPool);
         User currentUser = ctx.sessionAttribute("currentUser");
@@ -42,6 +32,41 @@ public class OrderController {
             currentUser.setBalance(currentUser.getBalance() - (cupcake.getPrice() * cupcake.getQuantity()));
         }
          */
+
+
+
+       /* int length = Integer.parseInt(ctx.formParam("length"));
+        int width = Integer.parseInt(ctx.formParam("width"));
+        int height = Integer.parseInt(ctx.formParam("height"));
+
+
+        Order currentOrder = ctx.sessionAttribute("currentOrder");
+        OrderMapper.addRequest(currentOrder, connectionPool);
+        User currrentUser = ctx.sessionAttribute("currentUser");
+
+*/
+        int length = Integer.parseInt(ctx.formParam("length"));
+        int width = Integer.parseInt(ctx.formParam("width"));
+        int height = Integer.parseInt(ctx.formParam("height"));
+
+        Order currentOrder = ctx.sessionAttribute("currentOrder");
+        User currentUser = ctx.sessionAttribute("currentUser");
+
+// Sæt mål på ordren (så de kommer med ned i databasen)
+        currentOrder.setLength(length);
+        currentOrder.setWidth(width);
+        currentOrder.setHeight(height);
+
+// Sæt brugeren på ordren
+        currentOrder.setUser(currentUser);
+
+// Gem ordren i databasen
+        OrderMapper.addRequest(currentOrder, connectionPool);
+
+// Evt. redirect eller vis bekræftelse
+        ctx.render("ordreBekræftelse.html");
+
+
 
     }
 }

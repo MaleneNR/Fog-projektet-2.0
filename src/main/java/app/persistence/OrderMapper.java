@@ -31,9 +31,9 @@ public class OrderMapper {
                 boolean payed = rs.getBoolean("payed");
                 LocalDate date = rs.getDate("date").toLocalDate();
                 User user = UserMapper.getUserById(rs.getInt("user_id"), connectionPool);
-                int l = rs.getInt("length");
+                int l = rs.getInt("carport_length");
                 int h = rs.getInt("height");
-                int w = rs.getInt("width");
+                int w = rs.getInt("carport_width");
 
                 orders.add(new Order(orderId,status,price,payed,date,user,l,h,w));
             }
@@ -95,7 +95,41 @@ return false;
             }
             return order;
         }
+
+
+
+
+        //TODO evt lave en update funktion så man kan opdaterer ordre som admin
+
+    public static boolean updateOrder(int orderId, int newPrice, String newStatus, ConnectionPool connectionPool) throws DatabaseException {
+
+        String sql = "UPDATE orders SET order_price = ?, order_status = ? WHERE order_id = ?";
+
+        try (
+                Connection connection = connectionPool.getConnection();
+                PreparedStatement ps = connection.prepareStatement(sql)
+        ) {
+            ps.setInt(1, newPrice);
+            ps.setString(2, newStatus);
+            ps.setInt(3, orderId);
+
+            int rows = ps.executeUpdate();
+            return rows > 0;
+
+        } catch (SQLException e) {
+            throw new DatabaseException("Fejl i opdatering af ordre i updateOrder()", e.getMessage());
+        }
     }
+
+
+
+}
+
+
+
+
+
+
 
 
 

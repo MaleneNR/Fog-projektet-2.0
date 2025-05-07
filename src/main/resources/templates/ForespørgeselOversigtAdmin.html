@@ -22,10 +22,16 @@
         <div class="order-info">
             <tr th:each="order : ${orderList}">
                 <td th:text="${order.orderid}"></td>
+
+                <td><form method="post" action="/seForesporgsel">
+                    <input type="hidden" name="orderid" th:value="${order.orderid}">
+                    <button class="order-action" type="submit" formaction="/seForesporgsel">Se forespørgsel</button>
+                </form></td>
+
+
+
         </div>
-        <div class="order-action">
-            <button>Se forespørgsel</button>
-        </div>
+
     </div>
 
     <div class="order-row">

@@ -94,7 +94,7 @@ body {
     flex: 1;
 }
 
-/****** Carport page styling ******/
+/****** index ******/
 
 .content {
     display: flex;
@@ -208,7 +208,7 @@ body {
     }
 }
 
-/****** Designer page (Dropdown og videre knap) ******/
+/****** CustomMadeSite (Dropdown og videre knap) ******/
 
 .nav-steps {
     background-color: #16325c;
@@ -481,7 +481,7 @@ body {
     }
 }
 
-/****** Afejl side  ******/
+/****** fejl side  ******/
 
 
 
@@ -679,13 +679,12 @@ body {
 
 
 
-/****** Login/Opret bruger vælger side ******/
+/****** Login/Opret bruger  ******/
 
-/****** Login/Opret bruger vælger præcist som billedet ******/
+
 
 .login-choice-container {
     background-color: #e5e5e5;
-    min-height: calc(100vh - 60px);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -697,17 +696,19 @@ body {
     padding: 100px 60px;
     text-align: center;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    border-radius: 4px;
+    border-radius: 6px;
     width: 400px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px; /* <-- mellemrum mellem knapperne */
 }
 
-.login-box {
-    display: block;
-    margin-bottom: 30px;
-}
 
 .login-box button {
     background-color: #16325c;
+
     color: white;
     border: none;
     padding: 12px 40px;
@@ -715,6 +716,7 @@ body {
     cursor: pointer;
     border-radius: 0;
     width: 200px;
+
 }
 
 .login-box button:hover {

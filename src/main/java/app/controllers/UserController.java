@@ -27,6 +27,7 @@ public class UserController {
         app.get("Login", ctx -> ctx.render("Login.html"));
         app.post("/createUser", ctx -> createUser(ctx, connectionPool));
         app.get("/Customsite", ctx -> ctx.render("CustomMadeSite.html"));
+        app.post("/seForesporgsel", ctx -> ctx.render("StatusSide.html"));
 
 
     }
