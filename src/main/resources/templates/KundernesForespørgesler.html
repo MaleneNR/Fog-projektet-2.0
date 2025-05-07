@@ -1,10 +1,34 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="da">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Din forespørgsel</title>
+    <link href="../public/css/css.css" th:href="@{/css/css.css}" rel="stylesheet"/>
 </head>
 <body>
+
+<div class="header">
+    <img src="../../../../target/Fog.jpeg" height="70" width="70"/>
+    <div class="search-bar">
+        <input type="text" placeholder="Søg på produkter eller kategorier">
+    </div>
+    <div class="konto">Fog Konto</div>
+</div>
+
+<div class="request-status-container">
+    <div class="request-header">
+        <h2>Din forespørgsel</h2>
+        <div class="status">
+            <span>Status:</span>
+            <span class="status-value">Under behandling</span>
+        </div>
+    </div>
+
+    <div class="request-body">
+        <!-- Her kan der evt. komme yderligere information -->
+    </div>
+</div>
 
 </body>
 </html>

@@ -1,10 +1,64 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="da">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tilbud - Rediger pris</title>
+    <link href="../public/css/css.css" th:href="@{/css/css.css}" rel="stylesheet"/>
 </head>
 <body>
+
+<div class="header">
+    <img src="../../../../target/Fog.jpeg" height="70" width="70"/>
+    <div class="search-bar">
+        <input type="text" placeholder="Søg på produkter eller kategorier">
+    </div>
+    <div class="konto">Fog Konto</div>
+</div>
+
+<div class="offer-page">
+
+    <div class="offer-left">
+        <h3>Kundeinformation</h3>
+        <p>Navn: Malene Hansen</p>
+        <p>Tlf: 12345678</p>
+        <p>Email: malene@hej.dk</p>
+        <p>Adresse: Carportvej 2, 2800 Lyngby</p>
+
+        <h3>Ordreoplysninger</h3>
+        <p>Ordre ID: 12</p>
+        <p>Længde: 600cm</p>
+        <p>Bredde: 400cm</p>
+        <p>Højde: 300cm</p>
+        <p>Skur: Med skur</p>
+        <p>Materiale: Trykimprægneret</p>
+
+        <h3>Beregnede pris</h3>
+        <div class="price-display">24.234,7 kr</div>
+
+        <h3>Beregn ny pris:</h3>
+        <input type="text" placeholder="Skriv ny pris her">
+
+    </div>
+
+    <div class="offer-right">
+        <div class="drawing-box">
+            <img src="https://via.placeholder.com/400x200?text=Tegning+af+Carport" alt="Carport tegning">
+        </div>
+
+
+
+        <div class="calculation-box">
+            <p>Afslag: 2.000 kr</p>
+            <p>Beregninger i forhold til pris</p>
+
+            <div class="send-offer">
+                <button>Send tilbud</button>
+            </div>
+        </div>
+    </div>
+
+</div>
 
 </body>
 </html>

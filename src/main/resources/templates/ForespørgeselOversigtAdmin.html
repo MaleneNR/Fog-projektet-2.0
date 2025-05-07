@@ -1,10 +1,54 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="da">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forespørgsler</title>
+    <link href="../public/css/css.css" th:href="@{/css/css.css}" rel="stylesheet"/>
 </head>
 <body>
+
+<div class="header">
+    <img src="../../../../target/Fog.jpeg" height="70" width="70"/>
+    <div class="search-bar">
+        <input type="text" placeholder="Søg på produkter eller kategorier">
+    </div>
+    <div class="konto">Fog Konto</div>
+</div>
+
+<div class="order-list-container">
+
+    <div class="order-row">
+        <div class="order-info">
+            <tr th:each="order : ${orderList}">
+                <td th:text="${order.orderid}"></td>
+        </div>
+        <div class="order-action">
+            <button>Se forespørgsel</button>
+        </div>
+    </div>
+
+    <div class="order-row">
+        <div class="order-info">
+            <span>Ordre ID: 2</span>
+            <span class="order-email">malene@hejhej.dk</span>
+        </div>
+        <div class="order-action">
+            <button>Se forespørgsel</button>
+        </div>
+    </div>
+
+    <div class="order-row">
+        <div class="order-info">
+            <span>Ordre ID: 3</span>
+            <span class="order-email">malene@hejigen.dk</span>
+        </div>
+        <div class="order-action">
+            <button>Se forespørgsel</button>
+        </div>
+    </div>
+
+</div>
 
 </body>
 </html>

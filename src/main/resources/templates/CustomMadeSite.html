@@ -1,10 +1,84 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="da">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carport Designer</title>
+    <link href="../public/css/css.css" th:href="@{/css/css.css}" rel="stylesheet"/>
 </head>
 <body>
+
+<div class="header">
+    <img src="../../../../target/Fog.jpeg" height="70" width="70"/>
+    <div class="search-bar">
+        <input type="text" placeholder="Søg på produkter eller kategorier">
+    </div>
+    <div class="konto">Fog Konto</div>
+</div>
+
+<div class="nav-steps">
+    <div>Design</div>
+    <div>→</div>
+    <div>Login</div>
+    <div>→</div>
+    <div>Forespørgsel</div>
+</div>
+
+<div class="designer-container">
+    <div class="options">
+        <select>
+            <option>Med/uden skur</option>
+            <option>Med skur</option>
+            <option>Uden skur</option>
+        </select>
+
+        <select>
+            <option>Længde</option>
+            <option>160</option>
+            <option>280</option>
+            <option>300</option>
+            <option>600</option>
+        </select>
+
+        <select>
+            <option>Højde</option>
+            <option>200</option>
+            <option>480</option>
+            <option>600</option>
+        </select>
+
+        <select>
+            <option>Bredde</option>
+            <option>200</option>
+            <option>480</option>
+            <option>600</option>
+        </select>
+
+        <select>
+            <option>Håndværker?</option>
+            <option>Ja</option>
+            <option>Nej</option>
+        </select>
+    </div>
+
+    <div class="drawing">
+        <p>SVG tegning </p>
+    </div>
+
+    <div class="info-text">
+        <p>Brødtekst er længere, løbende tekst. Før i tiden blev typografernes løn beregnet ud fra antallet af linjer de
+            havde sat. Brødteksten var hurtig at sætte og det var hovedsageligt det som gav sætteren penge til det
+            daglige brød.</p>
+    </div>
+</div>
+
+
+<form method="get">
+    <div class="next-button">
+        <button class="button" formaction="/loginOpretBruger" type="submit">Videre</button>
+        <!-- TIL OpretBrugerEllerLogin.html -->
+    </div>
+    <form>
 
 </body>
 </html>
