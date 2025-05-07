@@ -1,6 +1,7 @@
 package app.entities;
 
 public class User {
+    private int userId;
     private String email;
     private String password;
     private int role;
@@ -12,6 +13,21 @@ public class User {
         this.email = email;
         this.password = password;
         this.role = role;
+    }
+
+    public User(int userId, String email, String password, int role) {
+        this.userId = userId;
+        this.email = email;
+        this.password = password;
+        this.role = role;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
     public String getEmail() {

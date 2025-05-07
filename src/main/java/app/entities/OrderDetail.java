@@ -8,6 +8,8 @@ public class OrderDetail {
     private int materialId;
     private int orderId;
 
+
+
     public int getProductId() {
         return productId;
     }

@@ -23,6 +23,7 @@ public class Calculator {
 
     }
 
+    // Spær
     public void calcRafters(){
 
     }
