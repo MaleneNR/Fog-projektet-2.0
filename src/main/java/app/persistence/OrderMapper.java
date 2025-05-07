@@ -48,7 +48,7 @@ public class OrderMapper {
     }
 
     public static List<OrderDetail> getAllOrderDetails (int orderId, ConnectionPool connectionPool) throws DatabaseException {
-        List<OrderDetail> orderDetails = new ArrayList<>();
+        List<OrderDetail> orderDetails = new ArrayList<>();//TODO skal hente details ud, IKKE FÆRDIG
         String sql = "SELECT \n" +
                 "  description,\n" +
                 "  length,\n" +
@@ -72,7 +72,7 @@ public class OrderMapper {
                 String unit = rs.getString("unit"); 
                 String assemblyDescription = rs.getString("assembly_description");
 
-                orderDetails.add(new OrderDetail());
+                //orderDetails.add(new OrderDetail(orderId,));
             }
         }
         catch (SQLException e)

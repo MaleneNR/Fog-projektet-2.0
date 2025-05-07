@@ -26,7 +26,7 @@ return null;
 
     public static List<Product> getProductsByMaterialId(int minLength, int materialId, ConnectionPool connectionPool) throws DatabaseException {
         List<Product> products = new ArrayList<>();
-        String sql = "SELECT * FROM products WHERE material_id = ? AND length > ?";
+        String sql = "SELECT * FROM products WHERE material_id = ? AND length >= ?";
 
         try (
                 Connection connection = connectionPool.getConnection();

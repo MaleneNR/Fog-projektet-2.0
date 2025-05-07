@@ -40,7 +40,7 @@ public class Calculator {
     private void calcPosts(Order order) throws DatabaseException {
         int quantity = calcPostQuantity(); //Antallet af stolper beregnes
 
-        List<Product> products = MaterialMapper.getProductsByMaterialId(0,POSTS,connectionPool); //Vi henter produkter, der er over minLength (her 0)
+        List<Product> products = MaterialMapper.getProductsByMaterialId(order.getHeight(),POSTS,connectionPool); //Vi henter produkter, der er over minLength (her 0)
         Product product = products.get(0);                                                                 //Tager den første i listen
         OrderDetail orderDetail = new OrderDetail(order.getOrderId(),product, quantity,"Stolpe nedgraves 90cm i jord");
         orderDetails.add(orderDetail);
@@ -57,7 +57,35 @@ public class Calculator {
     }
 
     // Spær
-    private void calcRafters(Order order){
+    private void calcRafters(Order order) throws DatabaseException {
+        int quantity = calcRaftersQuantity(); //Antallet af stolper beregnes
+
+        List<Product> products = MaterialMapper.getProductsByMaterialId(this.width,RAFTERS,connectionPool);         //Vi henter produkter, der er over minLength (her 0)
+
+        /***** Vi finder det bedst matchende produkt *****/
+        int smallestDifference = Integer.MAX_VALUE;
+        Product bestMatchingProduct = null;
+
+        for(Product p : products){
+            if(p.getLength() >= this.width){
+                int difference = length - this.width;
+                if(difference < smallestDifference){
+                    smallestDifference = difference;
+                    bestMatchingProduct = p;
+                }
+            }
+        }
+
+        Product product = products.get(0);                                                                                 //Tager den første i listen
+        OrderDetail orderDetail = new OrderDetail(order.getOrderId(),product, quantity,"Spær, monteres på rem");
+        orderDetails.add(orderDetail);
+    }
+
+    public int calcRaftersQuantity() {
+        /*Et spær er 4,5cm tykke - her er der rundet op til 5 cm derfor 55+5,
+        da der er 55 cm mellemrum mellem hvert spær. Og et spær for enden derfor +1
+         */
+        return this.length/(55+5) + 1;
 
     }
 

@@ -25,4 +25,10 @@ class CalculatorTest {
         Calculator calculator = new Calculator(600,780, connectionPool);
         assertEquals(6,calculator.calcPostQuantity());
     }
+
+    @Test
+    void calcRaftersQuantity() {
+        Calculator calculator = new Calculator(600, 780, connectionPool);
+        assertEquals(14, calculator.calcRaftersQuantity());
+    }
 }
