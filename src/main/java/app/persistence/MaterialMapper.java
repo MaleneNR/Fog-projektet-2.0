@@ -24,9 +24,9 @@ public class MaterialMapper {
 return null;
     }
 
-    public static List<Product> getProductsByMaterialId(int minLength, int materialId, ConnectionPool connectionPool) throws DatabaseException {
+    public static List<Product> getProductsByMaterialId(int materialId, ConnectionPool connectionPool) throws DatabaseException {
         List<Product> products = new ArrayList<>();
-        String sql = "SELECT * FROM products WHERE material_id = ? AND length >= ?";
+        String sql = "SELECT * FROM products WHERE material_id = ?";
 
         try (
                 Connection connection = connectionPool.getConnection();
@@ -34,7 +34,6 @@ return null;
                 )
         {
             ps.setInt(1,materialId);
-            ps.setInt(2,minLength);
             ResultSet rs = ps.executeQuery();
             if(rs.next()){
                 int productId = rs.getInt("product_id");

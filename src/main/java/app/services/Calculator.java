@@ -36,13 +36,13 @@ public class Calculator {
 
     }
 
-    // Stolper
+    /***** STOLPER *****/
     private void calcPosts(Order order) throws DatabaseException {
         int quantity = calcPostQuantity(); //Antallet af stolper beregnes
 
-        List<Product> products = MaterialMapper.getProductsByMaterialId(order.getHeight(),POSTS,connectionPool); //Vi henter produkter, der er over minLength (her 0)
-        Product product = products.get(0);                                                                 //Tager den første i listen
-        OrderDetail orderDetail = new OrderDetail(order.getOrderId(),product, quantity,"Stolpe nedgraves 90cm i jord");
+        List<Product> products = MaterialMapper.getProductsByMaterialId(POSTS,connectionPool); //Vi henter produkter, der er over minLength (her 0)
+        Product bestMatchingProduct = findBestMatchingProduct(products,order.getHeight());                                                                //Tager den første i listen
+        OrderDetail orderDetail = new OrderDetail(order.getOrderId(),bestMatchingProduct, quantity,"Stolpe nedgraves 90cm i jord");
         orderDetails.add(orderDetail);
     }
 
@@ -51,33 +51,45 @@ public class Calculator {
         return quantity;
     }
 
-    // Remme
-    private void calcBeams(Order order){
+
+
+    /***** REMME *****/
+    private void calcBeams(Order order) throws DatabaseException {
+        List<Product> products = MaterialMapper.getProductsByMaterialId(RAFTERS,connectionPool);
+
+        if(this.length <= 600) {  //Finder bedst matchende rem, hvis længden er under 600cm
+            Product bestMatchingProduct = findBestMatchingProduct(products,this.length);
+            int quantity = 2; //Vi skal bruge en til hver side af carporten, derfor 2
+
+            OrderDetail orderDetail = new OrderDetail(order.getOrderId(),bestMatchingProduct, quantity,"Remme i sider, sadles ned i stoplerne");
+            orderDetails.add(orderDetail);
+
+
+        }else {
+            //Beregning
+        }
+
+
+
+        /*
+        * Hent alle længder remme
+        * Hvis længde på carport er større end største rem-længde, så skal vi lave beregning ift. hvad der er smartest
+        * add Orderdetail
+        * */
+
 
     }
 
-    // Spær
+    /***** SPÆR *****/
     private void calcRafters(Order order) throws DatabaseException {
         int quantity = calcRaftersQuantity(); //Antallet af stolper beregnes
 
-        List<Product> products = MaterialMapper.getProductsByMaterialId(this.width,RAFTERS,connectionPool);         //Vi henter produkter, der er over minLength (her 0)
+        List<Product> products = MaterialMapper.getProductsByMaterialId(RAFTERS,connectionPool);
 
-        /***** Vi finder det bedst matchende produkt *****/
-        int smallestDifference = Integer.MAX_VALUE;
-        Product bestMatchingProduct = null;
+        /***** Vi finder det bedst matchende produkt, hvor længden er lang nok, men kortest mulig til spæret *****/
+        Product bestMatchingProduct = findBestMatchingProduct(products,this.width);
 
-        for(Product p : products){
-            if(p.getLength() >= this.width){
-                int difference = length - this.width;
-                if(difference < smallestDifference){
-                    smallestDifference = difference;
-                    bestMatchingProduct = p;
-                }
-            }
-        }
-
-        Product product = products.get(0);                                                                                 //Tager den første i listen
-        OrderDetail orderDetail = new OrderDetail(order.getOrderId(),product, quantity,"Spær, monteres på rem");
+        OrderDetail orderDetail = new OrderDetail(order.getOrderId(),bestMatchingProduct, quantity,"Spær, monteres på rem");
         orderDetails.add(orderDetail);
     }
 
@@ -87,6 +99,22 @@ public class Calculator {
          */
         return this.length/(55+5) + 1;
 
+    }
+
+    private Product findBestMatchingProduct(List<Product> products, int minLength){
+        int smallestDifference = Integer.MAX_VALUE;
+        Product bestMatchingProduct = null;
+
+        for (Product p : products) {
+            if (p.getLength() >= minLength) {
+                int difference = length - this.width;
+                if (difference < smallestDifference) {
+                    smallestDifference = difference;
+                    bestMatchingProduct = p;
+                }
+            }
+        }
+        return bestMatchingProduct;
     }
 
     public List<OrderDetail> getOrderDetails(){
