@@ -1,6 +1,7 @@
 package app.entities;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 public class Order {
     private int orderId;
@@ -110,5 +111,27 @@ public class Order {
                 ", height=" + height +
                 ", width=" + width +
                 '}';
+    }
+
+    @Override
+    public final boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Order order)) return false;
+
+        return getOrderId() == order.getOrderId() && getOrderPrice() == order.getOrderPrice() && isPayed() == order.isPayed() && getLength() == order.getLength() && getHeight() == order.getHeight() && getWidth() == order.getWidth() && getOrderStatus().equals(order.getOrderStatus()) && getDate().equals(order.getDate()) && getUser().equals(order.getUser());
+    }
+
+    @Override
+    public int hashCode() {
+        int result = getOrderId();
+        result = 31 * result + getOrderStatus().hashCode();
+        result = 31 * result + getOrderPrice();
+        result = 31 * result + Boolean.hashCode(isPayed());
+        result = 31 * result + getDate().hashCode();
+        result = 31 * result + getUser().hashCode();
+        result = 31 * result + getLength();
+        result = 31 * result + getHeight();
+        result = 31 * result + getWidth();
+        return result;
     }
 }

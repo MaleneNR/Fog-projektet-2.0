@@ -11,6 +11,10 @@ public class Product {
         this.materialId = materialId;
     }
 
+    public Product(int length) {
+        this.length = length;
+    }
+
     public int getProductId() {
         return productId;
     }

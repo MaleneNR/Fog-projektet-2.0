@@ -1,5 +1,7 @@
 package app.entities;
 
+import java.util.Objects;
+
 public class User {
     private int userId;
     private String email;
@@ -83,7 +85,27 @@ public class User {
         return "User{" +
                 "email='" + email + '\'' +
                 ", password='" + password + '\'' +
-                ", role=" + role
+                ", role=" + role+"}"
                ;
+    }
+
+    @Override
+    public final boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof User user)) return false;
+
+        return getUserId() == user.getUserId() && getRole() == user.getRole() && getPhonenumber() == user.getPhonenumber() && getEmail().equals(user.getEmail()) && getPassword().equals(user.getPassword()) && getName().equals(user.getName()) && getAdresse().equals(user.getAdresse());
+    }
+
+    @Override
+    public int hashCode() {
+        int result = getUserId();
+        result = 31 * result + getEmail().hashCode();
+        result = 31 * result + getPassword().hashCode();
+        result = 31 * result + getRole();
+        result = 31 * result + getName().hashCode();
+        result = 31 * result + getPhonenumber();
+        result = 31 * result + getAdresse().hashCode();
+        return result;
     }
 }

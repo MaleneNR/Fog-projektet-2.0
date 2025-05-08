@@ -55,7 +55,7 @@ public class Calculator {
 
     /***** REMME *****/
     private void calcBeams(Order order) throws DatabaseException {
-        List<Product> products = MaterialMapper.getProductsByMaterialId(RAFTERS,connectionPool);
+        List<Product> products = MaterialMapper.getProductsByMaterialId(BEAMS,connectionPool);
         int quantity = 2; //Always 2, one for each side
 
         if(this.length <= 600) {  //Finder bedst matchende rem, hvis længden er under 600cm
@@ -114,7 +114,7 @@ public class Calculator {
 
     }
 
-    private Product findBestMatchingProduct(List<Product> products, int minLength){
+    public Product findBestMatchingProduct(List<Product> products, int minLength){
         int smallestDifference = Integer.MAX_VALUE;
         Product bestMatchingProduct = null;
 

@@ -23,7 +23,7 @@ public class OrderMapper {
         )
         {
             ResultSet rs = s.executeQuery(sql);
-            if (rs.next())
+            while (rs.next())
             {
                 int orderId = rs.getInt("order_id");
                 String status = rs.getString("order_status");
@@ -127,6 +127,7 @@ public class OrderMapper {
     }
 
     //vi har en funktion der hedder addOderDetails men tænker det er beregneren der styrer det
+    //TODO DENNE KOMMENTAR SLETTES, vi bruger addOrderDetails inde i calculator ^
 
 
     public static boolean deleteOrderDetailsAndOrder (int orderId, ConnectionPool connectionPool){
@@ -152,9 +153,9 @@ return false;
                     boolean payed = rs.getBoolean("payed");
                     LocalDate date = rs.getDate("date").toLocalDate();
                     User user = UserMapper.getUserById(rs.getInt("user_id"), connectionPool);
-                    int l = rs.getInt("length");
+                    int l = rs.getInt("carport_length");
                     int h = rs.getInt("height");
-                    int w = rs.getInt("width");
+                    int w = rs.getInt("carport_width");
 
                     order = new Order(orderId,status,price,payed,date,user,l,h,w);
                 }
@@ -164,6 +165,10 @@ return false;
                 throw new DatabaseException("Fejl i søgning på en ordre ved id" + orderId+ " i getOrderById()", e.getMessage());
             }
             return order;
+        }
+
+        public static void insertOrder(Order order, ConnectionPool connectionPool){
+
         }
     }
 
