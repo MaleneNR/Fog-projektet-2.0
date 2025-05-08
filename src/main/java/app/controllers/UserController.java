@@ -27,22 +27,27 @@ public class UserController {
         app.get("Login", ctx -> ctx.render("Login.html"));
         app.post("/createUser", ctx -> createUser(ctx, connectionPool));
         app.get("/Customsite", ctx -> ctx.render("CustomMadeSite.html"));
-        app.post("/seForesporgsel", ctx -> ctx.render("StatusSide.html"));
+        app.post("/seForesporgsel", ctx -> AdminController.editProduct(ctx, connectionPool));
 
 
     }
 
     private static void createUser(@NotNull Context ctx, ConnectionPool connectionPool) {
-        String username = ctx.formParam("email");
+        String username = ctx.formParam("email"); //til thomsd, hvorfor hedder denne username?
         String password1 = ctx.formParam("password1");
         String password2 = ctx.formParam("password2");
+        String navn = ctx.formParam("navn");
+        String telefon = ctx.formParam("telefon");//hvorfor ikke int
+        String text = ctx.formParam("text");
+
+        //TODO: 1. gem inputs fra de andre keys i createUser.html som fx "telefon".
 
 
 
         //Validerer password
         if(password1.equals(password2)){
             try{
-                UserMapper.createUser(username,password1,connectionPool);
+                UserMapper.createUser(username,password1, telefon, navn, text, connectionPool); //TODO 2. funktionen skal opdateres så den modtager de nye parametre fx telefon.
                 ctx.attribute("message", "Du er hermed oprettet med brugernavn: "+ username+ ". Du skal nu logge på");
                 ctx.render("Login.html");}
             catch (DatabaseException e) {
@@ -71,10 +76,11 @@ public class UserController {
         String username= ctx.formParam("email");
         String password = ctx.formParam("password");
         try {
-            User user = UserMapper.login(username, password, connectionPool);
+            //TODO.5 User klassen skal opdateres, så den kan indeholde de nye parametre. Husk konstruktoren!
+            //TODO.6 UserMapper.login() skal opdateres til at tage de nye parametre.
+            User user = UserMapper.login(username, password, connectionPool);//skal denne også opdaterers med nye parametre?
             //Når user bliver oprettet, bliver der også oprettet en basket.
-            int role = user.getRole();
-            if(role == 3){
+            if(user.getRole() == 3){
                 loginAdmin(ctx,connectionPool);
             } else{
 
@@ -94,8 +100,8 @@ public class UserController {
     private static void loginAdmin(@NotNull Context ctx, ConnectionPool connectionPool) throws DatabaseException {
 
         //List<Order> orderList = OrderMapper.getAllRequest(connectionPool);
-        List<Order> orderList = OrderMapper.getAllRequest(connectionPool);
-        ctx.attribute("orderList", orderList);
+        List<Order> orderList = OrderMapper.getAllRequest(connectionPool);//skal man kalde viewAllOrders fra dmin controller?
+        ctx.sessionAttribute("orderList", orderList);
         ctx.render("ForespørgeselOversigtAdmin.html");
     }
 }

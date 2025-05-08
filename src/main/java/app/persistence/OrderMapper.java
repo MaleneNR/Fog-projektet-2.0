@@ -4,6 +4,7 @@ import app.entities.Order;
 import app.entities.OrderDetail;
 import app.entities.User;
 import app.exceptions.DatabaseException;
+import io.javalin.http.Context;
 
 import java.sql.*;
 import java.time.LocalDate;
@@ -23,7 +24,7 @@ public class OrderMapper {
         )
         {
             ResultSet rs = s.executeQuery(sql);
-            if (rs.next())
+            while (rs.next())
             {
                 int orderId = rs.getInt("order_id");
                 String status = rs.getString("order_status");
@@ -75,16 +76,16 @@ return false;
             {
                 ps.setInt(1, orderId);
                 ResultSet rs = ps.executeQuery();
-                if (rs.next())
+                while (rs.next())
                 {
                     String status = rs.getString("order_status");
                     int price = rs.getInt("order_price");
                     boolean payed = rs.getBoolean("payed");
                     LocalDate date = rs.getDate("date").toLocalDate();
                     User user = UserMapper.getUserById(rs.getInt("user_id"), connectionPool);
-                    int l = rs.getInt("length");
+                    int l = rs.getInt("carport_length");
                     int h = rs.getInt("height");
-                    int w = rs.getInt("width");
+                    int w = rs.getInt("carport_width");
 
                     order = new Order(orderId,status,price,payed,date,user,l,h,w);
                 }
@@ -101,16 +102,19 @@ return false;
 
         //TODO evt lave en update funktion så man kan opdaterer ordre som admin
 
-    public static boolean updateOrder(int orderId, int newPrice, String newStatus, ConnectionPool connectionPool) throws DatabaseException {
+    public static boolean updateOrder(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
 
-        String sql = "UPDATE orders SET order_price = ?, order_status = ? WHERE order_id = ?";
+        String newPrice = ctx.sessionAttribute("newPrice"); //ala det her.
+        Order order = ctx.sessionAttribute("order");
+        int orderId = order.getOrderId();
+        String sql = "UPDATE orders SET order_price = ?, payed = ? WHERE order_id = ?";
 
         try (
                 Connection connection = connectionPool.getConnection();
                 PreparedStatement ps = connection.prepareStatement(sql)
         ) {
-            ps.setInt(1, newPrice);
-            ps.setString(2, newStatus);
+            ps.setString(1, newPrice);
+            ps.setBoolean(2, false);
             ps.setInt(3, orderId);
 
             int rows = ps.executeUpdate();

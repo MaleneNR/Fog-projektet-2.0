@@ -45,25 +45,25 @@ public class OrderController {
         User currrentUser = ctx.sessionAttribute("currentUser");
 
 */
-        int length = Integer.parseInt(ctx.formParam("length"));
+        int length = Integer.parseInt(ctx.formParam("length"));//skal der ændres til carport_length
         int width = Integer.parseInt(ctx.formParam("width"));
         int height = Integer.parseInt(ctx.formParam("height"));
 
         Order currentOrder = ctx.sessionAttribute("currentOrder");
         User currentUser = ctx.sessionAttribute("currentUser");
 
-// Sæt mål på ordren (så de kommer med ned i databasen)
+//Sæt mål på ordren (så de kommer med ned i databasen)
         currentOrder.setLength(length);
         currentOrder.setWidth(width);
         currentOrder.setHeight(height);
 
-// Sæt brugeren på ordren
-        currentOrder.setUser(currentUser);
+//Sæt brugeren på ordren
+        currentOrder.setUser(currentUser);//skal der være noget med order_id
 
-// Gem ordren i databasen
+//Gem ordren i databasen
         OrderMapper.addRequest(currentOrder, connectionPool);
 
-// Evt. redirect eller vis bekræftelse
+//evt. redirect eller vis bekræftelse
         ctx.render("ordreBekræftelse.html");
 
 

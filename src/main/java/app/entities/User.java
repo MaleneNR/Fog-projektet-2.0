@@ -5,17 +5,22 @@ public class User {
     private String password;
     private int role;
     private String name;
-    private int phonenumber;
+    private int telefon;
     private String adresse;
 
-    public User(String email, String password, int role) {
+    public User(String email, String password, int role, String name, String adresse, int telefon) {
         this.email = email;
         this.password = password;
         this.role = role;
+        this.telefon = telefon;
+        this.name=name;
+        this.adresse = adresse;
+
+
     }
 
     public String getEmail() {
-        return email;
+        return this.email;
     }
 
     public void setEmail(String email) {
@@ -39,35 +44,40 @@ public class User {
     }
 
     public String getName() {
-        return name;
+        return this.name;
     }
 
     public void setName(String name) {
         this.name = name;
     }
 
-    public int getPhonenumber() {
-        return phonenumber;
+    public int getTelefon() {
+        return this.telefon;
     }
 
-    public void setPhonenumber(int phonenumber) {
-        this.phonenumber = phonenumber;
+    public void setTelefon(int phonenumber) {
+        this.telefon = phonenumber;
     }
 
     public String getAdresse() {
-        return adresse;
+        return this.adresse;
     }
 
     public void setAdresse(String adresse) {
         this.adresse = adresse;
     }
 
+
+
     @Override
     public String toString() {
         return "User{" +
                 "email='" + email + '\'' +
                 ", password='" + password + '\'' +
-                ", role=" + role
-               ;
+                ", role=" + role +
+                ", name='" + name + '\'' +
+                ", telefon=" + telefon +
+                ", adresse='" + adresse + '\'' +
+                '}';
     }
 }

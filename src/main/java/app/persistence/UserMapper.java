@@ -10,10 +10,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class UserMapper {
-    public static User login(String email, String password, ConnectionPool cp) throws DatabaseException {
+    public static User login(String email, String password, ConnectionPool connectionPool) throws DatabaseException {
         String sql = "select * from users where email=? and password=?";
         try (
-                Connection connection = cp.getConnection();
+                Connection connection = connectionPool.getConnection();
                 PreparedStatement ps = connection.prepareStatement(sql)
         ) {
             ps.setString(1, email);
@@ -22,8 +22,13 @@ public class UserMapper {
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 int role = rs.getInt("role_id");
+                //TODO 7: gemme de nye parametre fx:
+                int tlf = rs.getInt("telefon");
+                String name = rs.getString("name");
+                String adress = rs.getString("adresse");
 
-                return new User(email, password, role);
+
+                return new User(email, password, role, name, adress, tlf); //TODO 8: Du har opdateret User klassen til at kunne indeholde de nye parametre. Disse skal indsættes her: return new User(email, password, tlf, role);
             } else {
                 throw new DatabaseException("Fejl i login. Prøv igen");
             }
@@ -33,9 +38,11 @@ public class UserMapper {
     }
 
 
-    public static void createUser(String email, String password, ConnectionPool connectionPool) throws DatabaseException {
+    public static void createUser(String email, String password, String navn, String telefon, String text, ConnectionPool connectionPool) throws DatabaseException {
         {
-            String sql = "insert into users (email, password, role_id) values (?,?,2)";
+            //TODO 3. users tabellen i databasen skal udvides til at kunne indeholde de nye parametre.
+            //TODO 4. sql stringen nedenfor skal tilpasses de nye parametre.
+            String sql = "insert into users (email, password, role_id, name, adresse, telefon) values (?,?,1,?,?,?)";
 
             try (
                     Connection connection = connectionPool.getConnection();
@@ -43,6 +50,10 @@ public class UserMapper {
             ) {
                 ps.setString(1, email);
                 ps.setString(2, password);
+                //ps.setInt(3,1);
+                ps.setString(3, navn);
+                ps.setString(4, text);
+                ps.setString(5, telefon);
 
                 int rowsAffected = ps.executeUpdate();
                 if (rowsAffected != 1) {
@@ -73,8 +84,12 @@ public class UserMapper {
                 int role = rs.getInt("role_id");
                 String email = rs.getString("email");
                 String password = rs.getString("password");
+                String navn = rs.getString("name");
+                int tlf = rs.getInt("telefon");
+                String adresse = rs.getString("adresse");
 
-                return new User(email, password, role);
+
+                return new User(email, password, role, navn, adresse, tlf);
             } else {
                 throw new DatabaseException("Fejl i login. Prøv igen");
             }

@@ -19,9 +19,11 @@ import java.util.List;
 
 public class AdminController {
     public static void addRoutes(Javalin app, ConnectionPool connectionPool) {
+        app.post("/sendTilbud", ctx -> OrderMapper.updateOrder(ctx, connectionPool));
+
     }
 
-    private static void editProduct(Context ctx, ConnectionPool connectionPool){
+    public static void editProduct(Context ctx, ConnectionPool connectionPool){
         //funktionen skal give admin adgang til at kunne redigere i beskriverlser og priser
 
         //funktionen skal tage en ctx og connection pool, så der er adgang til db og så der kan komunikeres med html ind og ud
@@ -46,29 +48,31 @@ public class AdminController {
 
 
             try {
-                // Hent ordre ID og ny pris fra form
-                int orderId = Integer.parseInt(ctx.formParam("order_id"));
-                int newPrice = Integer.parseInt(ctx.formParam("price"));
+                //Hent ordre ID og ny pris fra form
+                int orderId = Integer.parseInt(ctx.formParam("orderid"));
 
-                // Hent ordren for at sikre den findes
+                //Hent ordren for at sikre den findes
                 Order order = OrderMapper.getOrderById(orderId, connectionPool);
+                User user = order.getUser();
 
                 if (order == null) {
                     ctx.status(404).result("Ordre ikke fundet.");
                     return;
                 }
 
-                // Brug den nuværende status fra ordren (så den ikke ændres her!)
+                //Brug den nuværende status fra ordren (så den ikke ændres her!)
                 String currentStatus = order.getOrderStatus();
 
-                // Opdater KUN prisen via OrderMapper → og behold nuværende status
-                boolean updated = OrderMapper.updateOrder(orderId, newPrice, currentStatus, connectionPool);
+                // pdater KUN prisen via OrderMapper → og behold nuværende status
+                //boolean updated = OrderMapper.updateOrder(orderId, newPrice, currentStatus, connectionPool);
+                boolean updated = true;
 
                 if (updated) {
-                    // Hent opdateret ordre igen for visning
+                    //Hent opdateret ordre igen for visning
                     Order updatedOrder = OrderMapper.getOrderById(orderId, connectionPool);
-                    ctx.attribute("order", updatedOrder);
-                    ctx.render("ForespørgeselOversigtAdmin.html"); // Vis opdateret ordre
+                    ctx.sessionAttribute("order", updatedOrder);
+                    ctx.sessionAttribute("user", user);
+                    ctx.render("StatusSide.html"); //Vis opdateret ordre
                 } else {
                     ctx.status(500).result("Opdatering fejlede.");
                 }
