@@ -47,7 +47,7 @@ public class Calculator {
     }
 
     public int calcPostQuantity(){
-        int quantity = 2 * ( 2 + (this.length-130) / 340);
+        int quantity = 2 * (2 + (this.length-130) / 340);
         return quantity;
     }
 
@@ -56,28 +56,41 @@ public class Calculator {
     /***** REMME *****/
     private void calcBeams(Order order) throws DatabaseException {
         List<Product> products = MaterialMapper.getProductsByMaterialId(RAFTERS,connectionPool);
+        int quantity = 2; //Always 2, one for each side
 
         if(this.length <= 600) {  //Finder bedst matchende rem, hvis længden er under 600cm
             Product bestMatchingProduct = findBestMatchingProduct(products,this.length);
-            int quantity = 2; //Vi skal bruge en til hver side af carporten, derfor 2
 
             OrderDetail orderDetail = new OrderDetail(order.getOrderId(),bestMatchingProduct, quantity,"Remme i sider, sadles ned i stoplerne");
             orderDetails.add(orderDetail);
 
 
         }else {
-            //Beregning
+            /*
+            * 130 udgør den første meter, der er uden stolpe i fronten,
+            * samt de 30 cm, som er efter sidste stolpe
+            * De trækkes fra total-længden, så vi kun har længden på carporten indenfor de beregnede antal stolper
+            * Deles i to, så vi går ud fra at midter-stolpen stilles i midten af front og bag-stolpen.
+            */
+
+            int frontBeamLength = ((this.length-130)/2)+100;
+            Product frontBeam = findBestMatchingProduct(products, frontBeamLength);
+            OrderDetail front = new OrderDetail(order.getOrderId(),frontBeam, quantity,"Forreste remme i sider, sadles ned i stoplerne");
+            orderDetails.add(front);
+
+            int backBeamLength = (((this.length-130)/2)+30);
+            Product backBeam  = findBestMatchingProduct(products, backBeamLength);
+            OrderDetail back = new OrderDetail(order.getOrderId(),backBeam, quantity,"Bagerste remme i sider, sadles ned i stoplerne");
+            orderDetails.add(back);
         }
 
 
-
+        /***** Opbygning af funktion: *****/
         /*
         * Hent alle længder remme
         * Hvis længde på carport er større end største rem-længde, så skal vi lave beregning ift. hvad der er smartest
         * add Orderdetail
-        * */
-
-
+        */
     }
 
     /***** SPÆR *****/
