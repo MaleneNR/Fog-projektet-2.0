@@ -106,7 +106,7 @@ public class AdminController {
 
 
         // 1. Hent alle ordre fra databasen (via OrderMapper)
-        List<Order> orderList = OrderMapper.getAllRequest(connectionPool);
+        List<Order> orderList = OrderMapper.getAllRequests(connectionPool);
 
         // 2. Læg listen af ordrer som attribut (så Thymeleaf kan bruge dem)
         ctx.attribute("orders", orderList);

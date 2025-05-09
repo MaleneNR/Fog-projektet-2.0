@@ -2,6 +2,7 @@ package app.controllers;
 
 import app.entities.Order;
 import app.entities.User;
+import app.exceptions.DatabaseException;
 import app.persistence.ConnectionPool;
 import app.persistence.OrderMapper;
 import io.javalin.Javalin;
@@ -11,7 +12,7 @@ public class OrderController {
     public static void addRoutes(Javalin app, ConnectionPool connectionPool) {
     }
 
-    private static void makeRequest(Context ctx, ConnectionPool connectionPool){
+    private static void makeRequest(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
         //funktionen skal kunne, så en bruger ud fra egne valg af mål der bliver givet i dropdownmenuerne og derfra kunne gå videre og ligge en forespørgsel
         //det som kunden vælger i menuerne bliver til en ordre og session som bliver tilkoblet på deres user_id når de logger ind
 
