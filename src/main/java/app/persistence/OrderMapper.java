@@ -195,11 +195,14 @@ return false;
         } catch (SQLException e) {
             throw new DatabaseException("Fejl i opdatering af ordre i updateOrder()", e.getMessage());
 
+
+        }
+    }
+
         public static void insertOrder(Order order, ConnectionPool connectionPool){
 
 
         }
-    }
 
 
 

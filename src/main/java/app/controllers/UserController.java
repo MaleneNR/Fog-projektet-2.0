@@ -100,7 +100,7 @@ public class UserController {
     private static void loginAdmin(@NotNull Context ctx, ConnectionPool connectionPool) throws DatabaseException {
 
         //List<Order> orderList = OrderMapper.getAllRequest(connectionPool);
-        List<Order> orderList = OrderMapper.getAllRequest(connectionPool);//skal man kalde viewAllOrders fra dmin controller?
+        List<Order> orderList = OrderMapper.getAllRequests(connectionPool);//skal man kalde viewAllOrders fra dmin controller?
         ctx.sessionAttribute("orderList", orderList);
         ctx.render("ForespørgeselOversigtAdmin.html");
     }
