@@ -14,7 +14,7 @@ import java.util.List;
 public class OrderMapper {
 
 
-    public static List<Order> getAllRequest(ConnectionPool connectionPool) throws DatabaseException {
+    public static List<Order> getAllRequests(ConnectionPool connectionPool) throws DatabaseException {
         List<Order> orders = new ArrayList<>();
         String sql = "select * from orders";
 
@@ -41,23 +41,94 @@ public class OrderMapper {
         }
         catch (SQLException e)
         {
-            throw new DatabaseException("Fejl i søgning på alle ordrer getOrderById()", e.getMessage());
+            throw new DatabaseException("Fejl i søgning på alle ordrer, getAllRequests()", e.getMessage());
         }
         return orders;
 
         //Admin skla kunne se alle forespørgelser så alle orders bliver hentet ud fra db via orderMapper
     }
 
-    public static List<OrderDetail> getAllOrderdetails (int orderId, ConnectionPool connectionPool){
+    public static List<OrderDetail> getAllOrderDetails (int orderId, ConnectionPool connectionPool) throws DatabaseException {
+        List<OrderDetail> orderDetails = new ArrayList<>();//TODO skal hente details ud, IKKE FÆRDIG
+        String sql = "SELECT \n" +
+                "  description,\n" +
+                "  length,\n" +
+                "  quantity,\n" +
+                "  unit,\n" +
+                "  assembly_description  \n" +
+                "FROM orderdetails_view;";
+
+        try (
+                Connection connection = connectionPool.getConnection();
+                Statement s = connection.createStatement();
+        )
+        {
+            ResultSet rs = s.executeQuery(sql);
+            if (rs.next())
+            {
+                String description = rs.getString("description");
+                int length = rs.getInt("length");
+                int pricePerUnit = rs.getInt("price_per_unit");
+                int quantity = rs.getInt("quantity");
+                String unit = rs.getString("unit"); 
+                String assemblyDescription = rs.getString("assembly_description");
+
+                //orderDetails.add(new OrderDetail(orderId,));
+            }
+        }
+        catch (SQLException e)
+        {
+            throw new DatabaseException("Fejl i søgning på alle ordrer, getAllRequests()", e.getMessage());
+        }
+
+
+
         //Skal hente detaljerne til givne ordre (Stk liste)
-    return null;
+    return null;  //TODO Skal returnerer en order_detail
     }
 
-    public static boolean addRequest(Order order, ConnectionPool connectionPool){
-        //Her gemmes det som kunden har indtastet på en ordre i ordretabellen i db
-    return false;
+    public static boolean addRequest(Order order, ConnectionPool connectionPool) throws DatabaseException {
+        int rowsAffected = 0;
+        Boolean orderAdded = false;
+
+            String status = "Received";  //TODO Skal dette hardcodes
+            LocalDate dateOfToday = LocalDate.of(LocalDate.now().getYear(), LocalDate.now().getMonth(), LocalDate.now().getDayOfMonth());
+
+        String sql = "INSERT INTO orders (order_status, order_price, payed, date, user_id, carport_length, height, carport_width) values (?,?,?,?,?,?,?,?) RETURNING order_id";
+
+        try (
+                Connection connection = connectionPool.getConnection();
+                PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+        ) {
+            ps.setString(1, status);
+            ps.setInt(2,20000); //TODO Estimeret pris, IKKE denne hardcodede pris!
+            ps.setBoolean(3,false);
+            ps.setDate(4, Date.valueOf(dateOfToday)); //Dags dato i (YYYY-MM-DD)-format
+            ps.setInt(5, order.getUser().getUserId());
+            ps.setInt(6,order.getLength());
+            ps.setInt(7,order.getHeight());
+            ps.setInt(8,order.getWidth());
+
+            rowsAffected = ps.executeUpdate();
+            if (rowsAffected == 1) {
+                try (ResultSet rs = ps.getGeneratedKeys()) {
+                    if (rs.next()) {
+                        int orderId = rs.getInt("order_id");
+                        order = new Order(orderId,status,20000, order.isPayed(), dateOfToday, order.getUser(),order.getLength(),order.getHeight(),order.getWidth());
+                        orderAdded = true;
+                    }
+                }
+            } else {
+                throw new DatabaseException("Fejl ved indsætning af en ordre");
+            }
+        } catch (SQLException | DatabaseException e) {
+            throw new DatabaseException("Fejl ved indsætning af en ordre", e.getMessage());
+        }
+        return orderAdded;
     }
+
     //vi har en funktion der hedder addOderDetails men tænker det er beregneren der styrer det
+    //TODO DENNE KOMMENTAR SLETTES, vi bruger addOrderDetails inde i calculator ^
 
 
     public static boolean deleteOrderDetailsAndOrder (int orderId, ConnectionPool connectionPool){
@@ -100,6 +171,7 @@ return false;
 
 
 
+
         //TODO evt lave en update funktion så man kan opdaterer ordre som admin
 
     public static boolean updateOrder(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
@@ -122,6 +194,10 @@ return false;
 
         } catch (SQLException e) {
             throw new DatabaseException("Fejl i opdatering af ordre i updateOrder()", e.getMessage());
+
+        public static void insertOrder(Order order, ConnectionPool connectionPool){
+
+
         }
     }
 
