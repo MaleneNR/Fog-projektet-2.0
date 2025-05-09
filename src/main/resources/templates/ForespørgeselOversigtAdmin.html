@@ -1,10 +1,45 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="da">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forespørgsler</title>
+    <link href="../public/css/css.css" th:href="@{/css/css.css}" rel="stylesheet"/>
 </head>
 <body>
+
+<div class="header">
+    <img src="../../../../target/Fog.jpeg" height="70" width="70"/>
+    <div class="search-bar">
+        <input type="text" placeholder="Søg på produkter eller kategorier">
+    </div>
+    <div class="konto">Fog Konto</div>
+</div>
+
+<div class="order-list-container">
+
+    <tr th:each="order : ${session.orderList}">
+        <div class="order-row">
+
+            <div class="order-info">
+
+                <td th:text="${order.orderid}"></td>
+
+                <td>
+                    <form method="post" action="/seForesporgsel">
+                        <input type="hidden" name="orderid" th:value="${order.orderid}">
+                        <button class="order-action" type="submit" formaction="/seForesporgsel">Se forespørgsel</button>
+                    </form>
+                </td>
+
+
+            </div>
+
+        </div>
+
+
+
+</div>
 
 </body>
 </html>

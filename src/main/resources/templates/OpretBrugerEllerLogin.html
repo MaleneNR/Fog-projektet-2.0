@@ -17,25 +17,16 @@
 </div>
 
 
-<div class="login">
-    <div class="form-container">
-        <form method="post">
-            <div>
-                <input class="button" type="email" name="email" placeholder="Email" required/>
-            </div>
-            <div></div>
-            <input class="button" type="password" name="password" placeholder="Password" required/>
-
-            <div class="button-group">
-                <button class="button" type="submit" formaction="/Login">Log in</button>
-            </div>
-        </form>
-    </div>
+<div class="login-choice-container">
+    <form method="get">
+        <div class="login-box">
+            <button formaction="/Login" type="submit">Login</button>
+            <button formaction="/OpretBruger" type="submit">Opret bruger</button>
+        </div>
+    </form>
 </div>
+
 
 </body>
 </html>
-
-
-
 

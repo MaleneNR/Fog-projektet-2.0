@@ -1,10 +1,59 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="da">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fog Konto</title>
+    <link href="../public/css/css.css" th:href="@{/css/css.css}" rel="stylesheet"/>
 </head>
 <body>
 
+<div class="header">
+    <img src="../../../../target/Fog.jpeg" height="70" width="70"/>
+    <div class="search-bar">
+        <input type="text" placeholder="Søg på produkter eller kategorier">
+    </div>
+    <div class="konto">Fog Konto</div>
+</div>
+
+
+
+
+<div class="login">
+    <div class="form-container">
+        <form method="post" action="/createUser">
+            <div>
+                <input class="button" type="navn" name="navn" placeholder="Navn:" required />
+            </div>
+
+            <div>
+                <input class="button" type="email" name="email" placeholder="Email:" required />
+            </div>
+            <div>
+                <input class="button" type="telefon" name="telefon" placeholder="Telefon:" required />
+            </div>
+            <div>
+                <input class="button" type="text" name="text" placeholder="Adresse:" required />
+            </div>
+            <div>
+                <input class="button" type="password" name="password1" placeholder="Indtast kodeord:" required />
+            </div>
+            <div>
+                <input class="button" type="password" name="password2" placeholder="Gentag kodeord:" required />
+            </div>
+
+            <div class="buttons">
+                <button formaction="/createUser" type="submit">Login</button>
+                <button formaction="/createUser" type="submit">Opret bruger</button>
+            </div>
+
+
+        </form>
+
+    </div>
+</div>
+
+
+
 </body>
-</html>
+</html>>

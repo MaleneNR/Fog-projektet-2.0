@@ -4,6 +4,7 @@ import app.entities.Order;
 import app.entities.OrderDetail;
 import app.entities.User;
 import app.exceptions.DatabaseException;
+import io.javalin.http.Context;
 
 import java.sql.*;
 import java.time.LocalDate;
@@ -146,7 +147,7 @@ return false;
             {
                 ps.setInt(1, orderId);
                 ResultSet rs = ps.executeQuery();
-                if (rs.next())
+                while (rs.next())
                 {
                     String status = rs.getString("order_status");
                     int price = rs.getInt("order_price");
@@ -167,10 +168,48 @@ return false;
             return order;
         }
 
+
+
+
+
+        //TODO evt lave en update funktion så man kan opdaterer ordre som admin
+
+    public static boolean updateOrder(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
+
+        String newPrice = ctx.sessionAttribute("newPrice"); //ala det her.
+        Order order = ctx.sessionAttribute("order");
+        int orderId = order.getOrderId();
+        String sql = "UPDATE orders SET order_price = ?, payed = ? WHERE order_id = ?";
+
+        try (
+                Connection connection = connectionPool.getConnection();
+                PreparedStatement ps = connection.prepareStatement(sql)
+        ) {
+            ps.setString(1, newPrice);
+            ps.setBoolean(2, false);
+            ps.setInt(3, orderId);
+
+            int rows = ps.executeUpdate();
+            return rows > 0;
+
+        } catch (SQLException e) {
+            throw new DatabaseException("Fejl i opdatering af ordre i updateOrder()", e.getMessage());
+
         public static void insertOrder(Order order, ConnectionPool connectionPool){
+
 
         }
     }
+
+
+
+}
+
+
+
+
+
+
 
 
 

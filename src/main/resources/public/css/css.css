@@ -1,0 +1,729 @@
+/****** Global styling *******/
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #e5e5e5;
+    margin: 0;
+    padding: 0;
+}
+
+.header {
+    background-color: white;
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #ccc;
+    flex-wrap: wrap;
+}
+
+.logo {
+    background-color: #16325c;
+    color: white;
+    padding: 10px 20px;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.search-bar {
+    flex-grow: 1;
+    margin: 10px 20px;
+    min-width: 200px;
+}
+
+.search-bar input {
+    width: 100%;
+    padding: 8px;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+
+.konto {
+    font-size: 16px;
+    color: #333;
+    margin: 10px 0;
+}
+
+/****** Form styling (Login + Opret bruger) *******/
+
+.form-container, .login-container {
+    background-color: white;
+    width: 400px;
+    max-width: 90%;
+    margin: 50px auto;
+    padding: 40px 20px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    text-align: center;
+    box-sizing: border-box;
+}
+
+.form-container input,
+.login-container input {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    background-color: #ddd;
+    border: none;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+
+.form-container .buttons {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.form-container button,
+.login-container button {
+    padding: 12px;
+    background-color: #16325c;
+    color: white;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.form-container button:hover,
+.login-container button:hover {
+    background-color: #0e2343;
+}
+
+.form-container .buttons button {
+    flex: 1;
+}
+
+/****** index ******/
+
+.content {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    padding: 40px 20px;
+}
+
+.box {
+    background-color: white;
+    width: 45%;
+    min-width: 300px;
+    margin: 20px 0;
+    padding: 20px;
+    box-sizing: border-box;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.box.standard {
+    background-color: #f3e7d7;
+}
+
+.box.build-yourself {
+    background-color: #e6f3d7;
+}
+
+.box p {
+    margin: 10px 0;
+}
+
+.box button {
+    background-color: #16325c;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    margin: 10px 0;
+}
+
+.box button:hover {
+    background-color: #0e2343;
+}
+
+.box img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    margin-top: 20px;
+    border-radius: 6px;
+}
+
+.footer {
+    background-color: #16325c;
+    color: white;
+    text-align: center;
+    padding: 20px;
+    font-size: 20px;
+}
+
+/****** Om os footer *******/
+
+.mega-footer {
+    background-color: #f7f7f7;
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    padding: 40px 20px;
+}
+
+.footer-column {
+    width: 200px;
+    margin: 20px;
+}
+
+.footer-column h3 {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.footer-column ul {
+    list-style: none;
+    padding: 0;
+}
+
+.footer-column ul li {
+    margin-bottom: 6px;
+    cursor: pointer;
+}
+
+.footer-column ul li:hover {
+    text-decoration: underline;
+}
+
+.footer-column img {
+    margin-bottom: 10px;
+}
+
+.company-info p {
+    font-size: 14px;
+}
+
+@media (max-width: 800px) {
+    .mega-footer {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .footer-column {
+        width: 90%;
+        text-align: center;
+    }
+}
+
+/****** CustomMadeSite (Dropdown og videre knap) ******/
+
+.nav-steps {
+    background-color: #16325c;
+    color: white;
+    display: flex;
+    justify-content: center;
+    padding: 15px;
+    gap: 40px;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.designer-container {
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-start;
+    padding: 40px 20px;
+    background-color: #f4f4f4;
+    flex-wrap: wrap;
+    min-height: 80vh;
+}
+
+.options {
+    background-color: #ffffff;
+    padding: 25px;
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.options select {
+    padding: 12px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+.drawing {
+    background-color: white;
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 600px;
+    height: 600px;
+    max-width: 100%;
+    margin: 20px;
+}
+
+.info-text {
+    background-color: #ffffff;
+    padding: 25px;
+    width: 300px;
+    min-height: 300px;
+    font-size: 15px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    line-height: 1.6;
+}
+
+.next-button {
+    display: flex;
+    justify-content: flex-end;
+    padding: 20px 40px;
+}
+
+.next-button button {
+    background-color: #16325c;
+    color: white;
+    padding: 12px 30px;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.next-button button:hover {
+    background-color: #0e2343;
+}
+
+@media (max-width: 800px) {
+    .designer-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .options, .info-text {
+        width: 90%;
+    }
+
+    .next-button {
+        justify-content: center;
+    }
+}
+
+/****** Oversigt side (Din valgte carport) ******/
+
+.carport-overview {
+    background-color: white;
+    width: 70%;
+    margin: 40px auto;
+    padding: 40px;
+    text-align: center;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    box-sizing: border-box;
+}
+
+.carport-overview h1 {
+    font-size: 32px;
+    margin-bottom: 40px;
+}
+
+.carport-image img {
+    width: 500px;
+    max-width: 100%;
+    margin-bottom: 40px;
+}
+
+.carport-info {
+    text-align: left;
+    font-size: 16px;
+    line-height: 1.6;
+    margin-bottom: 40px;
+}
+
+.carport-price p {
+    font-size: 24px;
+    color: #4CAF50;
+    font-weight: bold;
+    margin-bottom: 40px;
+}
+
+.carport-overview .next-button {
+    text-align: right;
+}
+
+.carport-overview .next-button button {
+    background-color: #16325c;
+    color: white;
+    padding: 12px 40px;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 6px;
+}
+
+.carport-overview .next-button button:hover {
+    background-color: #0e2343;
+}
+
+@media (max-width: 800px) {
+    .carport-overview {
+        width: 90%;
+        padding: 20px;
+    }
+
+    .carport-image img {
+        width: 100%;
+    }
+
+    .carport-overview .next-button {
+        text-align: center;
+    }
+}
+
+/****** kunde forespørgsel ******/
+
+
+
+.request-status-container {
+    background-color: white;
+    width: 70%;
+    margin: 40px auto;
+    padding: 30px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
+}
+
+.request-header {
+    background-color: #e5e5e5;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 6px;
+    margin-bottom: 30px;
+}
+
+.request-header h2 {
+    font-size: 24px;
+    margin: 0;
+}
+
+.status {
+    font-size: 18px;
+    display: flex;
+    gap: 10px;
+}
+
+.status-value {
+    font-weight: bold;
+    color: #666;
+}
+
+.request-body {
+    min-height: 400px;
+    background-color: #fff;
+}
+
+
+/****** Admin oversigt over ordre  ******/
+
+.order-list-container {
+    background-color: white;
+    width: 70%;
+    margin: 40px auto;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
+}
+
+.order-row {
+    background-color: #e5e5e5;
+    padding: 20px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 6px;
+}
+
+.order-info {
+    font-size: 16px;
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.order-email {
+    font-weight: bold;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.order-action button {
+    background-color: #16325c;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    font-size: 14px;
+    cursor: pointer;
+    border-radius: 6px;
+}
+
+.order-action button:hover {
+    background-color: #0e2343;
+}
+
+@media (max-width: 800px) {
+    .order-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .order-action {
+        width: 100%;
+        text-align: right;
+    }
+}
+
+/****** fejl side  ******/
+
+
+
+
+.error-page {
+    background-color: white;
+    width: 70%;
+    margin: 80px auto;
+    padding: 60px;
+    text-align: center;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    box-sizing: border-box;
+}
+
+.error-page h1 {
+    font-size: 60px;
+    margin-bottom: 20px;
+}
+
+.error-text {
+    font-size: 24px;
+    color: red;
+    margin-bottom: 40px;
+}
+
+.back-button .button {
+    background-color: #16325c;
+    color: white;
+    padding: 12px 40px;
+    text-decoration: none;
+    font-size: 18px;
+    border-radius: 6px;
+}
+
+
+/****** status side  ******/
+
+
+
+
+.offer-page {
+    background-color: white;
+    width: 80%;
+    margin: 40px auto;
+    padding: 40px;
+    display: flex;
+    justify-content: space-between;
+    gap: 40px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
+}
+
+.offer-left {
+    flex: 2;
+    background-color: #f4f4f4;
+    padding: 30px;
+    border-radius: 6px;
+}
+
+.offer-left h3 {
+    margin-top: 20px;
+}
+
+.price-display {
+    background-color: #16325c;
+    color: white;
+    padding: 10px 20px;
+    display: inline-block;
+    font-size: 18px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+}
+
+.offer-left input {
+    padding: 12px;
+    width: 200px;
+    font-size: 16px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+
+.offer-right {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.drawing-box img {
+    width: 100%;
+    background-color: #ddd;
+    border-radius: 6px;
+}
+
+.calculation-box {
+    background-color: #e5e5e5;
+    padding: 20px;
+    border-radius: 6px;
+    font-size: 16px;
+}
+
+@media (max-width: 800px) {
+    .offer-page {
+        flex-direction: column;
+    }
+
+    .offer-right, .offer-left {
+        width: 100%;
+    }
+}
+
+.send-offer {
+    margin-top: 20px;
+    text-align: right;
+}
+
+.send-offer button {
+    background-color: #16325c;
+    color: white;
+    padding: 10px 30px;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 6px;
+}
+
+.send-offer button:hover {
+    background-color: #0e2343;
+}
+
+
+/****** stk liste  ******/
+
+
+
+.offer-summary {
+    background-color: white;
+    width: 70%;
+    margin: 40px auto;
+    padding: 40px;
+    text-align: left;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    box-sizing: border-box;
+}
+
+.offer-summary h1 {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.offer-top {
+    display: flex;
+    gap: 40px;
+    margin-bottom: 40px;
+    align-items: center;
+}
+
+.offer-image img {
+    width: 500px;
+    max-width: 100%;
+    border-radius: 6px;
+}
+
+.offer-description p {
+    font-size: 16px;
+    line-height: 1.6;
+}
+
+.material-list {
+    background-color: #f4f4f4;
+    padding: 20px;
+    border-radius: 6px;
+    margin-bottom: 40px;
+}
+
+.material-list li {
+    margin-bottom: 10px;
+}
+
+.instruction {
+    background-color: #f4f4f4;
+    padding: 20px;
+    border-radius: 6px;
+    margin-bottom: 40px;
+}
+
+.final-price p {
+    background-color: #16325c;
+    color: white;
+    display: inline-block;
+    padding: 12px 30px;
+    font-size: 24px;
+    border-radius: 6px;
+}
+
+
+
+/****** Login/Opret bruger  ******/
+
+
+
+.login-choice-container {
+    background-color: #e5e5e5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px 20px;
+}
+
+.login-box {
+    background-color: white;
+    padding: 100px 60px;
+    text-align: center;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 6px;
+    width: 400px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px; /* <-- mellemrum mellem knapperne */
+}
+
+
+.login-box button {
+    background-color: #16325c;
+
+    color: white;
+    border: none;
+    padding: 12px 40px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 0;
+    width: 200px;
+
+}
+
+.login-box button:hover {
+    background-color: #0e2343;
+}
+
+
+
+
+

@@ -1,10 +1,98 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="da">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fog Carporte</title>
+    <link href="../public/css/css.css" th:href="@{/css/css.css}" rel="stylesheet"/>
 </head>
 <body>
 
+<div class="header">
+    <img src="../../../../target/Fog.jpeg" height="70" width="70"/>
+    <div class="search-bar">
+        <input type="text" placeholder="Søg på produkter eller kategorier">
+    </div>
+    <div class="konto">Fog Konto</div>
+</div>
+
+<div class="content">
+    <div class="box standard">
+        <p>Her kan du ud fra eget ønske og egne mål selv designe din drømme carport bare ved hjælp af få klik.</p>
+        <p>din forespørgsel vil blive sendt til vores dygtige sælgere som derfra vil lav et skræddersyet tilbud til dig og dine behov</p>
+        <button>Standard carporte</button>
+        <img src="../../../../Unknown.jpeg" alt="Standard carporte" height="183" width="275"/>
+    </div>
+
+    <div class="box build-yourself">
+        <form method="get" action="/Customsite">
+            <img src="../../../../target/Unknown.jpeg" alt="Byg Selv Carport" height="174" width="289"/>
+            <p>Her kan du ud fra eget ønske og egne mål selv designe din drømme carport bare ved hjælp af få klik.</p>
+            <p>din forespørgsel vil blive sendt til vores dygtige sælgere som derfra vil lav et skræddersyet tilbud til dig og dine behov</p>
+            <button formaction="/Customsite" type="submit">Byg selv carport</button>   <!-- TIL CUSTOMMADESIDE -->
+    </div>
+</div>
+
+<div class="footer">
+    Om os
+
+
+</div>
+<div class="mega-footer">
+    <div class="footer-column">
+        <h3>Kundeservice</h3>
+        <ul>
+            <li>Kontakt Fog</li>
+            <li>Ofte stillede spørgsmål</li>
+            <li>Købs- og leveringsvilkår online</li>
+            <li>Fortrydelse og returnering</li>
+            <li>Reklamation og klage</li>
+            <li>Fragt</li>
+            <li>Prismatch</li>
+            <li>Lån en trailer</li>
+            <li>Udlejning</li>
+            <li>Bliv kontokunde</li>
+        </ul>
+    </div>
+    <div class="footer-column">
+        <h3>Aktuelt</h3>
+        <ul>
+            <li>Mærker</li>
+            <li>Avser og kataloger</li>
+            <li>Tilmeld nyhedsbrev</li>
+            <li>Inspiration & guides</li>
+            <li>LinkedIn</li>
+            <li>Instagram</li>
+            <li>Facebook</li>
+        </ul>
+    </div>
+    <div class="footer-column">
+        <h3>Om Fog</h3>
+        <ul>
+            <li>Åbningstider</li>
+            <li>Om Fog</li>
+            <li>Fogs Fond</li>
+            <li>Karriere i Fog</li>
+            <li>Bliv kontokunde i Fog</li>
+            <li>Persondatapolitik</li>
+            <li>Cookies</li>
+        </ul>
+    </div>
+    <div class="footer-column">
+        <h3>Med omtanke</h3>
+        <ul>
+            <li>CSR-rapporter</li>
+            <li>Certificering</li>
+            <li>Whistleblowerordning</li>
+            <li>Whistleblowerpolitik</li>
+        </ul>
+    </div>
+    <div class="footer-column company-info">
+        <img src="../../../../target/Fog.jpeg" height="70" width="70"/>
+        <p><strong>Johannes Fog A/S</strong><br>Firskovvej 20<br>2800 Lyngby<br>CVR-nr. 16314439</p>
+    </div>
+</div>
+
 </body>
 </html>
+
