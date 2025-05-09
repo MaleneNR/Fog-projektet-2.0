@@ -1,19 +1,28 @@
 package app.entities;
 
 public class OrderDetail {
-    private int productId;
+    private Product product;
     private int quantity;
     private int totalPrice;
     private String assemblyDescription;
     private int materialId;
     private int orderId;
 
-    public int getProductId() {
-        return productId;
+    public OrderDetail(int orderId, Product product, int quantity, String assemblyDescription) {
+        this.orderId = orderId;
+        this.product = product;
+        this.quantity = quantity;
+        this.assemblyDescription = assemblyDescription;
     }
 
-    public void setProductId(int productId) {
-        this.productId = productId;
+
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
     }
 
     public int getQuantity() {
@@ -59,7 +68,7 @@ public class OrderDetail {
     @Override
     public String toString() {
         return "OrderDetail{" +
-                "productId=" + productId +
+                "product=" + product +
                 ", quantity=" + quantity +
                 ", totalPrice=" + totalPrice +
                 ", assemblyDescription='" + assemblyDescription + '\'' +
