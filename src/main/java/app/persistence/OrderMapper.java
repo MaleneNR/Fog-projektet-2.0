@@ -148,9 +148,15 @@ public class OrderMapper {
                 PreparedStatement ps = connection.prepareStatement(sql);
         ) {
             for (OrderDetail orderDetail : orderDetails) {
+
+                //Calculation of totalprice (quantity * pricePerUnit)
+                int pricePerUnit = MaterialMapper.getMaterialById(orderDetail.getMaterialId(),connectionPool).getPricePerUnit();
+                int lengthInMeter = orderDetail.getProduct().getLength()/100; //from cm i db
+                int totalPrice = pricePerUnit * lengthInMeter;
+
                 ps.setInt(1, orderDetail.getProduct().getProductId());
                 ps.setInt(2, orderDetail.getQuantity());
-                ps.setInt(3, 99); //TODO TOTALPRICE!!!
+                ps.setInt(3, totalPrice); //TODO TOTALPRICE KAN OPTIMERES
                 ps.setString(4, orderDetail.getAssemblyDescription());
                 ps.setInt(5, orderDetail.getMaterialId());
                 ps.setInt(6, orderDetail.getOrderId());
@@ -160,7 +166,7 @@ public class OrderMapper {
                 orderDetailsAdded = true;
             }
 
-        } catch (SQLException e) {
+        } catch (SQLException | DatabaseException e) {
             throw new RuntimeException(e);
         }
         return orderDetailsAdded;
