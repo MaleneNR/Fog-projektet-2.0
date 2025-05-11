@@ -32,26 +32,30 @@
             <option>Uden skur</option>
         </select>
 
-        <select>
-            <option>Længde</option>
-            <option>160</option>
-            <option>280</option>
-            <option>300</option>
-            <option>600</option>
+        <select id="length" name="length">
+            <option>Længde i cm</option>
+                <option th:each="length : ${lengthOptions}"
+                        th:value="${length}"
+                        th:text="${length +' cm'}">
+                </option>
+            </select>
         </select>
 
-        <select>
-            <option>Højde</option>
-            <option>200</option>
-            <option>480</option>
-            <option>600</option>
+        <select id="height" name="height">
+            <option>Højde i cm</option>
+            <option th:each="height : ${heightOptions}"
+                    th:value="${height}"
+                    th:text="${height +' cm'}">
+            </option>
         </select>
 
-        <select>
-            <option>Bredde</option>
-            <option>200</option>
-            <option>480</option>
-            <option>600</option>
+        <select id="width" name="width">
+            <option>Bredde i cm</option>
+            <option th:each="width : ${widthOptions}"
+                    th:value="${width}"
+                    th:text="${width +' cm'}">
+            </option>
+        </select>
         </select>
 
         <select>

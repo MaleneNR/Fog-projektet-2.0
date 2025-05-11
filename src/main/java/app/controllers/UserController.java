@@ -4,6 +4,7 @@ import app.entities.*;
 import app.exceptions.DatabaseException;
 import app.persistence.ConnectionPool;
 import app.persistence.UserMapper;
+import app.services.Dimensions;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 import app.persistence.OrderMapper;
@@ -26,7 +27,13 @@ public class UserController {
         app.get("OpretBruger", ctx -> ctx.render("createUser.html"));
         app.get("Login", ctx -> ctx.render("Login.html"));
         app.post("/createUser", ctx -> createUser(ctx, connectionPool));
-        app.get("/Customsite", ctx -> ctx.render("CustomMadeSite.html"));
+        app.get("/Customsite", ctx -> {
+            ctx.attribute("lengthOptions", Dimensions.options(240,780,30));
+            ctx.attribute("widthOptions", Dimensions.options(240,600,30));
+            ctx.attribute("heightOptions", Dimensions.options(210,300,30));
+
+            ctx.render("CustomMadeSite.html");
+        });
         app.post("/seForesporgsel", ctx -> AdminController.editProduct(ctx, connectionPool));
 
 
