@@ -23,7 +23,7 @@ public class UserMapper {
             if (rs.next()) {
                 int role = rs.getInt("role_id");
                 //TODO 7: gemme de nye parametre fx:
-                int tlf = rs.getInt("telefon");
+                String tlf = rs.getString("telefon");
                 String name = rs.getString("name");
                 String adress = rs.getString("adresse");
 
@@ -85,7 +85,7 @@ public class UserMapper {
                 String email = rs.getString("email");
                 String password = rs.getString("password");
                 String navn = rs.getString("name");
-                int tlf = rs.getInt("telefon");
+                String tlf = rs.getString("telefon");
                 String adresse = rs.getString("adresse");
 
 

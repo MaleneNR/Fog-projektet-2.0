@@ -22,7 +22,7 @@ public class UserController {
         app.post("/Login", ctx -> login(ctx, connectionPool));
         //app.get("/loginPage", ctx -> ctx.render("Login.html"));
         app.get("/logout", ctx -> logout(ctx));
-        app.get("/loginOpretBruger", ctx -> ctx.render("OpretBrugerEllerLogin.html"));
+        app.post("/loginOpretBruger", ctx -> ctx.render("OpretBrugerEllerLogin.html")); //TODO:
         app.get("OpretBruger", ctx -> ctx.render("createUser.html"));
         app.get("Login", ctx -> ctx.render("Login.html"));
         app.post("/createUser", ctx -> createUser(ctx, connectionPool));
@@ -31,7 +31,12 @@ public class UserController {
 
 
     }
-
+//TODO brug lidt alla det samme her til custommadesite i from af at genne valgte mål i formparametre  fx cupcake  <select id="topping" name="topping">
+//                    <option>Vælg topping</option>
+//                    <option th:each="topping: ${toppingsList}"
+//                            th:value="${topping.toppingId}"
+//                            th:text="${topping.topping}">
+//                    </option>
     private static void createUser(@NotNull Context ctx, ConnectionPool connectionPool) {
         String username = ctx.formParam("email"); //til thomsd, hvorfor hedder denne username?
         String password1 = ctx.formParam("password1");

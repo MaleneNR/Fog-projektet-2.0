@@ -9,7 +9,7 @@
 <body>
 
 <div class="header">
-    <img src="../../../../target/Fog.jpeg" height="70" width="70"/>
+    <img src="../public/images/FogLogo.jpeg" th:src="@{/images/FogLogo.jpeg}" height="70" width="70"/>
     <div class="search-bar">
         <input type="text" placeholder="Søg på produkter eller kategorier">
     </div>
@@ -26,40 +26,47 @@
 
 <div class="designer-container">
     <div class="options">
-        <select>
-            <option>Med/uden skur</option>
-            <option>Med skur</option>
-            <option>Uden skur</option>
-        </select>
+        <form method="post" action="/loginOpretBruger">
+            <select id ="skur" name = "skur">
+                <option>Med/uden skur</option>
+                <option>Med skur</option>
+                <option>Uden skur</option>
+            </select>
 
-        <select>
-            <option>Længde</option>
-            <option>160</option>
-            <option>280</option>
-            <option>300</option>
-            <option>600</option>
-        </select>
+            <select id = "laengde" name ="laengde">
+                <option>Længde</option>
+                <option>160</option>
+                <option>280</option>
+                <option>300</option>
+                <option>600</option>
+            </select>
 
-        <select>
-            <option>Højde</option>
-            <option>200</option>
-            <option>480</option>
-            <option>600</option>
-        </select>
+            <select id = "hoejde" name = "hoejde">
+                <option>Højde</option>
+                <option>200</option>
+                <option>480</option>
+                <option>600</option>
+            </select>
 
-        <select>
-            <option>Bredde</option>
-            <option>200</option>
-            <option>480</option>
-            <option>600</option>
-        </select>
+            <select id = "bredder" name="bredde">
+                <option>Bredde</option>
+                <option>200</option>
+                <option>480</option>
+                <option>600</option>
+            </select>
 
-        <select>
-            <option>Håndværker?</option>
-            <option>Ja</option>
-            <option>Nej</option>
-        </select>
+            <select id = "haandvaerker" name="haandvaerker">
+                <option>Håndværker?</option>
+                <option>Ja</option>
+                <option>Nej</option>
+            </select>
+            <div class="next-button">
+                <button type="submit">Videre</button>
+                <!-- TIL OpretBrugerEllerLogin.html -->
+            </div>
+        </form>
     </div>
+
 
     <div class="drawing">
         <p>SVG tegning </p>
@@ -71,15 +78,6 @@
             daglige brød.</p>
     </div>
 </div>
-
-
-<form method="get">
-    <div class="next-button">
-        <button class="button" formaction="/loginOpretBruger" type="submit">Videre</button>
-        <!-- TIL OpretBrugerEllerLogin.html -->
-    </div>
-    <form>
-
 </body>
 </html>
 
