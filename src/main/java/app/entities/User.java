@@ -1,21 +1,19 @@
 package app.entities;
 
-import java.util.Objects;
-
 public class User {
     private int userId;
     private String email;
     private String password;
     private int role;
     private String name;
-    private int telefon;
+    private int phoneNumber;
     private String adresse;
 
-    public User(String email, String password, int role, String name, String adresse, int telefon) {
+    public User(String email, String password, int role, String name, String adresse, int phoneNumber) {
         this.email = email;
         this.password = password;
         this.role = role;
-        this.telefon = telefon;
+        this.phoneNumber = phoneNumber;
         this.name=name;
         this.adresse = adresse;
 
@@ -69,12 +67,12 @@ public class User {
         this.name = name;
     }
 
-    public int getTelefon() {
-        return this.telefon;
+    public int getPhoneNumber() {
+        return this.phoneNumber;
     }
 
-    public void setTelefon(int phonenumber) {
-        this.telefon = phonenumber;
+    public void setPhoneNumber(int phonenumber) {
+        this.phoneNumber = phonenumber;
     }
 
     public String getAdresse() {
@@ -95,7 +93,7 @@ public class User {
 
                 ", role=" + role +
                 ", name='" + name + '\'' +
-                ", telefon=" + telefon +
+                ", telefon=" + phoneNumber +
                 ", adresse='" + adresse + '\'' +
                 '}';
 
@@ -106,7 +104,7 @@ public class User {
         if (this == o) return true;
         if (!(o instanceof User user)) return false;
 
-        return getUserId() == user.getUserId() && getRole() == user.getRole() && getPhonenumber() == user.getPhonenumber() && getEmail().equals(user.getEmail()) && getPassword().equals(user.getPassword()) && getName().equals(user.getName()) && getAdresse().equals(user.getAdresse());
+        return getUserId() == user.getUserId() && getRole() == user.getRole() && getPhoneNumber() == user.getPhoneNumber() && getEmail().equals(user.getEmail()) && getPassword().equals(user.getPassword()) && getName().equals(user.getName()) && getAdresse().equals(user.getAdresse());
     }
 
     @Override
@@ -116,7 +114,7 @@ public class User {
         result = 31 * result + getPassword().hashCode();
         result = 31 * result + getRole();
         result = 31 * result + getName().hashCode();
-        result = 31 * result + getPhonenumber();
+        result = 31 * result + getPhoneNumber();
         result = 31 * result + getAdresse().hashCode();
         return result;
     }
