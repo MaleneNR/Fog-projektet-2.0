@@ -4,6 +4,7 @@ import app.entities.Order;
 import app.entities.OrderDetail;
 import app.entities.User;
 import app.exceptions.DatabaseException;
+import app.services.Calculator;
 import io.javalin.http.Context;
 
 import java.sql.*;
@@ -114,8 +115,16 @@ public class OrderMapper {
                 try (ResultSet rs = ps.getGeneratedKeys()) {
                     if (rs.next()) {
                         int orderId = rs.getInt("order_id");
-                        order = new Order(orderId,status,20000, order.isPayed(), dateOfToday, order.getUser(),order.getLength(),order.getHeight(),order.getWidth());
+                        order.setOrderId(orderId);
                         orderAdded = true;
+
+                        //Calculator beregner materialler
+                        Calculator calculator = new Calculator(order.getWidth(),order.getLength(),connectionPool);
+                        calculator.calcCarport(order); //Kalder alle beregningsmetoder i calculatorklassen, hvor de tilføjer til en liste af orderdetails
+                        List<OrderDetail> orderDetails = calculator.getOrderDetails(); //Her får vi så listen
+                        if(addOrderDetail(orderDetails,connectionPool) == true){
+                            orderAdded = true;
+                        }
                     }
                 }
             } else {
@@ -127,8 +136,35 @@ public class OrderMapper {
         return orderAdded;
     }
 
-    //vi har en funktion der hedder addOderDetails men tænker det er beregneren der styrer det
-    //TODO DENNE KOMMENTAR SLETTES, vi bruger addOrderDetails inde i calculator ^
+
+    private static boolean addOrderDetail(List<OrderDetail> orderDetails, ConnectionPool connectionPool) {
+        int affectedRows = 0;
+        Boolean orderDetailsAdded = false;
+
+        String sql = "INSERT INTO order_deatils (product_id, quantity, total_price, assembly_description, material_id, order_id) values (?,?,?,?,?,?,?,?) RETURNING order_id";
+
+        try (
+                Connection connection = connectionPool.getConnection();
+                PreparedStatement ps = connection.prepareStatement(sql);
+        ) {
+            for (OrderDetail orderDetail : orderDetails) {
+                ps.setInt(1, orderDetail.getProduct().getProductId());
+                ps.setInt(2, orderDetail.getQuantity());
+                ps.setInt(3, 99); //TODO TOTALPRICE!!!
+                ps.setString(4, orderDetail.getAssemblyDescription());
+                ps.setInt(5, orderDetail.getMaterialId());
+                ps.setInt(6, orderDetail.getOrderId());
+                affectedRows = ps.executeUpdate();
+            }
+            if (affectedRows == orderDetails.size()){
+                orderDetailsAdded = true;
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return orderDetailsAdded;
+    }
 
 
     public static boolean deleteOrderDetailsAndOrder (int orderId, ConnectionPool connectionPool){
