@@ -10,6 +10,33 @@ import io.javalin.http.Context;
 
 public class OrderController {
     public static void addRoutes(Javalin app, ConnectionPool connectionPool) {
+        app.post("/carport-request", ctx -> showRequest(ctx));
+    }
+
+    private static void showRequest(Context ctx){
+
+        String shed = ctx.formParam("shed");
+        Boolean withShed = false;
+        if (shed.equals("Med skur")){
+            withShed = true;
+        }
+
+        int length = Integer.parseInt(ctx.formParam("length"));
+        int height = Integer.parseInt(ctx.formParam("height"));
+        int width = Integer.parseInt(ctx.formParam("width"));
+        String craftsmen = ctx.formParam("craftsmen");
+        Boolean withCraftsmen = false;
+        if(craftsmen.equals("Ja")){
+            withCraftsmen = true;
+        }
+
+        ctx.sessionAttribute("shed", withShed);
+        ctx.sessionAttribute("length", length);
+        ctx.sessionAttribute("width", width);
+        ctx.sessionAttribute("height", height);
+        ctx.sessionAttribute("craftsmen", withCraftsmen);
+
+        ctx.render("OversigtCustomer.html");
     }
 
     private static void makeRequest(Context ctx, ConnectionPool connectionPool) throws DatabaseException {

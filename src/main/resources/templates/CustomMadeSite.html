@@ -24,9 +24,10 @@
     <div>Forespørgsel</div>
 </div>
 
+<form method="post">
 <div class="designer-container">
     <div class="options">
-        <select>
+        <select name="shed">
             <option>Med/uden skur</option>
             <option>Med skur</option>
             <option>Uden skur</option>
@@ -58,8 +59,8 @@
         </select>
         </select>
 
-        <select>
-            <option>Håndværker?</option>
+        <select name="craftsmen">
+            <option>Bestilling af håndværkere til montering</option>
             <option>Ja</option>
             <option>Nej</option>
         </select>
@@ -77,11 +78,12 @@
 </div>
 
 
-<form method="get">
+
     <div class="next-button">
-        <button class="button" formaction="/loginOpretBruger" type="submit">Videre</button>
+        <button class="button" formaction="/carport-request" type="submit">Videre</button>
         <!-- TIL OpretBrugerEllerLogin.html -->
     </div>
+
     <form>
 
 </body>

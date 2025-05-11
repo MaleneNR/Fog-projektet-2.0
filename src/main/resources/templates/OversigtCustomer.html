@@ -24,9 +24,11 @@
     </div>
 
     <div class="carport-info">
-        <p>Brødtekst er længere, løbende tekst. Før i tiden blev typografernes løn beregnet ud fra antallet af linjer de havde sat.
-            Brødteksten var hurtig at sætte og det var hovedsageligt det som gav sætteren penge til det daglige brød.
-            Brødtekst kaldes også brødsats eller brødskrift.</p>
+        <p th:text="'Din valgte længde er '+ ${session.length} +' cm'"></p>
+        <p th:text="'Din valgte højde er '+ ${session.height} +' cm'"></p>
+        <p th:text="'Din valgte bredde er '+ ${session.width} +' cm'"></p>
+        <p><span th:if="${session.shed}"}>Du har valgt med skur </span></p>
+        <p><span th:if="${session.craftsmen}"}>Du har valgt med montering af håndværkere, som vi bestiller</span></p>
     </div>
 
     <div class="carport-price">
