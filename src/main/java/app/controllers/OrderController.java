@@ -65,7 +65,7 @@ public class OrderController {
         OrderMapper.addRequest(currentOrder, connectionPool);
 
 //evt. redirect eller vis bekræftelse
-        ctx.render("ordreBekræftelse.html");
+        ctx.render("OversigtCustomer.html");
 
 
 

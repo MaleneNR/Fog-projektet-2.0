@@ -9,7 +9,7 @@
 <body>
 
 <div class="header">
-    <img src="../../../../target/Fog.jpeg" height="70" width="70"/>
+    <img src="../public/images/FogLogo.jpeg" th:src="@{/images/FogLogo.jpeg}" height="70" width="70"/>
     <div class="search-bar">
         <input type="text" placeholder="Søg på produkter eller kategorier">
     </div>
@@ -28,7 +28,6 @@
         <p th:text="'Adresse: '+ ${session.user.getAdresse()}">
         </p>
 
-
         <h3>Ordreoplysninger</h3>
         <p th:text="'Order id: '+ ${session.order.getOrderId()}">
         </p>
@@ -39,17 +38,18 @@
         <p th:text="'Højde: '+ ${session.order.getHeight()}">
         </p>
 
-
         <p>Skur: Med skur</p>
         <p>Materiale: Trykimprægneret</p>
 
         <h3>Beregnede pris</h3>
         <div class="price-display">24.234,7 kr</div>
 
-
         <h3>Beregn ny pris:</h3>
         <form method="post" action="/sendTilbud">
             <input type="text" id="newPrice" name="newPrice" placeholder="Skriv ny pris her">
+            <div class="send-offer">
+                <button type="submit">Send tilbud</button>
+            </div>
         </form>
     </div>
 
@@ -57,18 +57,9 @@
         <div class="drawing-box">
             <img src="https://via.placeholder.com/400x200?text=Tegning+af+Carport" alt="Carport tegning">
         </div>
-
-
         <div class="calculation-box">
             <p>Afslag: 2.000 kr</p>
             <p>Beregninger i forhold til pris</p>
-
-
-            <div class="send-offer">
-
-                <button type="submit" formaction="/sendTilbud">Send tilbud</button>
-
-            </div>
         </div>
     </div>
 

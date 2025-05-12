@@ -16,8 +16,6 @@ public class User {
         this.phoneNumber = phoneNumber;
         this.name=name;
         this.adresse = adresse;
-
-
     }
 
     public User(int userId, String email, String password, int role) {
@@ -67,6 +65,7 @@ public class User {
         this.name = name;
     }
 
+
     public int getPhoneNumber() {
         return this.phoneNumber;
     }
@@ -82,7 +81,6 @@ public class User {
     public void setAdresse(String adresse) {
         this.adresse = adresse;
     }
-
 
 
     @Override
@@ -104,6 +102,7 @@ public class User {
         if (this == o) return true;
         if (!(o instanceof User user)) return false;
 
+
         return getUserId() == user.getUserId() && getRole() == user.getRole() && getPhoneNumber() == user.getPhoneNumber() && getEmail().equals(user.getEmail()) && getPassword().equals(user.getPassword()) && getName().equals(user.getName()) && getAdresse().equals(user.getAdresse());
     }
 
@@ -119,3 +118,5 @@ public class User {
         return result;
     }
 }
+
+

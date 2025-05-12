@@ -175,34 +175,25 @@ return false;
         //TODO evt lave en update funktion så man kan opdaterer ordre som admin
 
     public static boolean updateOrder(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
-
-        String newPrice = ctx.sessionAttribute("newPrice"); //ala det her.
+        int newPrice = Integer.parseInt(ctx.formParam("newPrice")); //ala det her.
         Order order = ctx.sessionAttribute("order");
         int orderId = order.getOrderId();
         String sql = "UPDATE orders SET order_price = ?, payed = ? WHERE order_id = ?";
-
         try (
                 Connection connection = connectionPool.getConnection();
                 PreparedStatement ps = connection.prepareStatement(sql)
         ) {
-            ps.setString(1, newPrice);
+            ps.setInt(1, newPrice);
             ps.setBoolean(2, false);
             ps.setInt(3, orderId);
-
             int rows = ps.executeUpdate();
             return rows > 0;
-
         } catch (SQLException e) {
             throw new DatabaseException("Fejl i opdatering af ordre i updateOrder()", e.getMessage());
-
-
         }
     }
         public static void insertOrder(Order order, ConnectionPool connectionPool){
-
-
         }
-
 
 }
 
