@@ -9,6 +9,16 @@ public class Material {
     private String description;
     private int pricePerUnit;
 
+    public Material(int materialId, String material, int width, int height, String unit, String description, int pricePerUnit) {
+        this.materialId = materialId;
+        this.material = material;
+        this.width = width;
+        this.height = height;
+        this.unit = unit;
+        this.description = description;
+        this.pricePerUnit = pricePerUnit;
+    }
+
     public int getMaterialId() {
         return materialId;
     }
