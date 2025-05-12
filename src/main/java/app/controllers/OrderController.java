@@ -10,8 +10,34 @@ import io.javalin.http.Context;
 
 public class OrderController {
     public static void addRoutes(Javalin app, ConnectionPool connectionPool) {
+        app.post("/carport-request", ctx -> showRequest(ctx));
     }
 
+    private static void showRequest(Context ctx){
+
+        String shed = ctx.formParam("shed");
+        Boolean withShed = false;
+        if (shed.equals("Med skur")){
+            withShed = true;
+        }
+
+        int length = Integer.parseInt(ctx.formParam("length"));
+        int height = Integer.parseInt(ctx.formParam("height"));
+        int width = Integer.parseInt(ctx.formParam("width"));
+        String craftsmen = ctx.formParam("craftsmen");
+        Boolean withCraftsmen = false;
+        if(craftsmen.equals("Ja")){
+            withCraftsmen = true;
+        }
+
+        ctx.sessionAttribute("shed", withShed);
+        ctx.sessionAttribute("length", length);
+        ctx.sessionAttribute("width", width);
+        ctx.sessionAttribute("height", height);
+        ctx.sessionAttribute("craftsmen", withCraftsmen);
+
+        ctx.render("viewRequest.html");
+    }
     private static void makeRequest(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
         //funktionen skal kunne, så en bruger ud fra egne valg af mål der bliver givet i dropdownmenuerne og derfra kunne gå videre og ligge en forespørgsel
         //det som kunden vælger i menuerne bliver til en ordre og session som bliver tilkoblet på deres user_id når de logger ind
