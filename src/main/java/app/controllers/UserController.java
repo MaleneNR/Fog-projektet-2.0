@@ -20,13 +20,13 @@ public class UserController {
 
     public static void addRoutes(Javalin app, ConnectionPool connectionPool) {
         app.post("/Login", ctx -> login(ctx, connectionPool));
-        //app.get("/loginPage", ctx -> ctx.render("Login.html"));
+        //app.get("/loginPage", ctx -> ctx.render("login.html"));
         app.get("/logout", ctx -> logout(ctx));
-        app.post("/loginOpretBruger", ctx -> ctx.render("OpretBrugerEllerLogin.html")); //TODO:
+        app.post("/loginOpretBruger", ctx -> ctx.render("createUserOrLogin.html")); //TODO:
         app.get("OpretBruger", ctx -> ctx.render("createUser.html"));
-        app.get("Login", ctx -> ctx.render("Login.html"));
+        app.get("Login", ctx -> ctx.render("login.html"));
         app.post("/createUser", ctx -> createUser(ctx, connectionPool));
-        app.get("/Customsite", ctx -> ctx.render("CustomMadeSite.html"));
+        app.get("/Customsite", ctx -> ctx.render("customMadeSite.html"));
         app.post("/seForesporgsel", ctx -> AdminController.editProduct(ctx, connectionPool));
 
 
@@ -42,8 +42,9 @@ public class UserController {
         String password1 = ctx.formParam("password1");
         String password2 = ctx.formParam("password2");
         String navn = ctx.formParam("navn");
-        String telefon = ctx.formParam("telefon");//hvorfor ikke int
+        String phoneNumber = ctx.formParam("telefon");//hvorfor ikke int
         String text = ctx.formParam("text");
+
 
         //TODO: 1. gem inputs fra de andre keys i createUser.html som fx "telefon".
 
@@ -52,9 +53,9 @@ public class UserController {
         //Validerer password
         if(password1.equals(password2)){
             try{
-                UserMapper.createUser(username,password1, telefon, navn, text, connectionPool); //TODO 2. funktionen skal opdateres så den modtager de nye parametre fx telefon.
+                UserMapper.createUser(username,password1, phoneNumber, navn, text, connectionPool); //TODO 2. funktionen skal opdateres så den modtager de nye parametre fx telefon.
                 ctx.attribute("message", "Du er hermed oprettet med brugernavn: "+ username+ ". Du skal nu logge på");
-                ctx.render("Login.html");}
+                ctx.render("login.html");}
             catch (DatabaseException e) {
                 ctx.attribute("message", "Dit brugernavn findes allerede. Prøv igen, eller log ind");
                 ctx.render("createUser.html");
@@ -89,12 +90,12 @@ public class UserController {
                 loginAdmin(ctx,connectionPool);
             } else{
 
-                ctx.render("OversigtCustomer.html");
+                ctx.render("viewRequest.html");
             }
 
         } catch (DatabaseException e) {
             ctx.attribute("message", e.getMessage());
-            ctx.render("OpretBrugerEllerLogin.html");
+            ctx.render("createUserOrLogin.html");
         }
 
     }
@@ -107,7 +108,7 @@ public class UserController {
         //List<Order> orderList = OrderMapper.getAllRequest(connectionPool);
         List<Order> orderList = OrderMapper.getAllRequests(connectionPool);//skal man kalde viewAllOrders fra dmin controller?
         ctx.sessionAttribute("orderList", orderList);
-        ctx.render("ForespørgeselOversigtAdmin.html");
+        ctx.render("adminIndex.html");
     }
 }
 

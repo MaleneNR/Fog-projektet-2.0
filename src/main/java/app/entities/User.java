@@ -6,10 +6,10 @@ public class User {
     private String password;
     private int role;
     private String name;
-    private int phoneNumber;
+    private String phoneNumber;
     private String adresse;
 
-    public User(String email, String password, int role, String name, String adresse, int phoneNumber) {
+    public User(String email, String password, int role, String name, String adresse, String phoneNumber) {
         this.email = email;
         this.password = password;
         this.role = role;
@@ -66,11 +66,11 @@ public class User {
     }
 
 
-    public int getPhoneNumber() {
+    public String getPhoneNumber() {
         return this.phoneNumber;
     }
 
-    public void setPhoneNumber(int phonenumber) {
+    public void setPhoneNumber(String phonenumber) {
         this.phoneNumber = phonenumber;
     }
 
@@ -91,7 +91,7 @@ public class User {
 
                 ", role=" + role +
                 ", name='" + name + '\'' +
-                ", telefon=" + phoneNumber +
+                ", telefonnr.=" + phoneNumber +
                 ", adresse='" + adresse + '\'' +
                 '}';
 
@@ -102,8 +102,7 @@ public class User {
         if (this == o) return true;
         if (!(o instanceof User user)) return false;
 
-
-        return getUserId() == user.getUserId() && getRole() == user.getRole() && getPhoneNumber() == user.getPhoneNumber() && getEmail().equals(user.getEmail()) && getPassword().equals(user.getPassword()) && getName().equals(user.getName()) && getAdresse().equals(user.getAdresse());
+        return getUserId() == user.getUserId() && getRole() == user.getRole() && getEmail().equals(user.getEmail()) && getPassword().equals(user.getPassword()) && getName().equals(user.getName()) && getPhoneNumber().equals(user.getPhoneNumber()) && getAdresse().equals(user.getAdresse());
     }
 
     @Override
@@ -113,7 +112,7 @@ public class User {
         result = 31 * result + getPassword().hashCode();
         result = 31 * result + getRole();
         result = 31 * result + getName().hashCode();
-        result = 31 * result + getPhoneNumber();
+        result = 31 * result + getPhoneNumber().hashCode();
         result = 31 * result + getAdresse().hashCode();
         return result;
     }

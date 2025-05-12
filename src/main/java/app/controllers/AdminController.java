@@ -72,7 +72,7 @@ public class AdminController {
                     Order updatedOrder = OrderMapper.getOrderById(orderId, connectionPool);
                     ctx.sessionAttribute("order", updatedOrder);
                     ctx.sessionAttribute("user", user);
-                    ctx.render("StatusSide.html"); //Vis opdateret ordre
+                    ctx.render("adminStatusSite.html"); //Vis opdateret ordre
                 } else {
                     ctx.status(500).result("Opdatering fejlede.");
                 }
@@ -112,7 +112,7 @@ public class AdminController {
         ctx.attribute("orders", orderList);
 
         // 3. Vis admin status siden (Thymeleaf HTML skabelon)
-        ctx.render("ForespørgeselOversigtAdmin.html");
+        ctx.render("adminIndex.html");
 
 
 

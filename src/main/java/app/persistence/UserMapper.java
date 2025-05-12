@@ -23,12 +23,12 @@ public class UserMapper {
             if (rs.next()) {
                 int role = rs.getInt("role_id");
                 //TODO 7: gemme de nye parametre fx:
-                String tlf = rs.getString("telefon");
+                String phoneNumber = rs.getString("telefon");
                 String name = rs.getString("name");
                 String adress = rs.getString("adresse");
 
 
-                return new User(email, password, role, name, adress, tlf); //TODO 8: Du har opdateret User klassen til at kunne indeholde de nye parametre. Disse skal indsættes her: return new User(email, password, tlf, role);
+                return new User(email, password, role, name, adress, phoneNumber); //TODO 8: Du har opdateret User klassen til at kunne indeholde de nye parametre. Disse skal indsættes her: return new User(email, password, tlf, role);
             } else {
                 throw new DatabaseException("Fejl i login. Prøv igen");
             }
@@ -85,11 +85,11 @@ public class UserMapper {
                 String email = rs.getString("email");
                 String password = rs.getString("password");
                 String navn = rs.getString("name");
-                String tlf = rs.getString("telefon");
+                String phoneNumber = rs.getString("telefon");
                 String adresse = rs.getString("adresse");
 
 
-                return new User(email, password, role, navn, adresse, tlf);
+                return new User(email, password, role, navn, adresse, phoneNumber);
             } else {
                 throw new DatabaseException("Fejl i login. Prøv igen");
             }
