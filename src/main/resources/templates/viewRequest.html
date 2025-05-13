@@ -24,7 +24,7 @@
     </div>
 
     <div class="carport-info">
-        <div class="bold"><p font-weight="">Her er dine valg af mål for din carport: </p></div>
+        <div class="bold"><p font-weight="">Her er dine valg for din carport: </p></div>
     <p th:text="'Din valgte længde er '+ ${session.length} +' cm'"></p>
     <p th:text="'Din valgte højde er '+ ${session.height} +' cm'"></p>
     <p th:text="'Din valgte bredde er '+ ${session.width} +' cm'"></p>
@@ -35,11 +35,12 @@
     <div class="carport-price">
         <p>24.000 kr</p>
     </div>
-
+<form method="get">
     <div class="next-button">
-        <button class="button" formaction="/" type="submit">Send forespørgsel</button>
+        <button class="button" formaction="/createUserOrLogin" type="submit">Send forespørgsel</button>
     </div>
-</div>
 
+</form>
+</div>
 </body>
 </html>

@@ -15,26 +15,17 @@ public class OrderController {
 
     private static void showRequest(Context ctx){
 
-        String shed = ctx.formParam("shed");
-        Boolean withShed = false;
-        if (shed.equals("Med skur")){
-            withShed = true;
-        }
-
+        Boolean shed = ctx.formParam("shed").equals("Med skur");
         int length = Integer.parseInt(ctx.formParam("length"));
         int height = Integer.parseInt(ctx.formParam("height"));
         int width = Integer.parseInt(ctx.formParam("width"));
-        String craftsmen = ctx.formParam("craftsmen");
-        Boolean withCraftsmen = false;
-        if(craftsmen.equals("Ja")){
-            withCraftsmen = true;
-        }
+        Boolean craftsmen = ctx.formParam("craftsmen").equals("Ja");
 
-        ctx.sessionAttribute("shed", withShed);
+        ctx.sessionAttribute("shed", shed);
         ctx.sessionAttribute("length", length);
         ctx.sessionAttribute("width", width);
         ctx.sessionAttribute("height", height);
-        ctx.sessionAttribute("craftsmen", withCraftsmen);
+        ctx.sessionAttribute("craftsmen", craftsmen);
 
         ctx.render("viewRequest.html");
     }

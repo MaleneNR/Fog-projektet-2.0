@@ -418,7 +418,14 @@ body {
     align-items: center;
     border-radius: 6px;
     margin-bottom: 30px;
+
 }
+
+.request-header td {
+    width: 25%;
+    padding: 10px;
+}
+
 
 .request-header h2 {
     font-size: 24px;

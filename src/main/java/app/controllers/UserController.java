@@ -23,7 +23,7 @@ public class UserController {
         app.post("/login", ctx -> login(ctx, connectionPool));
         //app.get("/loginPage", ctx -> ctx.render("login.html"));
         app.get("/logout", ctx -> logout(ctx));
-        app.post("/loginOrCreateUser", ctx -> ctx.render("createUserOrLogin.html")); //TODO:
+        app.get("/createUserOrLogin", ctx -> ctx.render("createUserOrLogin.html")); //TODO:
         app.get("/createUser", ctx -> ctx.render("createUser.html"));
         app.get("/login", ctx -> ctx.render("login.html"));
         app.post("/createUser", ctx -> createUser(ctx, connectionPool));
@@ -78,9 +78,14 @@ public class UserController {
             if(user.getRole() == 3 || user.getRole() == 2){
                 loginAdmin(ctx,connectionPool);
             } else{
-                Order order = new Order(user,Integer.parseInt(ctx.sessionAttribute("length")),
-                        Integer.parseInt(ctx.sessionAttribute("width")),
-                        Integer.parseInt(ctx.sessionAttribute("height")));
+
+                if(ctx.sessionAttribute("length")==null || ctx.sessionAttribute("width")==null||ctx.sessionAttribute("height")== null){
+                    throw new NullPointerException("Length, Width or Height is not set, prøv igen");
+                }
+
+                Order order = new Order(user,ctx.sessionAttribute("length"),
+                        ctx.sessionAttribute("width"),
+                        ctx.sessionAttribute("height"));
 
                 OrderMapper.addRequest(order,connectionPool);
                 ctx.attribute("orders", OrderMapper.getAllRequestsByUserId(user.getUserId(), connectionPool));

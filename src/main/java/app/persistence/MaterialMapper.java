@@ -19,6 +19,7 @@ public class MaterialMapper {
     }
 
     public static Material getMaterialById (int materialId, ConnectionPool connectionPool) throws DatabaseException {
+        Material material = null;
         String sql = "SELECT * FROM materials WHERE material_id = ?";
 
         try (
@@ -36,16 +37,15 @@ public class MaterialMapper {
                 String description = rs.getString("description");
                 int pricePerUnit = rs.getInt("price_per_unit");
 
-                Material material = new Material(materialId,title, width, height, unit, description, pricePerUnit);
+                material = new Material(materialId, title, width, height, unit, description, pricePerUnit);
+            }
+            if(materialId == 0){
+                throw new NullPointerException("materialId is 0");
             }
         } catch (SQLException e) {
             throw new DatabaseException("Couldn't find material, getMaterialById()",e.getMessage());
         }
-
-
-        //henter alle kolonner i material tabellen som er beregnet til ønskede carport
-        //Admin bruger denne til stk. liste
-return null;
+        return material;
     }
 
     public static List<Product> getProductsByMaterialId(int materialId, ConnectionPool connectionPool) throws DatabaseException {
@@ -59,7 +59,7 @@ return null;
         {
             ps.setInt(1,materialId);
             ResultSet rs = ps.executeQuery();
-            if(rs.next()){
+            while(rs.next()){
                 int productId = rs.getInt("product_id");
                 int length = rs.getInt("length");
 
