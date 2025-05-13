@@ -22,13 +22,11 @@ public class UserMapper {
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 int role = rs.getInt("role_id");
-                //TODO 7: gemme de nye parametre fx:
                 String phoneNumber = rs.getString("telefon");
                 String name = rs.getString("name");
-                String adress = rs.getString("adresse");
+                String address = rs.getString("adresse");
 
-
-                return new User(email, password, role, name, adress, phoneNumber); //TODO 8: Du har opdateret User klassen til at kunne indeholde de nye parametre. Disse skal indsættes her: return new User(email, password, tlf, role);
+                return new User(email, password, role, name, address, phoneNumber); //TODO 8: Du har opdateret User klassen til at kunne indeholde de nye parametre. Disse skal indsættes her: return new User(email, password, tlf, role);
             } else {
                 throw new DatabaseException("Fejl i login. Prøv igen");
             }
