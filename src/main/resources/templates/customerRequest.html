@@ -16,18 +16,22 @@
     <div class="konto">Fog Konto</div>
 </div>
 
-<div class="request-status-container">
-    <table>
-        <tbody class="request-header">
-        <tr th:each="order : ${orders}">
-            <td><h2 th:text="'Din forespørgsel: ordreid #' + ${order.orderid}"></h2></td>
-            <td th:text="${order.user.email}"></td>
-            <td th:text="'Ordre indsendt ' + ${order.date}"></td>
-            <td><button type="submit" class="buttonTable">Se detaljer</button></td>
-        </tr>
-        </tbody>
-    </table>
+<div th:each="order : ${orders}" class="request-status-container">
+    <div class="request-header">
+        <h2>Din forespørgsel: ordre #<span th:text="${order.orderid}"></span></h2>
+        <div class="status">
+            <span>Status:</span>
+            <span class="status-value">Under behandling</span>
+        </div>
+    </div>
+
+    <div class="request-body">
+        <p><strong>Bruger:</strong> <span th:text="${order.user.email}"></span></p>
+        <p><strong>Dato:</strong> <span th:text="${order.date}"></span></p>
+        <!--<button class="next-button">Se detaljer</button> -->
+    </div>
 </div>
+
 
 
 

@@ -421,17 +421,17 @@ body {
 
 }
 
-.request-header td {
-    width: 25%;
-    padding: 10px;
-}
+
 
 
 .request-header h2 {
     font-size: 24px;
     margin: 0;
 }
-
+.request-header td {
+    width: 25%;
+    padding: 10px;
+}
 .status {
     font-size: 18px;
     display: flex;
