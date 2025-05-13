@@ -78,7 +78,13 @@ public class UserController {
             if(user.getRole() == 3 || user.getRole() == 2){
                 loginAdmin(ctx,connectionPool);
             } else{
-                ctx.render("viewRequest.html");
+                Order order = new Order(user,Integer.parseInt(ctx.sessionAttribute("length")),
+                        Integer.parseInt(ctx.sessionAttribute("width")),
+                        Integer.parseInt(ctx.sessionAttribute("height")));
+
+                OrderMapper.addRequest(order,connectionPool);
+                ctx.attribute("orders", OrderMapper.getAllRequestsByUserId(user.getUserId(), connectionPool));
+                ctx.render("customerRequest.html");
             }
 
         } catch (DatabaseException e) {

@@ -49,6 +49,40 @@ public class OrderMapper {
         //Admin skla kunne se alle forespørgelser så alle orders bliver hentet ud fra db via orderMapper
     }
 
+    public static List<Order> getAllRequestsByUserId(int userId, ConnectionPool connectionPool) throws DatabaseException {
+        List<Order> orders = new ArrayList<>();
+        String sql = "select * from orders where user_id = ?";
+
+        try (
+                Connection connection = connectionPool.getConnection();
+                PreparedStatement ps = connection.prepareStatement(sql);
+        ) {
+            ps.setInt(1, userId);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next())
+            {
+                int orderId = rs.getInt("order_id");
+                String status = rs.getString("order_status");
+                int price = rs.getInt("order_price");
+                boolean payed = rs.getBoolean("payed");
+                LocalDate date = rs.getDate("date").toLocalDate();
+                User user = UserMapper.getUserById(rs.getInt("user_id"), connectionPool);
+                int l = rs.getInt("carport_length");
+                int h = rs.getInt("height");
+                int w = rs.getInt("carport_width");
+
+                orders.add(new Order(orderId,status,price,payed,date,user,l,h,w));
+            }
+        }
+        catch (SQLException e)
+        {
+            throw new DatabaseException("Fejl i søgning på alle ordrer, getAllRequests()", e.getMessage());
+        }
+        return orders;
+
+        //Admin skla kunne se alle forespørgelser så alle orders bliver hentet ud fra db via orderMapper
+    }
+
     public static List<OrderDetail> getAllOrderDetails (int orderId, ConnectionPool connectionPool) throws DatabaseException {
         List<OrderDetail> orderDetails = new ArrayList<>();//TODO skal hente details ud, IKKE FÆRDIG
         String sql = "SELECT \n" +
@@ -141,7 +175,7 @@ public class OrderMapper {
         int affectedRows = 0;
         Boolean orderDetailsAdded = false;
 
-        String sql = "INSERT INTO order_deatils (product_id, quantity, total_price, assembly_description, material_id, order_id) values (?,?,?,?,?,?,?,?) RETURNING order_id";
+        String sql = "INSERT INTO order_details (product_id, quantity, total_price, assembly_description, material_id, order_id) values (?,?,?,?,?,?)";
 
         try (
                 Connection connection = connectionPool.getConnection();

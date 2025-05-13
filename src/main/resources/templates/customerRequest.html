@@ -17,18 +17,20 @@
 </div>
 
 <div class="request-status-container">
-    <div class="request-header">
-        <h2>Din forespørgsel</h2>
-        <div class="status">
-            <span>Status:</span>
-            <span class="status-value">Under behandling</span>
-        </div>
-    </div>
+    <tr th:each="order : ${orders}">
+        <div class="request-header"><h2>Din forespørgsel</h2></div>
+        <td class="request-header" th:text="'#'+${order.orderid}"></td>
+        <td th:text="${order.user.email}"></td>
+        <td th:text="'Ordre indsendt ' +${order.date}"></td>
+        <td><button type="submit" class="buttonTable">Se detajler</button></td>
+    </tr>
+
 
     <div class="request-body">
         <!-- Her kan der evt. komme yderligere information -->
     </div>
 </div>
+
 
 </body>
 </html>

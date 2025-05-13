@@ -22,11 +22,12 @@ public class UserMapper {
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 int role = rs.getInt("role_id");
-                String phoneNumber = rs.getString("telefon");
+                String phoneNumber = rs.getString("phonenumber");
                 String name = rs.getString("name");
-                String address = rs.getString("adresse");
+                String address = rs.getString("address");
+                int userId = rs.getInt("user_id");
 
-                return new User(email, password, role, name, address, phoneNumber); //TODO 8: Du har opdateret User klassen til at kunne indeholde de nye parametre. Disse skal indsættes her: return new User(email, password, tlf, role);
+                return new User(userId, email, password, role, name, address, phoneNumber);
             } else {
                 throw new DatabaseException("Fejl i login. Prøv igen");
             }
@@ -36,11 +37,11 @@ public class UserMapper {
     }
 
 
-    public static void createUser(String email, String password, String navn, String telefon, String text, ConnectionPool connectionPool) throws DatabaseException {
+    public static void createUser(String email, String password, String navn, String phoneNumber, String address, ConnectionPool connectionPool) throws DatabaseException {
         {
             //TODO 3. users tabellen i databasen skal udvides til at kunne indeholde de nye parametre.
             //TODO 4. sql stringen nedenfor skal tilpasses de nye parametre.
-            String sql = "insert into users (email, password, role_id, name, adresse, telefon) values (?,?,1,?,?,?)";
+            String sql = "insert into users (email, password, role_id, name, adresse, phonenumber) values (?,?,1,?,?,?)";
 
             try (
                     Connection connection = connectionPool.getConnection();
@@ -48,10 +49,10 @@ public class UserMapper {
             ) {
                 ps.setString(1, email);
                 ps.setString(2, password);
-                //ps.setInt(3,1);
+                //role_id = 1 i sql'en
                 ps.setString(3, navn);
-                ps.setString(4, text);
-                ps.setString(5, telefon);
+                ps.setString(4, address);
+                ps.setString(5, phoneNumber);
 
                 int rowsAffected = ps.executeUpdate();
                 if (rowsAffected != 1) {
@@ -83,11 +84,11 @@ public class UserMapper {
                 String email = rs.getString("email");
                 String password = rs.getString("password");
                 String navn = rs.getString("name");
-                String phoneNumber = rs.getString("telefon");
-                String adresse = rs.getString("adresse");
+                String phoneNumber = rs.getString("phonenumber");
+                String address = rs.getString("address");
 
 
-                return new User(email, password, role, navn, adresse, phoneNumber);
+                return new User(userId,email, password, role, navn, address, phoneNumber);
             } else {
                 throw new DatabaseException("Fejl i login. Prøv igen");
             }
