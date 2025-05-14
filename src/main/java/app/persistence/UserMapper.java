@@ -23,9 +23,9 @@ public class UserMapper {
             if (rs.next()) {
                 int role = rs.getInt("role_id");
                 //TODO 7: gemme de nye parametre fx:
-                String phoneNumber = rs.getString("telefon");
+                String phoneNumber = rs.getString("phonenumber");
                 String name = rs.getString("name");
-                String adress = rs.getString("adresse");
+                String adress = rs.getString("address");
 
 
                 return new User(email, password, role, name, adress, phoneNumber); //TODO 8: Du har opdateret User klassen til at kunne indeholde de nye parametre. Disse skal indsættes her: return new User(email, password, tlf, role);
@@ -42,7 +42,7 @@ public class UserMapper {
         {
             //TODO 3. users tabellen i databasen skal udvides til at kunne indeholde de nye parametre.
             //TODO 4. sql stringen nedenfor skal tilpasses de nye parametre.
-            String sql = "insert into users (email, password, role_id, name, adresse, telefon) values (?,?,1,?,?,?)";
+            String sql = "insert into users (email, password, role_id, name, address, phonenumber) values (?,?,1,?,?,?)";
 
             try (
                     Connection connection = connectionPool.getConnection();
@@ -85,8 +85,8 @@ public class UserMapper {
                 String email = rs.getString("email");
                 String password = rs.getString("password");
                 String navn = rs.getString("name");
-                String phoneNumber = rs.getString("telefon");
-                String adresse = rs.getString("adresse");
+                String phoneNumber = rs.getString("phonenumber");
+                String adresse = rs.getString("address");
 
 
                 return new User(email, password, role, navn, adresse, phoneNumber);

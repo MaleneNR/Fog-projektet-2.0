@@ -34,6 +34,7 @@ public class UserController {
 
             ctx.render("customMadeSite.html");
         });
+        //app.post("/seForesporgsel", ctx -> ctx.render("adminStatusSite.html"));
         app.post("/seForesporgsel", ctx -> AdminController.editProduct(ctx, connectionPool));
 
 
@@ -97,7 +98,7 @@ public class UserController {
                 loginAdmin(ctx,connectionPool);
             } else{
 
-                ctx.render("viewRequest.html");
+                ctx.render("adminIndex.html");
             }
 
         } catch (DatabaseException e) {
@@ -116,6 +117,8 @@ public class UserController {
         List<Order> orderList = OrderMapper.getAllRequests(connectionPool);//skal man kalde viewAllOrders fra dmin controller?
         ctx.sessionAttribute("orderList", orderList);
         ctx.render("adminIndex.html");
+
+
     }
 }
 

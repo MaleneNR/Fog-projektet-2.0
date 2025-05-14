@@ -24,28 +24,6 @@ public class AdminController {
     }
 
     public static void editProduct(Context ctx, ConnectionPool connectionPool){
-        //funktionen skal give admin adgang til at kunne redigere i beskriverlser og priser
-
-        //funktionen skal tage en ctx og connection pool, så der er adgang til db og så der kan komunikeres med html ind og ud
-
-        //funktionen skal retunere det færdige redigerede produkt
-
-        //jeg skal have en ordre med adgang igennem db
-
-        // funktionen skal gå ind i db og hente de forespørgsler via viewAllOrders() der nu engang ligger og derfra give adgang til at man kan ændre i tingene
-
-        //man skal som admin kunne vælge en af mange ordre at kigge på
-
-        //TODO for at kunne redigere i tingene skal vi først have en forespørgsel fra en kunde
-
-        //jeg vil måske starte med at have en fobinedelse til db i noget try-catch så skal man via OrderMapper kalde getAllRequest() så de bliver hentet
-
-        //så skal man kunne gå ind via Orders tabellen i Price og ændre prisen og gemme det som ny opdateret pris
-
-        //så skal den retunere den nye opdaterede ordre med opdateret pris
-
-        //evt kunne sende tilbus men tror det hører til mailsystem
-
 
             try {
                 //Hent ordre ID og ny pris fra form
@@ -63,7 +41,7 @@ public class AdminController {
                 //Brug den nuværende status fra ordren (så den ikke ændres her!)
                 String currentStatus = order.getOrderStatus();
 
-                // pdater KUN prisen via OrderMapper → og behold nuværende status
+                //pdater KUN prisen via OrderMapper → og behold nuværende status
                 //boolean updated = OrderMapper.updateOrder(orderId, newPrice, currentStatus, connectionPool);
                 boolean updated = true;
 

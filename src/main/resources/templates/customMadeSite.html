@@ -17,11 +17,11 @@
 </div>
 
 <div class="nav-steps">
-    <div>Design</div>
+    <div class="grøn">Design</div>
     <div>→</div>
     <div>Login</div>
     <div>→</div>
-    <div>Forespørgsel</div>
+    <div>Forespørgsel er sendt</div>
 </div>
 
 <form method="post">
@@ -34,7 +34,7 @@
             </select>
 
             <select id="length" name="length">
-                <option>Længde i cm</option>
+                <option value="" disabled selected hidden>Længde i cm</option>
                 <option th:each="length : ${lengthOptions}"
                         th:value="${length}"
                         th:text="${length +' cm'}">
@@ -71,10 +71,13 @@
         </div>
 
         <div class="info-text">
-            <p>Brødtekst er længere, løbende tekst. Før i tiden blev typografernes løn beregnet ud fra antallet af
-                linjer de
-                havde sat. Brødteksten var hurtig at sætte og det var hovedsageligt det som gav sætteren penge til det
-                daglige brød.</p>
+            <p>At spare de forkerte steder, holder ikke i længden værktøj at høj kvalitet kan bygge de næste 20 år.
+                dette sparer på den lange bane, i forhold til at gå til de billige af slagsen.
+                det samme gælder byggematerialer.
+                holder de ikke ud fra bæredygtig tankegang er det miljøet der betaler prisen.
+                Netop derfor går vi op i holdbarhed og gode msterialer, så vi sammen kan sætte flere af de positvie aftryk sammen.
+
+            </p>
         </div>
     </div>
 

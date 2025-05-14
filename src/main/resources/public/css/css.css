@@ -96,6 +96,19 @@ body {
 
 /****** index ******/
 
+
+.konto-link {
+    text-decoration: none;
+    color: black; /* eller hvilken farve du bruger */
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.konto-link:hover {
+    text-decoration: underline; /* eller en anden hover-effekt */
+}
+
+
 .content {
     display: flex;
     justify-content: space-around;
@@ -325,6 +338,12 @@ body {
 
 /****** Oversigt side (Din valgte carport) ******/
 
+
+.grøn{
+  color: #e6f3d7;
+
+
+}
 .carport-overview {
     background-color: white;
     width: 70%;

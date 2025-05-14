@@ -214,7 +214,7 @@ return false;
 
 
 
-        //TODO evt lave en update funktion så man kan opdaterer ordre som admin
+
 
     public static boolean updateOrder(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
         int newPrice = Integer.parseInt(ctx.formParam("newPrice")); //ala det her.
@@ -234,8 +234,41 @@ return false;
             throw new DatabaseException("Fejl i opdatering af ordre i updateOrder()", e.getMessage());
         }
     }
+
+
+
+
         public static void insertOrder(Order order, ConnectionPool connectionPool){
         }
+
+
+
+
+
+    public static List<Order> getAllOrdersWithEmail(ConnectionPool connectionPool) throws DatabaseException {
+        List<Order> orderList = new ArrayList<>();
+
+        String sql = "SELECT orders.order_id, orders.date, users.email FROM orders orders JOIN users users ON orders.user_id = users.user_id";
+
+        try (
+                Connection conn = connectionPool.getConnection();
+                PreparedStatement ps = conn.prepareStatement(sql);
+                ResultSet rs = ps.executeQuery()
+        ) {
+            while (rs.next()) {
+                int orderId = rs.getInt("order_id");
+                String email = rs.getString("email");
+                LocalDate date = rs.getDate("date").toLocalDate();
+
+                orderList.add(new Order(orderId, email, date));
+            }
+        } catch (SQLException e) {
+            throw new DatabaseException("Kunne ikke hente ordrer med email", e.getMessage());
+        }
+
+        return orderList;
+    }
+
 
 }
 

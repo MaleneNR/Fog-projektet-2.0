@@ -26,6 +26,10 @@ public class Order {
         this.width = width;
     }
 
+    public Order(int orderId, String email, LocalDate date) {
+
+    }
+
     public int getOrderId() {
         return orderId;
     }
