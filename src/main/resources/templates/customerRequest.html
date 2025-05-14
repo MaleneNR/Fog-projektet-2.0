@@ -18,17 +18,19 @@
 
 <div th:each="order : ${orders}" class="request-status-container">
     <div class="request-header">
-        <h2>Din forespørgsel: ordre #<span th:text="${order.orderid}"></span></h2>
+        <h2>Din forespørgsel: ordreid #<span th:text="${order.orderid}"></span></h2>
         <div class="status">
             <span>Status:</span>
-            <span class="status-value">Under behandling</span>
+            <span class="status-value" th:text="${order.orderstatus}"></span>
         </div>
     </div>
 
     <div class="request-body">
-        <p><strong>Bruger:</strong> <span th:text="${order.user.email}"></span></p>
-        <p><strong>Dato:</strong> <span th:text="${order.date}"></span></p>
+        <p><strong>Email:</strong> <span th:text="${order.user.email}"></span></p>
+        <p><strong>Dato for indsendte forespørgsel:</strong> <span th:text="${order.date}"></span></p>
+        <p><strong>Pris for samlet tilbud:</strong><span th:if="${order.orderstatus == 'Accepter og betal'}" th:text="@{order.orderprice}"></span></p>
         <!--<button class="next-button">Se detaljer</button> -->
+        <p class="next-button" th:if="${order.orderstatus == 'Accepter og betal'}"><button formaction="/viewFinalOrder">Acceptér tilbud</button></p>
     </div>
 </div>
 

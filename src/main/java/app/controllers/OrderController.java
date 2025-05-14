@@ -3,31 +3,44 @@ package app.controllers;
 import app.entities.Order;
 import app.entities.User;
 import app.exceptions.DatabaseException;
+import app.exceptions.IllegalInputException;
 import app.persistence.ConnectionPool;
 import app.persistence.OrderMapper;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
+import org.jetbrains.annotations.NotNull;
 
 public class OrderController {
     public static void addRoutes(Javalin app, ConnectionPool connectionPool) {
         app.post("/carport-request", ctx -> showRequest(ctx));
+        app.post("/viewFinalOrder", ctx -> acceptOrder(ctx));
+    }
+
+    private static void acceptOrder(@NotNull Context ctx) { //TODO
     }
 
     private static void showRequest(Context ctx){
+        try {
+            Boolean shed = tryParseBoolean(ctx.formParam("shed"));
+            Boolean roof = tryParseBoolean(ctx.formParam("plastic-roof"));
+            int length = tryParseInt(ctx.formParam("length"));
+            int height = tryParseInt(ctx.formParam("height"));
+            int width = tryParseInt(ctx.formParam("width"));
+            Boolean craftsmen = tryParseBoolean(ctx.formParam("craftsmen"));
 
-        Boolean shed = ctx.formParam("shed").equals("Med skur");
-        int length = Integer.parseInt(ctx.formParam("length"));
-        int height = Integer.parseInt(ctx.formParam("height"));
-        int width = Integer.parseInt(ctx.formParam("width"));
-        Boolean craftsmen = ctx.formParam("craftsmen").equals("Ja");
+            ctx.sessionAttribute("shed", shed);
+            ctx.sessionAttribute("roof", roof);
+            ctx.sessionAttribute("length", length);
+            ctx.sessionAttribute("width", width);
+            ctx.sessionAttribute("height", height);
+            ctx.sessionAttribute("craftsmen", craftsmen);
 
-        ctx.sessionAttribute("shed", shed);
-        ctx.sessionAttribute("length", length);
-        ctx.sessionAttribute("width", width);
-        ctx.sessionAttribute("height", height);
-        ctx.sessionAttribute("craftsmen", craftsmen);
+            ctx.render("viewRequest.html");
+        }catch (IllegalInputException e){
+            ctx.render("/customMadeSite.html");
+            ctx.status(400).result(e.getMessage());
+            }
 
-        ctx.render("viewRequest.html");
     }
     private static void makeRequest(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
         //funktionen skal kunne, så en bruger ud fra egne valg af mål der bliver givet i dropdownmenuerne og derfra kunne gå videre og ligge en forespørgsel
@@ -87,4 +100,20 @@ public class OrderController {
 
 
     }
+
+    public static Integer tryParseInt(String value) {  //Overvej at put denne i en anden klasse, hvis vi bruger den i mere end den her
+        try {
+            return Integer.parseInt(value);
+        } catch (NumberFormatException | NullPointerException e) {
+            throw new IllegalArgumentException("Du mangler at vælge et eller flere mål i forbindelse med dit design af carport");
+        }
+    }
+
+    public static Boolean tryParseBoolean(String value) {
+        if (value == null || value.startsWith("Med/uden")){
+            throw new IllegalArgumentException("Du mangler at træffe et valg i forbindelse med dit design af carport");
+        }
+        return value.equalsIgnoreCase("ja") || value.startsWith("Med"); //Hvis ja eller med, så returneres true, ellers false
+    }
+
 }
