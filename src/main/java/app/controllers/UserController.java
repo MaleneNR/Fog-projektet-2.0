@@ -27,14 +27,6 @@ public class UserController {
         app.get("/createUser", ctx -> ctx.render("createUser.html"));
         app.get("/login", ctx -> ctx.render("login.html"));
         app.post("/createUser", ctx -> createUser(ctx, connectionPool));
-
-        app.get("/customMadeSite", ctx -> {
-            ctx.attribute("lengthOptions", Dimensions.options(240,780,30));
-            ctx.attribute("widthOptions", Dimensions.options(240,600,30));
-            ctx.attribute("heightOptions", Dimensions.options(210,300,30));
-
-            ctx.render("customMadeSite.html");
-        });
         app.post("/seForesporgsel", ctx -> AdminController.editProduct(ctx, connectionPool));
     }
 
