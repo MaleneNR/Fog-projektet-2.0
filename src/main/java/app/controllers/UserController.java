@@ -77,7 +77,8 @@ public class UserController {
 
                 Order order = new Order(user,ctx.sessionAttribute("length"),
                         ctx.sessionAttribute("height"),
-                        ctx.sessionAttribute("width"));
+                        ctx.sessionAttribute("width"),
+                        ctx.sessionAttribute("shed"));
 
                 OrderMapper.addRequest(order,connectionPool);
                 ctx.attribute("orders", OrderMapper.getAllRequestsByUserId(user.getUserId(), connectionPool));

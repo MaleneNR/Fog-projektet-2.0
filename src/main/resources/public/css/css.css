@@ -298,11 +298,16 @@ body {
 .next-button button {
     background-color: #16325c;
     color: white;
-    padding: 12px 30px;
+    padding: 12px 30px 12px 30px;
     border: none;
     cursor: pointer;
     font-size: 16px;
 }
+
+.next-button button + button {
+    margin-left: 10px;
+}
+
 
 .next-button button:hover {
     background-color: #0e2343;

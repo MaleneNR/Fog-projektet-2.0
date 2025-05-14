@@ -36,8 +36,9 @@ public class OrderMapper {
                 int l = rs.getInt("carport_length");
                 int h = rs.getInt("height");
                 int w = rs.getInt("carport_width");
+                boolean shed = rs.getBoolean("shed");
 
-                orders.add(new Order(orderId,status,price,payed,date,user,l,h,w));
+                orders.add(new Order(orderId,status,price,payed,date,user,l,h,w,shed));
             }
         }
         catch (SQLException e)
@@ -70,8 +71,9 @@ public class OrderMapper {
                 int l = rs.getInt("carport_length");
                 int h = rs.getInt("height");
                 int w = rs.getInt("carport_width");
+                boolean shed = rs.getBoolean("shed");
 
-                orders.add(new Order(orderId,status,price,payed,date,user,l,h,w));
+                orders.add(new Order(orderId,status,price,payed,date,user,l,h,w,shed));
             }
         }
         catch (SQLException e)
@@ -129,7 +131,7 @@ public class OrderMapper {
             String status = "Received";  //TODO Skal dette hardcodes
             LocalDate dateOfToday = LocalDate.of(LocalDate.now().getYear(), LocalDate.now().getMonth(), LocalDate.now().getDayOfMonth());
 
-        String sql = "INSERT INTO orders (order_status, order_price, payed, date, user_id, carport_length, height, carport_width) values (?,?,?,?,?,?,?,?) RETURNING order_id";
+        String sql = "INSERT INTO orders (order_status, order_price, payed, date, user_id, carport_length, height, carport_width,shed) values (?,?,?,?,?,?,?,?,?) RETURNING order_id";
 
         try (
                 Connection connection = connectionPool.getConnection();
@@ -143,6 +145,7 @@ public class OrderMapper {
             ps.setInt(6,order.getLength());
             ps.setInt(7,order.getHeight());
             ps.setInt(8,order.getWidth());
+            ps.setBoolean(9, order.wantShed());
 
             rowsAffected = ps.executeUpdate();
             if (rowsAffected == 1) {
@@ -233,8 +236,9 @@ return false;
                     int l = rs.getInt("carport_length");
                     int h = rs.getInt("height");
                     int w = rs.getInt("carport_width");
+                    boolean shed = rs.getBoolean("shed");
 
-                    order = new Order(orderId,status,price,payed,date,user,l,h,w);
+                    order = new Order(orderId,status,price,payed,date,user,l,h,w,shed);
                 }
             }
             catch (SQLException e)

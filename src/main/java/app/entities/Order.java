@@ -13,6 +13,8 @@ public class Order {
     private int length;
     private int height;
     private int width;
+    private boolean shed;
+
 
     public Order(int orderId, String orderStatus, int orderPrice, boolean payed, LocalDate date, User user, int length, int height, int width) {
         this.orderId = orderId;
@@ -26,15 +28,37 @@ public class Order {
         this.width = width;
     }
 
-    public Order(User user, int length, int height, int width){
+    public Order(User user, int length, int height, int width, boolean shed){
         this.user = user;
         this.length = length;
         this.height = height;
         this.width = width;
+        this.shed = shed;
+    }
+
+    public Order(int orderId, String orderStatus, int orderPrice, boolean payed, LocalDate date, User user, int length, int height, int width, boolean shed) {
+        this.orderId = orderId;
+        this.orderStatus = orderStatus;
+        this.orderPrice = orderPrice;
+        this.payed = payed;
+        this.date = date;
+        this.user = user;
+        this.length = length;
+        this.height = height;
+        this.width = width;
+        this.shed = shed;
     }
 
     public int getOrderId() {
         return orderId;
+    }
+
+    public boolean wantShed() {
+        return shed;
+    }
+
+    public void setShed(boolean shed) {
+        this.shed = shed;
     }
 
     public void setOrderId(int orderId) {

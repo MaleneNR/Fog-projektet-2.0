@@ -43,16 +43,16 @@
 
             <select id="length" name="length">
                 <option disabled selected>Længde i cm</option>
-                <option th:each="length : ${lengthOptions}"
+                <option th:each="length : ${session.lengthOptions}"
                         th:value="${length}"
                         th:text="${length +' cm'}">
                 </option>
             </select>
-            </select>
+
 
             <select id="height" name="height">
                 <option disabled selected>Højde i cm</option>
-                <option th:each="height : ${heightOptions}"
+                <option th:each="height : ${session.heightOptions}"
                         th:value="${height}"
                         th:text="${height +' cm'}">
                 </option>
@@ -60,12 +60,12 @@
 
             <select id="width" name="width">
                 <option disabled selected>Bredde i cm</option>
-                <option th:each="width : ${widthOptions}"
+                <option th:each="width : ${session.widthOptions}"
                         th:value="${width}"
                         th:text="${width +' cm'}">
                 </option>
             </select>
-            </select>
+
 
             <select name="craftsmen">
                 <option disabled selected>Bestilling af håndværkere til montering</option>
