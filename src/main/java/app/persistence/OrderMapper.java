@@ -248,6 +248,24 @@ return false;
             return order;
         }
 
+    public static boolean updateStatus(String status, int orderId, ConnectionPool connectionPool) throws DatabaseException {
+        String sql = "UPDATE orders SET order_status = ? WHERE order_id = ?";
+        try (
+                Connection connection = connectionPool.getConnection();
+                PreparedStatement ps = connection.prepareStatement(sql)
+        ) {
+            ps.setString(1, status);
+            ps.setInt(2, orderId);
+
+            int rows = ps.executeUpdate();
+            if(rows == 1){
+                return true;
+            }
+            return false;
+        } catch (SQLException e) {
+            throw new DatabaseException("Fejl i opdatering af ordre i updateOrder()", e.getMessage());
+        }
+    }
 
 
 

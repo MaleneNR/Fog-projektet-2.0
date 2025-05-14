@@ -15,8 +15,13 @@ public class OrderController {
     public static void addRoutes(Javalin app, ConnectionPool connectionPool) {
         app.get("/customMadeSite", ctx -> designYourCarport(ctx));
         app.post("/carportRequest", ctx -> showRequest(ctx));
+        app.post("/rejectOrder", ctx -> rejectOrder(ctx, connectionPool));
         app.post("/viewFinalOrder", ctx -> acceptOrder(ctx));
 
+    }
+
+    private static void rejectOrder(@NotNull Context ctx, ConnectionPool connectionPool) throws DatabaseException {
+        OrderMapper.updateStatus("Afvist", ctx.attribute("orderid"),connectionPool);
     }
 
     private static void designYourCarport(@NotNull Context ctx) {

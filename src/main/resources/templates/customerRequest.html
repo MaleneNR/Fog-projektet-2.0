@@ -28,11 +28,19 @@
     <div class="request-body">
         <p><strong>Email:</strong> <span th:text="${order.user.email}"></span></p>
         <p><strong>Dato for indsendte forespørgsel:</strong> <span th:text="${order.date}"></span></p>
+        <p><strong>Længde af carport:</strong> <span th:text="${order.length} + ' cm'"></span></p>
+        <p><strong>Bredde af carport:</strong> <span th:text="${order.width}+ ' cm'"></span></p>
+        <p><strong>Højde for carport:</strong> <span th:text="${order.height}+ ' cm'"></span></p>
         <p><strong>Pris for samlet tilbud:</strong><span th:if="${order.orderstatus == 'Accepter og betal'}" th:text="${order.orderprice}"></span></p>
-        <!--<button class="next-button">Se detaljer</button> -->
+
         <p class="next-button" th:if="${order.orderstatus == 'Accepter og betal'}">
-            <button formaction="/viewFinalOrder">Acceptér tilbud</button>
-            <button formaction="/rejectOrder">Afvis tilbud</button>
+            <form method="post" action="/deleteOrder">
+            <input type="hidden" name="orderid" th:value="${order.orderid}">
+        <button formaction="/viewFinalOrder">Acceptér tilbud</button></form>
+
+            <form method="post" action="/deleteOrder">
+            <input type="hidden" name="orderid" th:value="${order.orderid}">
+                <button formaction="/rejectOrder">Afvis tilbud</button></form>
         </p>
     </div>
 </div>
