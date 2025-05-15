@@ -1,6 +1,7 @@
 package app.entities;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Objects;
 
 public class Order {
@@ -14,6 +15,7 @@ public class Order {
     private int height;
     private int width;
     private boolean shed;
+    private List<OrderDetail> orderDetails;
 
 
     public Order(int orderId, String orderStatus, int orderPrice, boolean payed, LocalDate date, User user, int length, int height, int width) {
@@ -49,6 +51,20 @@ public class Order {
         this.shed = shed;
     }
 
+    public Order(int orderId, String orderStatus, int orderPrice, boolean payed, LocalDate date, User user, int length, int height, int width, boolean shed, List<OrderDetail> orderDetails) {
+        this.orderId = orderId;
+        this.orderStatus = orderStatus;
+        this.orderPrice = orderPrice;
+        this.payed = payed;
+        this.date = date;
+        this.user = user;
+        this.length = length;
+        this.height = height;
+        this.width = width;
+        this.shed = shed;
+        this.orderDetails = orderDetails;
+    }
+
     public int getOrderId() {
         return orderId;
     }
@@ -59,6 +75,14 @@ public class Order {
 
     public void setShed(boolean shed) {
         this.shed = shed;
+    }
+
+    public List<OrderDetail> getOrderDetails() {
+        return orderDetails;
+    }
+
+    public void setOrderDetails(List<OrderDetail> orderDetails) {
+        this.orderDetails = orderDetails;
     }
 
     public void setOrderId(int orderId) {

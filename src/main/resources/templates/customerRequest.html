@@ -31,17 +31,24 @@
         <p><strong>Længde af carport:</strong> <span th:text="${order.length} + ' cm'"></span></p>
         <p><strong>Bredde af carport:</strong> <span th:text="${order.width}+ ' cm'"></span></p>
         <p><strong>Højde for carport:</strong> <span th:text="${order.height}+ ' cm'"></span></p>
-        <p><strong>Pris for samlet tilbud:</strong><span th:if="${order.orderstatus == 'Accepter og betal'}" th:text="${order.orderprice}"></span></p>
+        <p><strong>Pris for samlet tilbud: </strong><span th:if="${order.orderstatus == 'Tilbud sendt'||order.orderstatus == 'Lukket'}" th:text="${order.orderprice} +',00 kr'"></span></p>
 
-        <p class="next-button" th:if="${order.orderstatus == 'Accepter og betal'}">
-            <form method="post" action="/deleteOrder">
+        <div class="next-button" th:if="${order.orderstatus == 'Tilbud sendt'}">
+            <form method="post" action="/viewFinalOrder">
             <input type="hidden" name="orderid" th:value="${order.orderid}">
         <button formaction="/viewFinalOrder">Acceptér tilbud</button></form>
 
-            <form method="post" action="/deleteOrder">
+            <form method="post" action="/rejectOrder">
             <input type="hidden" name="orderid" th:value="${order.orderid}">
                 <button formaction="/rejectOrder">Afvis tilbud</button></form>
-        </p>
+        </div>
+        <div class="next-button" th:if="${order.orderstatus == 'Betalt' && order.payed == true}">
+            <form method="post" action="/showFinalOrder">
+                <input type="hidden" name="orderid" th:value="${order.orderid}">
+                <button formaction="/showFinalOrder">Se stykliste</button></form>
+        </div>
+
+
     </div>
 </div>
 

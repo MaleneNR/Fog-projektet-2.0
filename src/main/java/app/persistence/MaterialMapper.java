@@ -12,12 +12,6 @@ import java.util.List;
 
 public class MaterialMapper {
 
-    public static List<Integer> getAllLengthsByMaterialId (int materialId, ConnectionPool connectionPool){
-        //den skal bruges i beregneren
-        //fra db skal den hente i products tabellen alle længderne på det givne materiale id
-        return null;
-    }
-
     public static Material getMaterialById (int materialId, ConnectionPool connectionPool) throws DatabaseException {
         Material material = null;
         String sql = "SELECT * FROM materials WHERE material_id = ?";
@@ -72,6 +66,32 @@ public class MaterialMapper {
         }
 
         return products;
+    }
+
+    public static Product getProductById(int productId, ConnectionPool connectionPool) throws DatabaseException {
+        Product product = null;
+        String sql = "SELECT * FROM products WHERE product_id = ?";
+
+        try (
+                Connection connection = connectionPool.getConnection();
+                PreparedStatement ps = connection.prepareStatement(sql);
+        )
+        {
+            ps.setInt(1,productId);
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()){
+                int materialId = rs.getInt("material_id");
+                int length = rs.getInt("length");
+
+                product = new Product(productId,length,materialId);
+
+            }
+
+        } catch (SQLException e) {
+            throw new DatabaseException("getProductsByMaterialId() failed",e.getMessage());
+        }
+
+        return product;
     }
 
 

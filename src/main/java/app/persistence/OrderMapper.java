@@ -2,6 +2,7 @@ package app.persistence;
 
 import app.entities.Order;
 import app.entities.OrderDetail;
+import app.entities.Product;
 import app.entities.User;
 import app.exceptions.DatabaseException;
 import app.services.Calculator;
@@ -87,30 +88,25 @@ public class OrderMapper {
 
     public static List<OrderDetail> getAllOrderDetails (int orderId, ConnectionPool connectionPool) throws DatabaseException {
         List<OrderDetail> orderDetails = new ArrayList<>();//TODO skal hente details ud, IKKE FÆRDIG
-        String sql = "SELECT \n" +
-                "  description,\n" +
-                "  length,\n" +
-                "  quantity,\n" +
-                "  unit,\n" +
-                "  assembly_description  \n" +
-                "FROM orderdetails_view;";
+        String sql = "SELECT * FROM order_details where order_id = ?";
 
         try (
                 Connection connection = connectionPool.getConnection();
-                Statement s = connection.createStatement();
+                PreparedStatement ps = connection.prepareStatement(sql);
         )
         {
-            ResultSet rs = s.executeQuery(sql);
-            if (rs.next())
+            ps.setInt(1, orderId);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next())
             {
-                String description = rs.getString("description");
-                int length = rs.getInt("length");
-                int pricePerUnit = rs.getInt("price_per_unit");
+                int productId = rs.getInt("product_id");
                 int quantity = rs.getInt("quantity");
-                String unit = rs.getString("unit"); 
+                int totalPrice = rs.getInt("total_price");
                 String assemblyDescription = rs.getString("assembly_description");
 
-                //orderDetails.add(new OrderDetail(orderId,));
+                Product product = MaterialMapper.getProductById(productId,connectionPool);
+                OrderDetail orderDetail = new OrderDetail(orderId, product,quantity,assemblyDescription,totalPrice);
+                orderDetails.add(orderDetail);
             }
         }
         catch (SQLException e)
@@ -263,7 +259,26 @@ return false;
             }
             return false;
         } catch (SQLException e) {
-            throw new DatabaseException("Fejl i opdatering af ordre i updateOrder()", e.getMessage());
+            throw new DatabaseException("Fejl i opdatering af ordre i updateStatus()", e.getMessage());
+        }
+    }
+
+    public static boolean updatePayed(Boolean newStatusOfPayed, int orderId, ConnectionPool connectionPool) throws DatabaseException {
+        String sql = "UPDATE orders SET payed = ? WHERE order_id = ?";
+        try (
+                Connection connection = connectionPool.getConnection();
+                PreparedStatement ps = connection.prepareStatement(sql)
+        ) {
+            ps.setBoolean(1, newStatusOfPayed);
+            ps.setInt(2, orderId);
+
+            int rows = ps.executeUpdate();
+            if(rows == 1){
+                return true;
+            }
+            return false;
+        } catch (SQLException e) {
+            throw new DatabaseException("Fejl i opdatering af ordre i updatePayed()", e.getMessage());
         }
     }
 

@@ -40,7 +40,7 @@ public class Calculator {
     private void calcPosts(Order order) throws DatabaseException {
         int quantity = calcPostQuantity(); //Antallet af stolper beregnes
 
-        List<Product> products = MaterialMapper.getProductsByMaterialId(POSTS,connectionPool); //Vi henter produkter, der er over minLength (her 0)
+        List<Product> products = MaterialMapper.getProductsByMaterialId(POSTS,connectionPool); //TODO Der burde kun være 300 cm stolpe
         Product bestMatchingProduct = findBestMatchingProduct(products,order.getHeight());
         OrderDetail orderDetail = new OrderDetail(bestMatchingProduct,quantity,999,"Stolpe nedgraves 90cm i jord",bestMatchingProduct.getMaterialId(), order.getOrderId());
         orderDetails.add(orderDetail);
