@@ -698,8 +698,15 @@ body {
     margin-bottom: 40px;
 }
 
-.material-list li {
-    margin-bottom: 10px;
+.styled-table {
+    width: 80%;
+    margin: 30px;
+    border-collapse: collapse;
+    font-family: Arial, sans-serif;
+}
+
+.styledTable td, .styledTable th {
+    width: 25%;
 }
 
 .instruction {
@@ -721,8 +728,6 @@ body {
 
 
 /****** Login/Opret bruger  ******/
-
-
 
 .login-choice-container {
     background-color: #e5e5e5;

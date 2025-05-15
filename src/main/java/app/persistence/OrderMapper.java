@@ -87,8 +87,8 @@ public class OrderMapper {
     }
 
     public static List<OrderDetail> getAllOrderDetails (int orderId, ConnectionPool connectionPool) throws DatabaseException {
-        List<OrderDetail> orderDetails = new ArrayList<>();//TODO skal hente details ud, IKKE FÆRDIG
-        String sql = "SELECT * FROM order_details where order_id = ?";
+        List<OrderDetail> orderDetails = new ArrayList<>();
+        String sql = "SELECT * FROM order_details WHERE order_id = ?";
 
         try (
                 Connection connection = connectionPool.getConnection();
@@ -97,8 +97,7 @@ public class OrderMapper {
         {
             ps.setInt(1, orderId);
             ResultSet rs = ps.executeQuery();
-            while (rs.next())
-            {
+            while (rs.next()){
                 int productId = rs.getInt("product_id");
                 int quantity = rs.getInt("quantity");
                 int totalPrice = rs.getInt("total_price");
@@ -117,7 +116,7 @@ public class OrderMapper {
 
 
         //Skal hente detaljerne til givne ordre (Stk liste)
-    return null;  //TODO Skal returnerer en order_detail
+    return orderDetails;  //TODO Skal returnerer en order_detail
     }
 
     public static boolean addRequest(Order order, ConnectionPool connectionPool) throws DatabaseException {

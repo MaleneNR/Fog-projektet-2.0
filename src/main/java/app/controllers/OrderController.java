@@ -43,12 +43,18 @@ public class OrderController {
     }
 
     private static void acceptOrder(@NotNull Context ctx, ConnectionPool connectionPool) throws DatabaseException { //TODO
-        OrderMapper.updateStatus("Betalt", tryParseInt(ctx.formParam("orderid")),connectionPool);
+        int orderId = tryParseInt(ctx.formParam("orderid"));
+        Boolean updated = OrderMapper.updatePayed(true,orderId, connectionPool);
 
+        if(updated){
+        OrderMapper.updateStatus("Betalt", orderId,connectionPool);
         User user = ctx.sessionAttribute("user");
         List<Order> orders = OrderMapper.getAllRequestsByUserId(user.getUserId(), connectionPool);
         ctx.attribute("orders", orders);
-        ctx.render("/customerRequest.html");
+        ctx.render("/customerRequest.html");}
+        else {
+            ctx.render("/error.html");
+        }
 
     }
 
