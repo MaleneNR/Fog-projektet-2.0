@@ -41,7 +41,7 @@ public class UserMapper {
         {
             //TODO 3. users tabellen i databasen skal udvides til at kunne indeholde de nye parametre.
             //TODO 4. sql stringen nedenfor skal tilpasses de nye parametre.
-            String sql = "insert into users (email, password, role_id, name, adresse, phonenumber) values (?,?,1,?,?,?)";
+            String sql = "insert into users (email, password, role_id, name, address, phonenumber) values (?,?,1,?,?,?)";
 
             try (
                     Connection connection = connectionPool.getConnection();
