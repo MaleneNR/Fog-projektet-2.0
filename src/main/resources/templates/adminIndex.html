@@ -25,6 +25,7 @@
 
                 <td th:text="${order.orderid}"></td>
 
+
                 <td>
                     <form method="post" action="/seForesporgsel">
                         <input type="hidden" name="orderid" th:value="${order.orderid}">
@@ -32,6 +33,9 @@
                     </form>
                 </td>
 
+                <td th:text="${order.getUser().getEmail()}"></td>
+
+                <td th:text="${order.getOrderStatus()}"></td>
 
             </div>
 

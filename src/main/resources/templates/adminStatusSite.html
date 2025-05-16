@@ -23,7 +23,7 @@
         </p>
         <p th:text="'Email: '+ ${session.user.getEmail()}">
         </p>
-        <p th:text="'Tlf: '+ ${session.user.getTelefon()}">
+        <p th:text="'Tlf: '+ ${session.user.getPhoneNumber()}">
         </p>
         <p th:text="'Adresse: '+ ${session.user.getAdresse()}">
         </p>
@@ -49,6 +49,7 @@
             <input type="text" id="newPrice" name="newPrice" placeholder="Skriv ny pris her">
             <div class="send-offer">
                 <button type="submit">Send tilbud</button>
+
             </div>
         </form>
     </div>

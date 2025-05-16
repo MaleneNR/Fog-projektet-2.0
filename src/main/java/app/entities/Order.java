@@ -65,6 +65,10 @@ public class Order {
         this.orderDetails = orderDetails;
     }
 
+    public Order(int orderId, String email, LocalDate date) {
+
+    }
+
     public int getOrderId() {
         return orderId;
     }
