@@ -32,10 +32,13 @@ public class UserController {
             ctx.attribute("widthOptions", Dimensions.options(240,600,30));
             ctx.attribute("heightOptions", Dimensions.options(210,300,30));
 
+
             ctx.render("customMadeSite.html");
         });
         //app.post("/seForesporgsel", ctx -> ctx.render("adminStatusSite.html"));
         app.post("/seForesporgsel", ctx -> AdminController.editProduct(ctx, connectionPool));
+        //app.post("/tilbageTilAdminIndex", ctx -> ctx.render("adminIndex.html"));
+
 
 
     }
@@ -61,7 +64,7 @@ public class UserController {
         //Validerer password
         if(password1.equals(password2)){
             try{
-                UserMapper.createUser(username,password1, phoneNumber, navn, text, connectionPool); //TODO 2. funktionen skal opdateres så den modtager de nye parametre fx telefon.
+                UserMapper.createUser(username,password1, phoneNumber, navn, text, connectionPool);
                 ctx.attribute("message", "Du er hermed oprettet med brugernavn: "+ username+ ". Du skal nu logge på");
                 ctx.render("login.html");}
             catch (DatabaseException e) {

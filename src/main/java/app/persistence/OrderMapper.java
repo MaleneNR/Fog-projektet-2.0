@@ -15,7 +15,7 @@ import java.util.List;
 public class OrderMapper {
 
 
-    public static List<Order> getAllRequests(ConnectionPool connectionPool) throws DatabaseException {
+   public static List<Order> getAllRequests(ConnectionPool connectionPool) throws DatabaseException {
         List<Order> orders = new ArrayList<>();
         String sql = "select * from orders";
 
@@ -48,6 +48,8 @@ public class OrderMapper {
 
         //Admin skla kunne se alle forespørgelser så alle orders bliver hentet ud fra db via orderMapper
     }
+
+
 
     public static List<OrderDetail> getAllOrderDetails (int orderId, ConnectionPool connectionPool) throws DatabaseException {
         List<OrderDetail> orderDetails = new ArrayList<>();//TODO skal hente details ud, IKKE FÆRDIG
@@ -141,7 +143,7 @@ public class OrderMapper {
         int affectedRows = 0;
         Boolean orderDetailsAdded = false;
 
-        String sql = "INSERT INTO order_deatils (product_id, quantity, total_price, assembly_description, material_id, order_id) values (?,?,?,?,?,?,?,?) RETURNING order_id";
+        String sql = "INSERT INTO order_details (product_id, quantity, total_price, assembly_description, material_id, order_id) values (?,?,?,?,?,?,?,?) RETURNING order_id";
 
         try (
                 Connection connection = connectionPool.getConnection();
@@ -220,14 +222,15 @@ return false;
         int newPrice = Integer.parseInt(ctx.formParam("newPrice")); //ala det her.
         Order order = ctx.sessionAttribute("order");
         int orderId = order.getOrderId();
-        String sql = "UPDATE orders SET order_price = ?, payed = ? WHERE order_id = ?";
+        String sql = "UPDATE orders SET order_price = ?, payed = ?, order_status = ? WHERE order_id = ?";
         try (
                 Connection connection = connectionPool.getConnection();
                 PreparedStatement ps = connection.prepareStatement(sql)
         ) {
             ps.setInt(1, newPrice);
             ps.setBoolean(2, false);
-            ps.setInt(3, orderId);
+            ps.setString(3, "Tilbud sendt");
+            ps.setInt(4, orderId);
             int rows = ps.executeUpdate();
             return rows > 0;
         } catch (SQLException e) {

@@ -19,7 +19,20 @@ import java.util.List;
 
 public class AdminController {
     public static void addRoutes(Javalin app, ConnectionPool connectionPool) {
-        app.post("/sendTilbud", ctx -> OrderMapper.updateOrder(ctx, connectionPool));
+        //app.post("/sendTilbud", ctx -> OrderMapper.updateOrder(ctx, connectionPool));
+
+        app.post("/sendTilbud", ctx -> {
+            boolean success = OrderMapper.updateOrder(ctx, connectionPool);
+            if (success) {
+                List<Order> orderList = OrderMapper.getAllRequests(connectionPool); //henter de opdaterede ordre fra databasen.
+                ctx.sessionAttribute("orderList", orderList); //opdaterer ordrelisten så den nye status kan ses.
+                ctx.render("adminIndex.html");
+            } else {
+                ctx.attribute("message", "Ordre kunne ikke opdateres");
+                ctx.render("error.html");
+            }
+        });
+
 
     }
 
