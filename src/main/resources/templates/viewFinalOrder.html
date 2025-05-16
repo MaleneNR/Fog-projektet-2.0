@@ -32,20 +32,36 @@
     </div>
 
     <h3>Materialeliste (stk liste)</h3>
-    <ul class="material-list">
-        <li>8 x Stolper (300cm)</li>
-        <li>20 x Spær (600cm)</li>
-        <li>40 x Tagbrædder (400cm)</li>
-        <li>Skruer og beslag</li>
-        <li>Tagpap og søm</li>
-    </ul>
+    <div class="material-list">
+    <div class="styledTable">
+        <table>
+            <thead>
+                <th>Varenummer</th>
+                <th>Antal</th>
+                <th>Samlet pris</th>
+                <th>Monteringsbeskrivelse</th>
+            </thead>
+            <tbody>
+            <tr th:each="orderdetail : ${order.orderdetails}">
+                <td th:text="${orderdetail.product.productid}"></td>
+                <td th:text="${orderdetail.quantity}"></td>
+                <td th:text="${orderdetail.totalprice}+',00 kr'"></td>
+                <td th:text="${orderdetail.assemblydescription}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    </div>
 
     <h3>Vejledning / Konstruktion</h3>
     <div class="instruction">
         <p>Se tegningen for mål og placering af stolper og spær. Sørg for at alle stolper er fastgjort i frostfri dybde. Monter spærene som vist og afslut med tagbrædder og tagpap.</p>
     </div>
 
+    <div class="material-list">
 
+        <p><strong>Ved spørgsmål eller problemer:</strong> kontakt en eller anden via mail xxx eller tlf xxx</p>
+    </div>
 
 </div>
 

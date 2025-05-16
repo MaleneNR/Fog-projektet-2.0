@@ -7,15 +7,25 @@ public class User {
     private int role;
     private String name;
     private String phoneNumber;
-    private String adresse;
+    private String address;
 
-    public User(String email, String password, int role, String name, String adresse, String phoneNumber) {
+    public User(int userId, String email, String password, int role, String name, String phoneNumber, String address) {
+        this.userId = userId;
+        this.email = email;
+        this.password = password;
+        this.role = role;
+        this.name = name;
+        this.phoneNumber = phoneNumber;
+        this.address = address;
+    }
+
+    public User(String email, String password, int role, String name, String address, String phoneNumber) {
         this.email = email;
         this.password = password;
         this.role = role;
         this.phoneNumber = phoneNumber;
         this.name=name;
-        this.adresse = adresse;
+        this.address = address;
     }
 
     public User(int userId, String email, String password, int role) {
@@ -77,12 +87,12 @@ public class User {
         this.phoneNumber = phonenumber;
     }
 
-    public String getAdresse() {
-        return this.adresse;
+    public String getAddress() {
+        return this.address;
     }
 
-    public void setAdresse(String adresse) {
-        this.adresse = adresse;
+    public void setAddress(String address) {
+        this.address = address;
     }
 
 
@@ -95,7 +105,7 @@ public class User {
                 ", role=" + role +
                 ", name='" + name + '\'' +
                 ", telefonnr.=" + phoneNumber +
-                ", adresse='" + adresse + '\'' +
+                ", adresse='" + address + '\'' +
                 '}';
 
     }
@@ -105,7 +115,7 @@ public class User {
         if (this == o) return true;
         if (!(o instanceof User user)) return false;
 
-        return getUserId() == user.getUserId() && getRole() == user.getRole() && getEmail().equals(user.getEmail()) && getPassword().equals(user.getPassword()) && getName().equals(user.getName()) && getPhoneNumber().equals(user.getPhoneNumber()) && getAdresse().equals(user.getAdresse());
+        return getUserId() == user.getUserId() && getRole() == user.getRole() && getEmail().equals(user.getEmail()) && getPassword().equals(user.getPassword()) && getName().equals(user.getName()) && getPhoneNumber().equals(user.getPhoneNumber()) && getAddress().equals(user.getAddress());
     }
 
     @Override
@@ -116,7 +126,7 @@ public class User {
         result = 31 * result + getRole();
         result = 31 * result + getName().hashCode();
         result = 31 * result + getPhoneNumber().hashCode();
-        result = 31 * result + getAdresse().hashCode();
+        result = 31 * result + getAddress().hashCode();
         return result;
     }
 }

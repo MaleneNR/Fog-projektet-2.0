@@ -32,9 +32,11 @@
     </div>
 
     <div class="carport-info">
+        <div class="bold"><p font-weight="">Her er dine valg for din carport: </p></div>
     <p th:text="'Din valgte længde er '+ ${session.length} +' cm'"></p>
     <p th:text="'Din valgte højde er '+ ${session.height} +' cm'"></p>
     <p th:text="'Din valgte bredde er '+ ${session.width} +' cm'"></p>
+    <p><span th:if="${session.roof}">Du har valgt fladt tag med trapezplader</span> </p>
     <p><span th:if="${session.shed}"}>Du har valgt med skur </span></p>
     <p><span th:if="${session.craftsmen}"}>Du har valgt med montering af håndværkere, som vi bestiller</span></p>
 </div>
@@ -42,11 +44,12 @@
     <div class="carport-price">
         <p>24.000 kr</p>
     </div>
-
+<form method="get">
     <div class="next-button">
-        <button>Videre</button>
+        <button class="button" formaction="/createUserOrLogin" type="submit">Send forespørgsel</button>
     </div>
-</div>
 
+</form>
+</div>
 </body>
 </html>
