@@ -40,9 +40,9 @@ public class Calculator {
     private void calcPosts(Order order) throws DatabaseException {
         int quantity = calcPostQuantity(); //Antallet af stolper beregnes
 
-        List<Product> products = MaterialMapper.getProductsByMaterialId(POSTS,connectionPool); //Vi henter produkter, der er over minLength (her 0)
-        Product bestMatchingProduct = findBestMatchingProduct(products,order.getHeight());                                                                //Tager den første i listen
-        OrderDetail orderDetail = new OrderDetail(order.getOrderId(),bestMatchingProduct, quantity,"Stolpe nedgraves 90cm i jord");
+        List<Product> products = MaterialMapper.getProductsByMaterialId(POSTS,connectionPool); //TODO Der burde kun være 300 cm stolpe
+        Product bestMatchingProduct = findBestMatchingProduct(products,order.getHeight());
+        OrderDetail orderDetail = new OrderDetail(bestMatchingProduct,quantity,999,"Stolpe nedgraves 90cm i jord",bestMatchingProduct.getMaterialId(), order.getOrderId());
         orderDetails.add(orderDetail);
     }
 
@@ -59,9 +59,9 @@ public class Calculator {
         int quantity = 2; //Always 2, one for each side
 
         if(this.length <= 600) {  //Finder bedst matchende rem, hvis længden er under 600cm
-            Product bestMatchingProduct = findBestMatchingProduct(products,this.length);
+            Product bestMatchingProduct = findBestMatchingProduct(products, order.getLength());
 
-            OrderDetail orderDetail = new OrderDetail(order.getOrderId(),bestMatchingProduct, quantity,"Remme i sider, sadles ned i stoplerne");
+            OrderDetail orderDetail = new OrderDetail(bestMatchingProduct,quantity,888,"Remme i sider, sadles ned i stoplerne",bestMatchingProduct.getMaterialId(), order.getOrderId());
             orderDetails.add(orderDetail);
 
 
@@ -73,14 +73,14 @@ public class Calculator {
             * Deles i to, så vi går ud fra at midter-stolpen stilles i midten af front og bag-stolpen.
             */
 
-            int frontBeamLength = ((this.length-130)/2)+100;
+            int frontBeamLength = ((order.getLength()-130)/2)+100;
             Product frontBeam = findBestMatchingProduct(products, frontBeamLength);
-            OrderDetail front = new OrderDetail(order.getOrderId(),frontBeam, quantity,"Forreste remme i sider, sadles ned i stoplerne");
+            OrderDetail front = new OrderDetail(frontBeam, quantity,777,"Forreste remme i sider, sadles ned i stoplerne",frontBeam.getMaterialId(),order.getOrderId());
             orderDetails.add(front);
 
-            int backBeamLength = (((this.length-130)/2)+30);
+            int backBeamLength = (((order.getLength()-130)/2)+30);
             Product backBeam  = findBestMatchingProduct(products, backBeamLength);
-            OrderDetail back = new OrderDetail(order.getOrderId(),backBeam, quantity,"Bagerste remme i sider, sadles ned i stoplerne");
+            OrderDetail back = new OrderDetail(backBeam, quantity,777,"Bagerste remme i sider, sadles ned i stoplerne",backBeam.getMaterialId(),order.getOrderId());
             orderDetails.add(back);
         }
 
@@ -102,7 +102,7 @@ public class Calculator {
         /***** Vi finder det bedst matchende produkt, hvor længden er lang nok, men kortest mulig til spæret *****/
         Product bestMatchingProduct = findBestMatchingProduct(products,this.width);
 
-        OrderDetail orderDetail = new OrderDetail(order.getOrderId(),bestMatchingProduct, quantity,"Spær, monteres på rem");
+        OrderDetail orderDetail = new OrderDetail(bestMatchingProduct, quantity,555,"Spær, monteres på rem",bestMatchingProduct.getMaterialId(),order.getOrderId());
         orderDetails.add(orderDetail);
     }
 
@@ -120,14 +120,19 @@ public class Calculator {
 
         for (Product p : products) {
             if (p.getLength() >= minLength) {
-                int difference = length - this.width;
+                int difference = p.getLength() - minLength;
                 if (difference < smallestDifference) {
                     smallestDifference = difference;
                     bestMatchingProduct = p;
                 }
             }
         }
-        return bestMatchingProduct;
+
+        if(bestMatchingProduct != null){
+        return bestMatchingProduct;}
+        else{
+            throw new RuntimeException();
+        }
     }
 
     public List<OrderDetail> getOrderDetails(){

@@ -295,14 +295,25 @@ body {
     padding: 20px 40px;
 }
 
-.next-button button {
+.next-button form button{
     background-color: #16325c;
     color: white;
     padding: 12px 30px;
     border: none;
     cursor: pointer;
     font-size: 16px;
+    margin-left: 10px;
 }
+
+.next-button button {
+    background-color: #16325c;
+    color: white;
+    padding: 12px 30px 12px 30px;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+}
+
 
 .next-button button:hover {
     background-color: #0e2343;
@@ -393,6 +404,10 @@ body {
     }
 }
 
+.bold{
+    font-weight: bold;
+}
+
 /****** kunde forespørgsel ******/
 
 
@@ -414,13 +429,20 @@ body {
     align-items: center;
     border-radius: 6px;
     margin-bottom: 30px;
+
 }
+
+
+
 
 .request-header h2 {
     font-size: 24px;
     margin: 0;
 }
-
+.request-header td {
+    width: 25%;
+    padding: 10px;
+}
 .status {
     font-size: 18px;
     display: flex;
@@ -520,6 +542,7 @@ body {
 }
 
 .error-text {
+    text-align: center;
     font-size: 24px;
     color: red;
     margin-bottom: 40px;
@@ -675,8 +698,15 @@ body {
     margin-bottom: 40px;
 }
 
-.material-list li {
-    margin-bottom: 10px;
+.styled-table {
+    width: 80%;
+    margin: 30px;
+    border-collapse: collapse;
+    font-family: Arial, sans-serif;
+}
+
+.styledTable td, .styledTable th {
+    width: 25%;
 }
 
 .instruction {
@@ -698,8 +728,6 @@ body {
 
 
 /****** Login/Opret bruger  ******/
-
-
 
 .login-choice-container {
     background-color: #e5e5e5;

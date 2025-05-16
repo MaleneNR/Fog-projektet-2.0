@@ -16,19 +16,46 @@
     <div class="konto">Fog Konto</div>
 </div>
 
-<div class="request-status-container">
+<div th:each="order : ${orders}" class="request-status-container">
     <div class="request-header">
-        <h2>Din forespørgsel</h2>
+        <h2>Din forespørgsel: ordreid #<span th:text="${order.orderid}"></span></h2>
         <div class="status">
             <span>Status:</span>
-            <span class="status-value">Under behandling</span>
+            <span class="status-value" th:text="${order.orderstatus}"></span>
         </div>
     </div>
 
     <div class="request-body">
-        <!-- Her kan der evt. komme yderligere information -->
+        <p><strong>Email:</strong> <span th:text="${order.user.email}"></span></p>
+        <p><strong>Dato for indsendte forespørgsel:</strong> <span th:text="${order.date}"></span></p>
+        <p><strong>Længde af carport:</strong> <span th:text="${order.length} + ' cm'"></span></p>
+        <p><strong>Bredde af carport:</strong> <span th:text="${order.width}+ ' cm'"></span></p>
+        <p><strong>Højde for carport:</strong> <span th:text="${order.height}+ ' cm'"></span></p>
+        <p><strong>Pris for samlet tilbud: </strong><span th:if="${order.orderstatus == 'Tilbud sendt' or order.orderstatus == 'Betalt'}" th:text="${order.orderprice} +',00 kr'"></span></p>
+
+        <div class="next-button" th:if="${order.orderstatus == 'Tilbud sendt'}">
+            <form method="post" action="/viewFinalOrder">
+            <input type="hidden" name="orderid" th:value="${order.orderid}">
+        <button formaction="/viewFinalOrder">Acceptér tilbud</button></form>
+
+            <form method="post" action="/rejectOrder">
+            <input type="hidden" name="orderid" th:value="${order.orderid}">
+                <button formaction="/rejectOrder">Afvis tilbud</button></form>
+        </div>
+        <p th:text="'Orderstatus: ' + ${order.orderstatus} + ', Payed: ' + ${order.payed}"></p>
+
+        <div class="next-button" th:if="${order.orderstatus == 'Betalt' and order.payed}">
+            <form method="post" action="/showFinalOrder">
+                <input type="hidden" name="orderid" th:value="${order.orderid}">
+                <button formaction="/showFinalOrder">Se stykliste</button></form>
+        </div>
+
+
     </div>
 </div>
+
+
+
 
 </body>
 </html>

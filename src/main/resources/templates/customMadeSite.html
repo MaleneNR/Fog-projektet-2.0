@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carport Designer</title>
+    <title>Carport Design</title>
     <link href="../public/css/css.css" th:href="@{/css/css.css}" rel="stylesheet"/>
 </head>
 <body>
@@ -23,44 +23,52 @@
     <div>→</div>
     <div>Forespørgsel</div>
 </div>
-
+<div class="error-text" th:if="${error}">
+    <p th:text="${error}"></p>
+</div>
 <form method="post">
     <div class="designer-container">
         <div class="options">
             <select name="shed">
-                <option>Med/uden skur</option>
+                <option disabled selected>Med/uden skur</option>
                 <option>Med skur</option>
                 <option>Uden skur</option>
             </select>
 
+            <select name="plastic-roof">
+                <option disabled selected>Med/uden trapeztag</option>
+                <option>Med tag</option>
+                <option>Uden tag</option>
+            </select>
+
             <select id="length" name="length">
-                <option>Længde i cm</option>
-                <option th:each="length : ${lengthOptions}"
+                <option disabled selected>Længde i cm</option>
+                <option th:each="length : ${session.lengthOptions}"
                         th:value="${length}"
                         th:text="${length +' cm'}">
                 </option>
             </select>
-            </select>
+
 
             <select id="height" name="height">
-                <option>Højde i cm</option>
-                <option th:each="height : ${heightOptions}"
+                <option disabled selected>Højde i cm</option>
+                <option th:each="height : ${session.heightOptions}"
                         th:value="${height}"
                         th:text="${height +' cm'}">
                 </option>
             </select>
 
             <select id="width" name="width">
-                <option>Bredde i cm</option>
-                <option th:each="width : ${widthOptions}"
+                <option disabled selected>Bredde i cm</option>
+                <option th:each="width : ${session.widthOptions}"
                         th:value="${width}"
                         th:text="${width +' cm'}">
                 </option>
             </select>
-            </select>
+
 
             <select name="craftsmen">
-                <option>Bestilling af håndværkere til montering</option>
+                <option disabled selected>Bestilling af håndværkere til montering</option>
                 <option>Ja</option>
                 <option>Nej</option>
             </select>
@@ -80,7 +88,7 @@
 
 
     <div class="next-button">
-        <button class="button" formaction="/carport-request" type="submit">Videre</button>
+        <button class="button" formaction="/carportRequest" type="submit">Videre</button>
         <!-- TIL OpretBrugerEllerLogin.html -->
     </div>
 

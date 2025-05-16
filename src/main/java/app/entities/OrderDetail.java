@@ -8,11 +8,21 @@ public class OrderDetail {
     private int materialId;
     private int orderId;
 
-    public OrderDetail(int orderId, Product product, int quantity, String assemblyDescription) {
+    public OrderDetail(Product product, int quantity, int totalPrice, String assemblyDescription, int materialId, int orderId) {
+        this.product = product;
+        this.quantity = quantity;
+        this.totalPrice = totalPrice;
+        this.assemblyDescription = assemblyDescription;
+        this.materialId = materialId;
+        this.orderId = orderId;
+    }
+
+    public OrderDetail(int orderId, Product product, int quantity, String assemblyDescription, int totalPrice) {
         this.orderId = orderId;
         this.product = product;
         this.quantity = quantity;
         this.assemblyDescription = assemblyDescription;
+        this.totalPrice = totalPrice;
     }
 
 
