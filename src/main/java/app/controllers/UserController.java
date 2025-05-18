@@ -62,43 +62,57 @@ public class UserController {
 
 
     private static void login(@NotNull Context ctx, ConnectionPool connectionPool) {
-        String username= ctx.formParam("email");
+        String username = ctx.formParam("email");
         String password = ctx.formParam("password");
         try {
             User user = UserMapper.login(username, password, connectionPool);
             ctx.sessionAttribute("user", user);
-            if(user.getRole() == 3 || user.getRole() == 2){
-                loginAdmin(ctx,connectionPool);
-            } else{
+            if (user.getRole() == 3 || user.getRole() == 2) {
+                loginAdmin(ctx, connectionPool);
 
-                if(ctx.sessionAttribute("length")==null || ctx.sessionAttribute("width")==null||ctx.sessionAttribute("height")== null){
-                    throw new NullPointerException("Length, Width or Height is not set, prøv igen");
-                }
-
-                Order order = new Order(user,ctx.sessionAttribute("length"),
-                        ctx.sessionAttribute("height"),
-                        ctx.sessionAttribute("width"),
-                        ctx.sessionAttribute("shed"));
-
-                OrderMapper.addRequest(order,connectionPool);
-                ctx.attribute("orders", OrderMapper.getAllRequestsByUserId(user.getUserId(), connectionPool));
-                ctx.render("customerRequest.html");
+            } else if (ctx.sessionAttribute("length") != null ||  //Hvis alle bare én parameter indeholder noget så går den i makeRequest(), som beder om alle parametre
+                    ctx.sessionAttribute("width") != null ||
+                    ctx.sessionAttribute("height") != null ||
+                    ctx.sessionAttribute("shed") != null) {
+                makeRequest(ctx, user, connectionPool);
             }
 
+            ctx.attribute("orders", OrderMapper.getAllRequestsByUserId(user.getUserId(), connectionPool));
+            ctx.render("customerRequest.html");
         } catch (DatabaseException e) {
             ctx.attribute("message", "Log ind var ikke vellykket. Prøv igen eller opret ny bruger.");
             ctx.render("createUserOrLogin.html");
         }
+    }
         //TODO.5 User klassen skal opdateres, så den kan indeholde de nye parametre. Husk konstruktoren!
         //TODO.6 UserMapper.login() skal opdateres til at tage de nye parametre.
 
+
+
+    private static void makeRequest(Context ctx, User user, ConnectionPool connectionPool) throws DatabaseException {
+            if (ctx.sessionAttribute("length") == null ||
+                    ctx.sessionAttribute("width") == null ||
+                    ctx.sessionAttribute("height") == null ||
+                    ctx.sessionAttribute("shed") == null) {
+                throw new NullPointerException("Length, Width or Height is not set, prøv igen");
+            }else {
+                Order order = new Order(user,
+                        ctx.sessionAttribute("length"),
+                        ctx.sessionAttribute("height"),
+                        ctx.sessionAttribute("width"),
+                        ctx.sessionAttribute("shed"));
+
+                OrderMapper.addRequest(order, connectionPool);
+                ctx.attribute("orders", OrderMapper.getAllRequestsByUserId(user.getUserId(), connectionPool));
+                ctx.render("customerRequest.html");
+            }
     }
 
 
 
 
     private static void loginAdmin(@NotNull Context ctx, ConnectionPool connectionPool) throws DatabaseException {
-        List<Order> orderList = OrderMapper.getAllRequests(connectionPool);//skal man kalde viewAllOrders fra dmin controller?
+        List<Order> orderList = OrderMapper.getAllRequests(connectionPool);//skal man kalde viewAllOrders fra admin controller?
         ctx.sessionAttribute("orderList", orderList);
         ctx.render("adminIndex.html");
     }
