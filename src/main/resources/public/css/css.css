@@ -724,14 +724,11 @@ body {
     border-collapse: collapse;
     font-family: Arial, sans-serif;
 }
-
 .styled-table th,
 .styled-table td {
-    padding: 8px 16px;
+    padding: 0 16px;
     text-align: left;
-    border-bottom: 1px solid #ccc;
 }
-
 
 
 
