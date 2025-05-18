@@ -9,11 +9,18 @@
 <body>
 
 <div class="header">
-    <img src="../public/images/FogLogo.jpeg" th:src="@{/images/FogLogo.jpeg}" height="70" width="70"/>
+
+
+    <a href="/index">
+        <img src="../public/images/FogLogo.jpeg" th:src="@{/images/FogLogo.jpeg}" height="70" width="70"/>
+    </a>
+
     <div class="search-bar">
         <input type="text" placeholder="Søg på produkter eller kategorier">
     </div>
-    <div class="konto">Fog Konto</div>
+    <form method="get" action="/createUserOrLogin">
+        <button type="submit" class="konto-link">Fog konto</button>
+    </form>
 </div>
 <div class="offer-page">
 
