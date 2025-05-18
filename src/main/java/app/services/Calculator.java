@@ -16,6 +16,7 @@ public class Calculator {
     private static final int POSTS = 1;
     private static final int RAFTERS = 2;               //ID for materiale i db, Hardcoded (må vi gerne:))
     private static final int BEAMS = 2;
+    private static final int ROOFPANELS = 3;
 
     private List<OrderDetail> orderDetails = new ArrayList<>(); //listen skal bestå af entiteten product, når denne er oprettet
     private int width;
@@ -66,7 +67,7 @@ public class Calculator {
 
 
         }else {
-            /*
+            /* Da der ikke er noget spærtræ, der er længdere end 600 cm, så skal der regnes af to omgange for at få en solid rem:
             * 130 udgør den første meter, der er uden stolpe i fronten,
             * samt de 30 cm, som er efter sidste stolpe
             * De trækkes fra total-længden, så vi kun har længden på carporten indenfor de beregnede antal stolper
@@ -113,6 +114,36 @@ public class Calculator {
         return this.length/(55+5) + 1;
 
     }
+
+    /***** TAG/Trapez-plader *****/
+    private void calcRoofPanels(Order order) throws DatabaseException{
+        List<Product> products = MaterialMapper.getProductsByMaterialId(ROOFPANELS,connectionPool); //TODO Der burde kun være 300 cm stolpe
+        Product bestMatchingProduct;
+        int productMaxWidth = 600;
+
+        if(order.getLength() <= productMaxWidth){
+        bestMatchingProduct = findBestMatchingProduct(products, order.getLength());
+        int quantity = calcRoofPanelsQuantity();
+        OrderDetail orderDetail = new OrderDetail(bestMatchingProduct,quantity,00, "Tagplader monteres på spær",bestMatchingProduct.getMaterialId(),order.getOrderId());
+        orderDetails.add(orderDetail);}
+        else{
+            findBestMatchingProduct(products, productMaxWidth);
+
+
+            int overlap = 30;
+            findBestMatchingProduct(products, this.length-productMaxWidth-overlap);
+        }
+
+
+    }
+
+    public int calcRoofPanelsQuantity() throws DatabaseException {
+        //Det anbefales at en trapezplade overlægges med 2 bølger, dvs. 12 cm
+        int materialWidth = MaterialMapper.getMaterialById(ROOFPANELS,connectionPool).getWidth();
+        int overlap = 12;
+        return  this.length/(materialWidth-overlap);
+    }
+
 
     public Product findBestMatchingProduct(List<Product> products, int minLength){
         int smallestDifference = Integer.MAX_VALUE;
