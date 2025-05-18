@@ -34,6 +34,7 @@ public class Calculator {
         calcPosts(order);
         calcBeams(order);
         calcRafters(order);
+        calcRoofPanels(order);
 
     }
 
@@ -43,8 +44,7 @@ public class Calculator {
 
         List<Product> products = MaterialMapper.getProductsByMaterialId(POSTS,connectionPool); //TODO Der burde kun være 300 cm stolpe
         Product bestMatchingProduct = findBestMatchingProduct(products,order.getHeight());
-        OrderDetail orderDetail = new OrderDetail(bestMatchingProduct,quantity,999,"Stolpe nedgraves 90cm i jord",bestMatchingProduct.getMaterialId(), order.getOrderId());
-        orderDetails.add(orderDetail);
+        orderDetails.add(new OrderDetail(bestMatchingProduct,quantity,"Stolpe nedgraves 90cm i jord",bestMatchingProduct.getMaterialId(), order.getOrderId()));
     }
 
     public int calcPostQuantity(){
@@ -62,7 +62,7 @@ public class Calculator {
         if(this.length <= 600) {  //Finder bedst matchende rem, hvis længden er under 600cm
             Product bestMatchingProduct = findBestMatchingProduct(products, order.getLength());
 
-            OrderDetail orderDetail = new OrderDetail(bestMatchingProduct,quantity,888,"Remme i sider, sadles ned i stoplerne",bestMatchingProduct.getMaterialId(), order.getOrderId());
+            OrderDetail orderDetail = new OrderDetail(bestMatchingProduct,quantity,"Remme i sider, sadles ned i stoplerne",bestMatchingProduct.getMaterialId(), order.getOrderId());
             orderDetails.add(orderDetail);
 
 
@@ -76,12 +76,12 @@ public class Calculator {
 
             int frontBeamLength = ((order.getLength()-130)/2)+100;
             Product frontBeam = findBestMatchingProduct(products, frontBeamLength);
-            OrderDetail front = new OrderDetail(frontBeam, quantity,777,"Forreste remme i sider, sadles ned i stoplerne",frontBeam.getMaterialId(),order.getOrderId());
+            OrderDetail front = new OrderDetail(frontBeam, quantity,"Forreste remme i sider, sadles ned i stoplerne",frontBeam.getMaterialId(),order.getOrderId());
             orderDetails.add(front);
 
             int backBeamLength = (((order.getLength()-130)/2)+30);
             Product backBeam  = findBestMatchingProduct(products, backBeamLength);
-            OrderDetail back = new OrderDetail(backBeam, quantity,777,"Bagerste remme i sider, sadles ned i stoplerne",backBeam.getMaterialId(),order.getOrderId());
+            OrderDetail back = new OrderDetail(backBeam, quantity,"Bagerste remme i sider, sadles ned i stoplerne",backBeam.getMaterialId(),order.getOrderId());
             orderDetails.add(back);
         }
 
@@ -103,7 +103,7 @@ public class Calculator {
         /***** Vi finder det bedst matchende produkt, hvor længden er lang nok, men kortest mulig til spæret *****/
         Product bestMatchingProduct = findBestMatchingProduct(products,this.width);
 
-        OrderDetail orderDetail = new OrderDetail(bestMatchingProduct, quantity,555,"Spær, monteres på rem",bestMatchingProduct.getMaterialId(),order.getOrderId());
+        OrderDetail orderDetail = new OrderDetail(bestMatchingProduct, quantity,"Spær, monteres på rem",bestMatchingProduct.getMaterialId(),order.getOrderId());
         orderDetails.add(orderDetail);
     }
 
@@ -117,31 +117,33 @@ public class Calculator {
 
     /***** TAG/Trapez-plader *****/
     private void calcRoofPanels(Order order) throws DatabaseException{
-        List<Product> products = MaterialMapper.getProductsByMaterialId(ROOFPANELS,connectionPool); //TODO Der burde kun være 300 cm stolpe
+        List<Product> products = MaterialMapper.getProductsByMaterialId(ROOFPANELS,connectionPool);
+        int quantity = calcRoofPanelsQuantity();
+        String assemblyDescription = "Tagplader monteres på spær";
         Product bestMatchingProduct;
-        int productMaxWidth = 600;
+        int productMaxWidth = 600;  //TODO Kan dette gøres mindre hardcoded?
 
         if(order.getLength() <= productMaxWidth){
         bestMatchingProduct = findBestMatchingProduct(products, order.getLength());
-        int quantity = calcRoofPanelsQuantity();
-        OrderDetail orderDetail = new OrderDetail(bestMatchingProduct,quantity,00, "Tagplader monteres på spær",bestMatchingProduct.getMaterialId(),order.getOrderId());
-        orderDetails.add(orderDetail);}
-        else{
-            findBestMatchingProduct(products, productMaxWidth);
 
+        orderDetails.add(new OrderDetail(bestMatchingProduct,quantity, assemblyDescription,bestMatchingProduct.getMaterialId(),order.getOrderId()));}
+        else{
+            Product firstRow = findBestMatchingProduct(products, productMaxWidth);
+            orderDetails.add(new OrderDetail(firstRow,quantity,assemblyDescription, firstRow.getMaterialId(), order.getOrderId()));
 
             int overlap = 30;
-            findBestMatchingProduct(products, this.length-productMaxWidth-overlap);
+            Product secondRow = findBestMatchingProduct(products, this.length-productMaxWidth-overlap);
+            orderDetails.add(new OrderDetail(secondRow,quantity,assemblyDescription, secondRow.getMaterialId(), order.getOrderId()));
         }
 
 
     }
 
     public int calcRoofPanelsQuantity() throws DatabaseException {
-        //Det anbefales at en trapezplade overlægges med 2 bølger, dvs. 12 cm
+        //Det anbefales at en trapezplade overlægges med 2 bølger ved fortsættelse, dvs. 12 cm
         int materialWidth = MaterialMapper.getMaterialById(ROOFPANELS,connectionPool).getWidth();
         int overlap = 12;
-        return  this.length/(materialWidth-overlap);
+        return  (int)Math.ceil(this.length/(materialWidth-overlap));
     }
 
 

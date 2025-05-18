@@ -125,7 +125,7 @@ public class OrderMapper {
         int rowsAffected = 0;
         Boolean orderAdded = false;
 
-            String status = "Received";  //TODO Skal dette hardcodes
+            String status = "Modtaget";  //TODO Skal dette hardcodes
             LocalDate dateOfToday = LocalDate.of(LocalDate.now().getYear(), LocalDate.now().getMonth(), LocalDate.now().getDayOfMonth());
 
         String sql = "INSERT INTO orders (order_status, payed, date, user_id, carport_length, height, carport_width,shed) values (?,?,?,?,?,?,?,?) RETURNING order_id";
@@ -151,7 +151,7 @@ public class OrderMapper {
                         order.setOrderId(orderId);
                         orderAdded = true;
 
-                        //Calculator beregner materialler
+                        //Calculator beregner materialer
                         Calculator calculator = new Calculator(order.getWidth(),order.getLength(),connectionPool);
                         calculator.calcCarport(order); //Kalder alle beregningsmetoder i calculatorklassen, hvor de tilføjer til en liste af orderdetails
                         List<OrderDetail> orderDetails = calculator.getOrderDetails(); //Her får vi så listen
@@ -183,11 +183,13 @@ public class OrderMapper {
                 PreparedStatement ps = connection.prepareStatement(sql);
         ) {
             for (OrderDetail orderDetail : orderDetails) {
+
                 //Calculation of totalprice (productLengthInMeter * pricePerUnit)
                 int pricePerUnit = MaterialMapper.getMaterialById(orderDetail.getMaterialId(),connectionPool).getPricePerUnit();
                 int lengthInMeter = orderDetail.getProduct().getLength()/100; //from cm i db
                 orderDetail.setTotalPrice(pricePerUnit * lengthInMeter);
 
+                //Update order_details with every detail from the list
                 ps.setInt(1, orderDetail.getProduct().getProductId());
                 ps.setInt(2, orderDetail.getQuantity());
                 ps.setInt(3, orderDetail.getTotalPrice());
@@ -195,7 +197,6 @@ public class OrderMapper {
                 ps.setInt(5, orderDetail.getMaterialId());
                 ps.setInt(6, orderDetail.getOrderId());
                 affectedRows += ps.executeUpdate();
-
 
                 //Calculation of orderPrice (total_price * quantity)
                 orderPrice += orderDetail.getQuantity() * orderDetail.getTotalPrice();
