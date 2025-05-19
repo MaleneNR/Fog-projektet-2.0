@@ -23,7 +23,7 @@ public class MaterialController {
         Order order = OrderMapper.getOrderById(orderid, connectionPool);
         List<OrderDetail> orderDetails = OrderMapper.getOrderDetailsFromViewById(order.getOrderId(), connectionPool);
         order.setOrderDetails(orderDetails);
-        CarportSvg svg = new CarportSvg(order.getLength(), order.getWidth());
+        CarportSvg svg = new CarportSvg(order.getWidth(), order.getLength());
 
         ctx.attribute("svg", svg.toString());
         ctx.attribute("order", order);

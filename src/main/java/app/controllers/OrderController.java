@@ -101,28 +101,8 @@ public class OrderController {
         Locale.setDefault(new Locale("US"));
         String rectStyle ="stroke:black;fill: white";
 
-        CarportSvg svg = new CarportSvg(780, 600);
+        CarportSvg svg = new CarportSvg(ctx.sessionAttribute("width"), ctx.sessionAttribute("length"));
 
-//        //Ramme
-//        carportSvg.addRectangle(0,0 ,600, 780,rectStyle );
-//
-//        //Spær
-//        carportSvg.addRectangle(0,0,600,5,rectStyle);
-//        carportSvg.addRectangle(775,0,600,5,rectStyle);
-//
-//        //Remme
-//        carportSvg.addRectangle(0,35,5,780, rectStyle);
-//        carportSvg.addRectangle(0,560,5,780, rectStyle);
-//
-//        //Stiplede linjer
-//        carportSvg.addLine(55,40,550,565, "stroke:black;stroke-dasharray:10,5");
-//        carportSvg.addLine(55,565,550,40, "stroke:black;stroke-dasharray:10,5");
-//
-//        //Stolper oppe
-//        carportSvg.addRectangle(100,35,10,10, rectStyle);
-//        carportSvg.addRectangle(425,35,10,10, rectStyle);
-//        carportSvg.addRectangle(750,35,10,10, rectStyle);
-//
 //        //Stolper nede
 //        carportSvg.addRectangle(100,555,10,10, rectStyle);
 //        carportSvg.addRectangle(425,555,10,10, rectStyle);

@@ -71,7 +71,8 @@ public class AdminController {
                     ctx.sessionAttribute("discount", discount);
                     ctx.sessionAttribute("order", updatedOrder);
                     ctx.sessionAttribute("user", user);
-                    CarportSvg svg = new CarportSvg(order.getLength(), order.getWidth());
+
+                    CarportSvg svg = new CarportSvg(order.getWidth(), order.getLength());
                     ctx.attribute("svg", svg.toString());
 
                     ctx.render("adminStatusSite.html"); //Vis opdateret ordre
