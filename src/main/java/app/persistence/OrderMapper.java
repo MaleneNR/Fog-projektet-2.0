@@ -126,10 +126,10 @@ public class OrderMapper {
         int rowsAffected = 0;
         Boolean orderAdded = false;
 
-            String status = "Received";  //TODO Skal dette hardcodes
+            String status = "Modtaget";  //TODO Skal dette hardcodes
             LocalDate dateOfToday = LocalDate.of(LocalDate.now().getYear(), LocalDate.now().getMonth(), LocalDate.now().getDayOfMonth());
 
-        String sql = "INSERT INTO orders (order_status, order_price, payed, date, user_id, carport_length, height, carport_width,shed) values (?,?,?,?,?,?,?,?,?) RETURNING order_id";
+        String sql = "INSERT INTO orders (order_status, payed, date, user_id, carport_length, height, carport_width,shed) values (?,?,?,?,?,?,?,?) RETURNING order_id";
 
         try (
                 Connection connection = connectionPool.getConnection();
@@ -140,15 +140,14 @@ public class OrderMapper {
             //    orderPrice = orderPrice + orderDetail.getTotalPrice(); //TODO orderDetail bliver først lavet længere nede. Den bliver null her på linje 139.
             //}
             ps.setString(1, status);
-            ps.setInt(2,20000); //TODO Skal være orderPrice
-            //ps.setInt(2,orderPrice);
-            ps.setBoolean(3,false);
-            ps.setDate(4, Date.valueOf(dateOfToday)); //Dags dato i (YYYY-MM-DD)-format
-            ps.setInt(5, order.getUser().getUserId());
-            ps.setInt(6,order.getLength());
-            ps.setInt(7,order.getHeight());
-            ps.setInt(8,order.getWidth());
-            ps.setBoolean(9, order.wantShed());
+            ps.setBoolean(2,false);
+            ps.setDate(3, Date.valueOf(dateOfToday)); //Dags dato i (YYYY-MM-DD)-format
+            ps.setInt(4, order.getUser().getUserId());
+            ps.setInt(5,order.getLength());
+            ps.setInt(6,order.getHeight());
+            ps.setInt(7,order.getWidth());
+            ps.setBoolean(8, order.wantShed());
+
 
             rowsAffected = ps.executeUpdate();
             if (rowsAffected == 1) {
@@ -158,7 +157,7 @@ public class OrderMapper {
                         order.setOrderId(orderId);
                         orderAdded = true;
 
-                        //Calculator beregner materialler
+                        //Calculator beregner materialer
                         Calculator calculator = new Calculator(order.getWidth(),order.getLength(),connectionPool);
                         calculator.calcCarport(order); //Kalder alle beregningsmetoder i calculatorklassen, hvor de tilføjer til en liste af orderdetails
                         List<OrderDetail> orderDetails = calculator.getOrderDetails(); //Her får vi så listen
@@ -180,6 +179,8 @@ public class OrderMapper {
     private static boolean addOrderDetail(List<OrderDetail> orderDetails, ConnectionPool connectionPool) {
         int affectedRows = 0;
         Boolean orderDetailsAdded = false;
+        int orderPrice = 0;
+        int currentOrderId = orderDetails.get(0).getOrderId();
 
         String sql = "INSERT INTO order_details (product_id, quantity, total_price, assembly_description, material_id, order_id) values (?,?,?,?,?,?)";
 
@@ -189,21 +190,26 @@ public class OrderMapper {
         ) {
             for (OrderDetail orderDetail : orderDetails) {
 
-                //Calculation of totalprice (quantity * pricePerUnit)
+                //Calculation of totalprice (productLengthInMeter * pricePerUnit)
                 int pricePerUnit = MaterialMapper.getMaterialById(orderDetail.getMaterialId(),connectionPool).getPricePerUnit();
                 int lengthInMeter = orderDetail.getProduct().getLength()/100; //from cm i db
-                int totalPrice = pricePerUnit * lengthInMeter;
+                orderDetail.setTotalPrice(pricePerUnit * lengthInMeter);
 
+                //Update order_details with every detail from the list
                 ps.setInt(1, orderDetail.getProduct().getProductId());
                 ps.setInt(2, orderDetail.getQuantity());
-                ps.setInt(3, totalPrice); //TODO TOTALPRICE KAN OPTIMERES
+                ps.setInt(3, orderDetail.getTotalPrice());
                 ps.setString(4, orderDetail.getAssemblyDescription());
                 ps.setInt(5, orderDetail.getMaterialId());
                 ps.setInt(6, orderDetail.getOrderId());
-                affectedRows = ps.executeUpdate();
+                affectedRows += ps.executeUpdate();
+
+                //Calculation of orderPrice (total_price * quantity)
+                orderPrice += orderDetail.getQuantity() * orderDetail.getTotalPrice();
             }
             if (affectedRows == orderDetails.size()){
                 orderDetailsAdded = true;
+                updatePrice(orderPrice,currentOrderId,connectionPool);
             }
 
         } catch (SQLException | DatabaseException e) {
@@ -289,6 +295,25 @@ return false;
         }
     }
 
+    public static boolean updatePrice(int newPrice, int orderId, ConnectionPool connectionPool) throws DatabaseException {
+        String sql = "UPDATE orders SET order_price = ? WHERE order_id = ?";
+        try (
+                Connection connection = connectionPool.getConnection();
+                PreparedStatement ps = connection.prepareStatement(sql)
+        ) {
+            ps.setInt(1, newPrice);
+            ps.setInt(2, orderId);
+
+            int rows = ps.executeUpdate();
+            if(rows == 1){
+                return true;
+            }
+            return false;
+        } catch (SQLException e) {
+            throw new DatabaseException("Fejl i opdatering af ordre i updatePayed()", e.getMessage());
+        }
+    }
+
 
 
 
@@ -313,15 +338,6 @@ return false;
             throw new DatabaseException("Fejl i opdatering af ordre i updateOrder()", e.getMessage());
         }
     }
-
-
-
-
-        public static void insertOrder(Order order, ConnectionPool connectionPool){
-        }
-
-
-
 
 
     public static List<Order> getAllOrdersWithEmail(ConnectionPool connectionPool) throws DatabaseException {
