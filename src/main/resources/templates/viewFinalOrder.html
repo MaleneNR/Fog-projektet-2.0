@@ -33,19 +33,25 @@
 
     <h3>Materialeliste (stk liste)</h3>
     <div class="material-list">
-    <div class="styledTable">
-        <table>
+    <div>
+        <table class="styled-table">
             <thead>
+            <tr>
                 <th>Varenummer</th>
-                <th>Antal</th>
-                <th>Samlet pris</th>
+                <th>Vare</th>
+                <th>Antal af enheder</th>
+                <th>Pris per enhed</th>
+                <th>Enhed</th>
                 <th>Monteringsbeskrivelse</th>
+            </tr>
             </thead>
             <tbody>
             <tr th:each="orderdetail : ${order.orderdetails}">
                 <td th:text="${orderdetail.product.productid}"></td>
+                <td th:text="${orderdetail.product.material.description}"></td>
                 <td th:text="${orderdetail.quantity}"></td>
                 <td th:text="${orderdetail.totalprice}+',00 kr'"></td>
+                <td th:text="${orderdetail.product.material.unit}"></td>
                 <td th:text="${orderdetail.assemblydescription}"></td>
             </tr>
             </tbody>
