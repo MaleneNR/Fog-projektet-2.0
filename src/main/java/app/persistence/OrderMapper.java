@@ -1,9 +1,6 @@
 package app.persistence;
 
-import app.entities.Order;
-import app.entities.OrderDetail;
-import app.entities.Product;
-import app.entities.User;
+import app.entities.*;
 import app.exceptions.DatabaseException;
 import app.services.Calculator;
 import io.javalin.http.Context;
@@ -88,37 +85,41 @@ public class OrderMapper {
 
 
 
-    public static List<OrderDetail> getAllOrderDetails (int orderId, ConnectionPool connectionPool) throws DatabaseException {
+    public static List<OrderDetail> getOrderDetailsFromViewById(int orderId, ConnectionPool connectionPool) throws DatabaseException {
+        String sql = "SELECT * FROM public.orderdetails_view WHERE order_id = ?";
         List<OrderDetail> orderDetails = new ArrayList<>();
-        String sql = "SELECT * FROM order_details WHERE order_id = ?";
-
         try (
                 Connection connection = connectionPool.getConnection();
                 PreparedStatement ps = connection.prepareStatement(sql);
         )
         {
-            ps.setInt(1, orderId);
+            ps.setInt(1,orderId);
             ResultSet rs = ps.executeQuery();
-            while (rs.next()){
-                int productId = rs.getInt("product_id");
-                int quantity = rs.getInt("quantity");
-                int totalPrice = rs.getInt("total_price");
-                String assemblyDescription = rs.getString("assembly_description");
+            while(rs.next()){
+                String title = rs.getString("material");
+                int materialId = rs.getInt("material_id");
+                String unit = rs.getString("unit");
+                String description = rs.getString("description");
+                int pricePerUnit = rs.getInt("price_per_unit");
+                Material material = new Material(materialId,title,unit,description,pricePerUnit);
 
-                Product product = MaterialMapper.getProductById(productId,connectionPool);
+                int productId = rs.getInt("product_id");
+                int length = rs.getInt("length");
+                Product product = new Product(productId,length,material);
+
+
+                int quantity = rs.getInt("quantity");
+                String assemblyDescription = rs.getString("assembly_description");
+                int totalPrice = rs.getInt("total_price");
                 OrderDetail orderDetail = new OrderDetail(orderId, product,quantity,assemblyDescription,totalPrice);
+
                 orderDetails.add(orderDetail);
             }
+
+        }catch (SQLException e){
+            throw new DatabaseException("Kunne ikke finde enten materiale, product eller orderdetails for ordre: " +orderId, e.getMessage());
         }
-        catch (SQLException e)
-        {
-            throw new DatabaseException("Fejl i søgning på alle ordrer, getAllRequests()", e.getMessage());
-        }
-
-
-
-        //Skal hente detaljerne til givne ordre (Stk liste)
-    return orderDetails;  //TODO Skal returnerer en order_detail
+        return orderDetails;
     }
 
     public static boolean addRequest(Order order, ConnectionPool connectionPool) throws DatabaseException {
@@ -134,6 +135,10 @@ public class OrderMapper {
                 Connection connection = connectionPool.getConnection();
                 PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
         ) {
+            //int orderPrice = 0;
+            //for (OrderDetail orderDetail : getAllOrderDetails(order.getOrderId(), connectionPool) ){
+            //    orderPrice = orderPrice + orderDetail.getTotalPrice(); //TODO orderDetail bliver først lavet længere nede. Den bliver null her på linje 139.
+            //}
             ps.setString(1, status);
             ps.setBoolean(2,false);
             ps.setDate(3, Date.valueOf(dateOfToday)); //Dags dato i (YYYY-MM-DD)-format
@@ -142,6 +147,7 @@ public class OrderMapper {
             ps.setInt(6,order.getHeight());
             ps.setInt(7,order.getWidth());
             ps.setBoolean(8, order.wantShed());
+
 
             rowsAffected = ps.executeUpdate();
             if (rowsAffected == 1) {
