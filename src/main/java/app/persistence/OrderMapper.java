@@ -135,8 +135,13 @@ public class OrderMapper {
                 Connection connection = connectionPool.getConnection();
                 PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
         ) {
+            //int orderPrice = 0;
+            //for (OrderDetail orderDetail : getAllOrderDetails(order.getOrderId(), connectionPool) ){
+            //    orderPrice = orderPrice + orderDetail.getTotalPrice(); //TODO orderDetail bliver først lavet længere nede. Den bliver null her på linje 139.
+            //}
             ps.setString(1, status);
-            ps.setInt(2,20000); //TODO Estimeret pris, IKKE denne hardcodede pris!
+            ps.setInt(2,20000); //TODO Skal være orderPrice
+            //ps.setInt(2,orderPrice);
             ps.setBoolean(3,false);
             ps.setDate(4, Date.valueOf(dateOfToday)); //Dags dato i (YYYY-MM-DD)-format
             ps.setInt(5, order.getUser().getUserId());

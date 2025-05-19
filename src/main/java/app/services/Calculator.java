@@ -42,7 +42,9 @@ public class Calculator {
 
         List<Product> products = MaterialMapper.getProductsByMaterialId(POSTS,connectionPool); //TODO Der burde kun være 300 cm stolpe
         Product bestMatchingProduct = findBestMatchingProduct(products,order.getHeight());
+
         OrderDetail orderDetail = new OrderDetail(bestMatchingProduct,quantity,999,"Stolpe nedgraves 90cm i jord",bestMatchingProduct.getMaterial().getMaterialId(), order.getOrderId());
+
         orderDetails.add(orderDetail);
     }
 

@@ -9,11 +9,18 @@
 <body>
 
 <div class="header">
-    <img src="../public/images/FogLogo.jpeg" th:src="@{/images/FogLogo.jpeg}" height="70" width="70"/>
+
+
+    <a href="/index">
+        <img src="../public/images/FogLogo.jpeg" th:src="@{/images/FogLogo.jpeg}" height="70" width="70"/>
+    </a>
+
     <div class="search-bar">
         <input type="text" placeholder="Søg på produkter eller kategorier">
     </div>
-    <div class="konto">Fog Konto</div>
+    <form method="get" action="/createUserOrLogin">
+        <button type="submit" class="konto-link">Fog konto</button>
+    </form>
 </div>
 
 
@@ -25,9 +32,10 @@
         <div class="offer-image">
             <img src="https://via.placeholder.com/500x300?text=Carport+Tegning" alt="Carport tegning">
         </div>
-
         <div class="offer-description">
-            <p>Tak for din bestilling! Nedenfor kan du se din valgte carport med materialeliste og vejledning.</p>
+            <a href="https://dat2cph.github.io/spring2025/projects/carport/docs/CP01DURvejledning2016.pdf" target="_blank">
+                Se materialeliste og vejledning.
+            </a>
         </div>
     </div>
 
