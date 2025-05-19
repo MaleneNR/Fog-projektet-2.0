@@ -6,12 +6,15 @@ import app.exceptions.DatabaseException;
 import app.exceptions.IllegalInputException;
 import app.persistence.ConnectionPool;
 import app.persistence.OrderMapper;
+import app.services.CarportSvg;
 import app.services.Dimensions;
+import app.services.Svg;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.Locale;
 
 public class OrderController {
     public static void addRoutes(Javalin app, ConnectionPool connectionPool) {
@@ -84,13 +87,49 @@ public class OrderController {
             ctx.sessionAttribute("height", height);
             ctx.sessionAttribute("craftsmen", craftsmen);
 
+            showOrder(ctx);
             //Viser deres forespørgsel, når de er logget ind
-            ctx.render("viewRequest.html");
+            //ctx.render("viewRequest.html");
         }catch (IllegalInputException e){
             designYourCarport(ctx);
             ctx.status(400).result(e.getMessage());
             }
 
+    }
+
+    public static void showOrder(Context ctx){
+        Locale.setDefault(new Locale("US"));
+        String rectStyle ="stroke:black;fill: white";
+
+        CarportSvg svg = new CarportSvg(780, 600);
+
+//        //Ramme
+//        carportSvg.addRectangle(0,0 ,600, 780,rectStyle );
+//
+//        //Spær
+//        carportSvg.addRectangle(0,0,600,5,rectStyle);
+//        carportSvg.addRectangle(775,0,600,5,rectStyle);
+//
+//        //Remme
+//        carportSvg.addRectangle(0,35,5,780, rectStyle);
+//        carportSvg.addRectangle(0,560,5,780, rectStyle);
+//
+//        //Stiplede linjer
+//        carportSvg.addLine(55,40,550,565, "stroke:black;stroke-dasharray:10,5");
+//        carportSvg.addLine(55,565,550,40, "stroke:black;stroke-dasharray:10,5");
+//
+//        //Stolper oppe
+//        carportSvg.addRectangle(100,35,10,10, rectStyle);
+//        carportSvg.addRectangle(425,35,10,10, rectStyle);
+//        carportSvg.addRectangle(750,35,10,10, rectStyle);
+//
+//        //Stolper nede
+//        carportSvg.addRectangle(100,555,10,10, rectStyle);
+//        carportSvg.addRectangle(425,555,10,10, rectStyle);
+//        carportSvg.addRectangle(750,555,10,10, rectStyle);
+
+        ctx.attribute("svg", svg.toString());
+        ctx.render("viewRequest.html");
     }
 
     public static Integer tryParseInt(String value) {  //Overvej at put denne i en anden klasse, hvis vi bruger den i mere end den her
