@@ -719,15 +719,21 @@ body {
 }
 
 .styled-table {
+    table-layout: auto;
     width: 80%;
-    margin: 30px;
+    margin: 30px auto;
     border-collapse: collapse;
     font-family: Arial, sans-serif;
 }
-
-.styledTable td, .styledTable th {
-    width: 25%;
+.styled-table th,
+.styled-table td {
+    padding: 0 16px;
+    text-align: left;
 }
+
+
+
+
 
 .instruction {
     background-color: #f4f4f4;

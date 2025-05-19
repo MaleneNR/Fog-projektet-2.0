@@ -1,6 +1,7 @@
 package app.persistence;
 
 import app.entities.Material;
+import app.entities.OrderDetail;
 import app.entities.Product;
 import app.exceptions.DatabaseException;
 
@@ -57,7 +58,8 @@ public class MaterialMapper {
                 int productId = rs.getInt("product_id");
                 int length = rs.getInt("length");
 
-                Product product = new Product(productId,length,materialId);
+                Material material = getMaterialById(materialId,connectionPool);
+                Product product = new Product(productId,length,material);
                 products.add(product);
             }
 
@@ -83,7 +85,8 @@ public class MaterialMapper {
                 int materialId = rs.getInt("material_id");
                 int length = rs.getInt("length");
 
-                product = new Product(productId,length,materialId);
+                Material material = getMaterialById(materialId,connectionPool);
+                product = new Product(productId,length,material);
 
             }
 
@@ -93,7 +96,6 @@ public class MaterialMapper {
 
         return product;
     }
-
 
 
 }

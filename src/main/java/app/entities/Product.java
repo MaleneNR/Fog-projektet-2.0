@@ -3,12 +3,12 @@ package app.entities;
 public class Product {
     private int productId;
     private int length;
-    private int materialId;
+    private Material material;
 
-    public Product(int productId, int length, int materialId) {
+    public Product(int productId, int length, Material material) {
         this.productId = productId;
         this.length = length;
-        this.materialId = materialId;
+        this.material = material;
     }
 
     public Product(int length) {
@@ -31,12 +31,12 @@ public class Product {
         this.length = length;
     }
 
-    public int getMaterialId() {
-        return materialId;
+    public Material getMaterial() {
+        return material;
     }
 
-    public void setMaterialId(int materialId) {
-        this.materialId = materialId;
+    public void setMaterial(Material material) {
+        this.material = material;
     }
 
     @Override
@@ -44,7 +44,7 @@ public class Product {
         return "Product{" +
                 "productId=" + productId +
                 ", length=" + length +
-                ", materialId=" + materialId +
+                ", material=" + material +
                 '}';
     }
 }
