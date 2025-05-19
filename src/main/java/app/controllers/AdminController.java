@@ -6,6 +6,7 @@ import app.exceptions.DatabaseException;
 import app.persistence.ConnectionPool;
 import app.persistence.OrderMapper;
 import app.persistence.UserMapper;
+import app.services.CarportSvg;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 
@@ -20,6 +21,7 @@ import java.util.List;
 public class AdminController {
     public static void addRoutes(Javalin app, ConnectionPool connectionPool) {
         //app.post("/sendTilbud", ctx -> OrderMapper.updateOrder(ctx, connectionPool));
+        app.post("/seForesporgsel", ctx -> AdminController.editProduct(ctx, connectionPool));
 
         app.post("/sendTilbud", ctx -> {
             boolean success = OrderMapper.updateOrder(ctx, connectionPool);
@@ -69,6 +71,9 @@ public class AdminController {
                     ctx.sessionAttribute("discount", discount);
                     ctx.sessionAttribute("order", updatedOrder);
                     ctx.sessionAttribute("user", user);
+                    CarportSvg svg = new CarportSvg(order.getLength(), order.getWidth());
+                    ctx.attribute("svg", svg.toString());
+
                     ctx.render("adminStatusSite.html"); //Vis opdateret ordre
                 } else {
                     ctx.status(500).result("Opdatering fejlede.");

@@ -27,7 +27,6 @@ public class UserController {
         app.get("/createUser", ctx -> ctx.render("createUser.html"));
         app.get("/login", ctx -> ctx.render("login.html"));
         app.post("/createUser", ctx -> createUser(ctx, connectionPool));
-        app.post("/seForesporgsel", ctx -> AdminController.editProduct(ctx, connectionPool));
         app.get("/index", ctx -> ctx.render("index.html"));
 
     }
@@ -79,10 +78,10 @@ public class UserController {
                     ctx.sessionAttribute("height") != null ||
                     ctx.sessionAttribute("shed") != null) {
                 makeRequest(ctx, user, connectionPool);
-            }
-
+            } else{
             ctx.attribute("orders", OrderMapper.getAllRequestsByUserId(user.getUserId(), connectionPool));
-            ctx.render("customerRequest.html");
+            ctx.render("customerRequest.html");}
+
         } catch (DatabaseException e) {
             ctx.attribute("message", "Log ind var ikke vellykket. Prøv igen eller opret ny bruger.");
             ctx.render("createUserOrLogin.html");
