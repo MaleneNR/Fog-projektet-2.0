@@ -73,20 +73,18 @@ public class UserController {
             if(user.getRole() == 3 || user.getRole() == 2){
                 loginAdmin(ctx,connectionPool);
             } else{
+                    if (ctx.sessionAttribute("length") == null || ctx.sessionAttribute("width") == null || ctx.sessionAttribute("height") == null) {
+                        throw new NullPointerException("Length, Width or Height is not set, prøv igen");//TODO denne gør at bruger ikke kan logge ind direkte fra index
+                    }
 
+                    Order order = new Order(user, ctx.sessionAttribute("length"),
+                            ctx.sessionAttribute("height"),
+                            ctx.sessionAttribute("width"),
+                            ctx.sessionAttribute("shed"));
 
-                if(ctx.sessionAttribute("length")==null || ctx.sessionAttribute("width")==null||ctx.sessionAttribute("height")== null){
-                    throw new NullPointerException("Length, Width or Height is not set, prøv igen");
-                }
-
-                Order order = new Order(user,ctx.sessionAttribute("length"),
-                        ctx.sessionAttribute("height"),
-                        ctx.sessionAttribute("width"),
-                        ctx.sessionAttribute("shed"));
-
-                OrderMapper.addRequest(order,connectionPool);
-                ctx.attribute("orders", OrderMapper.getAllRequestsByUserId(user.getUserId(), connectionPool));
-                ctx.render("customerRequest.html");
+                    OrderMapper.addRequest(order, connectionPool);
+                    ctx.attribute("orders", OrderMapper.getAllRequestsByUserId(user.getUserId(), connectionPool));
+                    ctx.render("customerRequest.html");
             }
 
         } catch (DatabaseException e) {

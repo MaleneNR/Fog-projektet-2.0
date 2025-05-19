@@ -49,7 +49,9 @@
         <p>Materiale: Trykimprægneret</p>
 
         <h3>Beregnede pris</h3>
-        <div class="price-display">24.234,7 kr</div>
+
+        <div class="price-display" th:text="'Pris: '+ ${session.order.getOrderPrice()}"></div>
+
 
         <h3>Beregn ny pris:</h3>
         <form method="post" action="/sendTilbud">
@@ -66,8 +68,10 @@
             <img src="https://via.placeholder.com/400x200?text=Tegning+af+Carport" alt="Carport tegning">
         </div>
         <div class="calculation-box">
-            <p>Afslag: 2.000 kr</p>
-            <p>Beregninger i forhold til pris</p>
+            <p th:text="'Afslag: '+ ${session.discount}+ ' kr'">
+            </p>
+            <p th:text="'Beregnet tilbud - 10%: '+ ${session.suggestedPrice} + ' kr'">
+            </p>
         </div>
     </div>
 
