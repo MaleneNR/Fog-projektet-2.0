@@ -171,10 +171,11 @@ body {
 
 .box img {
     width: 100%;
-    height: auto;
+    height: 475px;
     object-fit: cover;
     margin-top: 20px;
     border-radius: 6px;
+    display: block;
 }
 
 .footer {
@@ -351,7 +352,7 @@ body {
 
 
 .grøn{
-  color: #e6f3d7;
+  color: darkgrey;
 
 
 }
@@ -718,15 +719,21 @@ body {
 }
 
 .styled-table {
+    table-layout: auto;
     width: 80%;
-    margin: 30px;
+    margin: 30px auto;
     border-collapse: collapse;
     font-family: Arial, sans-serif;
 }
-
-.styledTable td, .styledTable th {
-    width: 25%;
+.styled-table th,
+.styled-table td {
+    padding: 0 16px;
+    text-align: left;
 }
+
+
+
+
 
 .instruction {
     background-color: #f4f4f4;

@@ -42,7 +42,9 @@ public class Calculator {
 
         List<Product> products = MaterialMapper.getProductsByMaterialId(POSTS,connectionPool); //TODO Der burde kun være 300 cm stolpe
         Product bestMatchingProduct = findBestMatchingProduct(products,order.getHeight());
-        OrderDetail orderDetail = new OrderDetail(bestMatchingProduct,quantity,999,"Stolpe nedgraves 90cm i jord",bestMatchingProduct.getMaterialId(), order.getOrderId());
+
+        OrderDetail orderDetail = new OrderDetail(bestMatchingProduct,quantity,999,"Stolpe nedgraves 90cm i jord",bestMatchingProduct.getMaterial().getMaterialId(), order.getOrderId());
+
         orderDetails.add(orderDetail);
     }
 
@@ -61,7 +63,7 @@ public class Calculator {
         if(this.length <= 600) {  //Finder bedst matchende rem, hvis længden er under 600cm
             Product bestMatchingProduct = findBestMatchingProduct(products, order.getLength());
 
-            OrderDetail orderDetail = new OrderDetail(bestMatchingProduct,quantity,888,"Remme i sider, sadles ned i stoplerne",bestMatchingProduct.getMaterialId(), order.getOrderId());
+            OrderDetail orderDetail = new OrderDetail(bestMatchingProduct,quantity,888,"Remme i sider, sadles ned i stoplerne",bestMatchingProduct.getMaterial().getMaterialId(), order.getOrderId());
             orderDetails.add(orderDetail);
 
 
@@ -75,12 +77,12 @@ public class Calculator {
 
             int frontBeamLength = ((order.getLength()-130)/2)+100;
             Product frontBeam = findBestMatchingProduct(products, frontBeamLength);
-            OrderDetail front = new OrderDetail(frontBeam, quantity,777,"Forreste remme i sider, sadles ned i stoplerne",frontBeam.getMaterialId(),order.getOrderId());
+            OrderDetail front = new OrderDetail(frontBeam, quantity,777,"Forreste remme i sider, sadles ned i stoplerne",frontBeam.getMaterial().getMaterialId(),order.getOrderId());
             orderDetails.add(front);
 
             int backBeamLength = (((order.getLength()-130)/2)+30);
             Product backBeam  = findBestMatchingProduct(products, backBeamLength);
-            OrderDetail back = new OrderDetail(backBeam, quantity,777,"Bagerste remme i sider, sadles ned i stoplerne",backBeam.getMaterialId(),order.getOrderId());
+            OrderDetail back = new OrderDetail(backBeam, quantity,777,"Bagerste remme i sider, sadles ned i stoplerne",backBeam.getMaterial().getMaterialId(),order.getOrderId());
             orderDetails.add(back);
         }
 
@@ -102,7 +104,7 @@ public class Calculator {
         /***** Vi finder det bedst matchende produkt, hvor længden er lang nok, men kortest mulig til spæret *****/
         Product bestMatchingProduct = findBestMatchingProduct(products,this.width);
 
-        OrderDetail orderDetail = new OrderDetail(bestMatchingProduct, quantity,555,"Spær, monteres på rem",bestMatchingProduct.getMaterialId(),order.getOrderId());
+        OrderDetail orderDetail = new OrderDetail(bestMatchingProduct, quantity,555,"Spær, monteres på rem",bestMatchingProduct.getMaterial().getMaterialId(),order.getOrderId());
         orderDetails.add(orderDetail);
     }
 

@@ -20,7 +20,7 @@ public class MaterialController {
     private static void showFinalOrder(@NotNull Context ctx, ConnectionPool connectionPool) throws DatabaseException {
         int orderid = Integer.parseInt(ctx.formParam("orderid"));
         Order order = OrderMapper.getOrderById(orderid, connectionPool);
-        List<OrderDetail> orderDetails = OrderMapper.getAllOrderDetails(order.getOrderId(), connectionPool);
+        List<OrderDetail> orderDetails = OrderMapper.getOrderDetailsFromViewById(order.getOrderId(), connectionPool);
         order.setOrderDetails(orderDetails);
 
 

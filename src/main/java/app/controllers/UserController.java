@@ -28,6 +28,8 @@ public class UserController {
         app.get("/login", ctx -> ctx.render("login.html"));
         app.post("/createUser", ctx -> createUser(ctx, connectionPool));
         app.post("/seForesporgsel", ctx -> AdminController.editProduct(ctx, connectionPool));
+        app.get("/index", ctx -> ctx.render("index.html"));
+
     }
 
     private static void createUser(@NotNull Context ctx, ConnectionPool connectionPool) {
@@ -64,9 +66,11 @@ public class UserController {
     private static void login(@NotNull Context ctx, ConnectionPool connectionPool) {
         String username = ctx.formParam("email");
         String password = ctx.formParam("password");
+
         try {
             User user = UserMapper.login(username, password, connectionPool);
             ctx.sessionAttribute("user", user);
+
             if (user.getRole() == 3 || user.getRole() == 2) {
                 loginAdmin(ctx, connectionPool);
 

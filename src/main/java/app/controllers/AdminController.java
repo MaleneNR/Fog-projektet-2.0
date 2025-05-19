@@ -54,13 +54,19 @@ public class AdminController {
                 //Brug den nuværende status fra ordren (så den ikke ændres her!)
                 String currentStatus = order.getOrderStatus();
 
-                //pdater KUN prisen via OrderMapper → og behold nuværende status
-                //boolean updated = OrderMapper.updateOrder(orderId, newPrice, currentStatus, connectionPool);
+                //double suggestedPrice = order.getOrderPrice()*0.9;
+                //double discount = order.getOrderPrice()*0.1;
+                //ctx.sessionAttribute("suggestedPrice", suggestedPrice);
+                //ctx.sessionAttribute("discount", discount);
                 boolean updated = true;
 
                 if (updated) {
                     //Hent opdateret ordre igen for visning
                     Order updatedOrder = OrderMapper.getOrderById(orderId, connectionPool);
+                    double suggestedPrice = updatedOrder.getOrderPrice()*0.9;
+                    double discount = updatedOrder.getOrderPrice()*0.1;
+                    ctx.sessionAttribute("suggestedPrice", suggestedPrice);
+                    ctx.sessionAttribute("discount", discount);
                     ctx.sessionAttribute("order", updatedOrder);
                     ctx.sessionAttribute("user", user);
                     ctx.render("adminStatusSite.html"); //Vis opdateret ordre

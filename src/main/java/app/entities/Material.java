@@ -19,6 +19,15 @@ public class Material {
         this.pricePerUnit = pricePerUnit;
     }
 
+        //Denne konstruktor bruges til orderDetails, her oplyses målene på gennem description
+    public Material(int materialId, String material, String unit, String description, int pricePerUnit ) {
+        this.materialId = materialId;
+        this.material = material;
+        this.unit = unit;
+        this.description = description;
+        this.pricePerUnit = pricePerUnit;
+    }
+
     public int getMaterialId() {
         return materialId;
     }
