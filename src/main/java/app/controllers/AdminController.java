@@ -28,26 +28,26 @@ public class AdminController {
         });
 
         app.post("/seForesporgsel",ctx ->{editProduct(ctx,connectionPool);});
-}
+    }
 
     public static void sendOffer(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
-            String message = null;
-            message = validateNewPrice(ctx);
-            if(message != null) {
+        String message = null;
+        message = validateNewPrice(ctx);
+        if(message != null) {
             ctx.attribute("errorMsg", message);
             ctx.render("adminStatusSite.html");
-            } else{
-                boolean success = OrderMapper.updateOrder(ctx, connectionPool);//her sendes tilbudet til kunden
-                if (success) {
-                    List<Order> orderList = OrderMapper.getAllRequests(connectionPool); //henter de opdaterede ordre fra databasen.
-                    ctx.sessionAttribute("orderList", orderList); //opdaterer ordrelisten så den nye status kan ses.
-                    ctx.render("adminIndex.html");
-                } else {
-                    ctx.attribute("message", "Ordre kunne ikke opdateres");
-                    ctx.render("error.html");
-                }
+        } else{
+            boolean success = OrderMapper.updateOrder(ctx, connectionPool);//her sendes tilbudet til kunden
+            if (success) {
+                List<Order> orderList = OrderMapper.getAllRequests(connectionPool); //henter de opdaterede ordre fra databasen.
+                ctx.sessionAttribute("orderList", orderList); //opdaterer ordrelisten så den nye status kan ses.
+                ctx.render("adminIndex.html");
+            } else {
+                ctx.attribute("message", "Ordre kunne ikke opdateres");
+                ctx.render("error.html");
             }
         }
+    }
 
 
 
@@ -76,22 +76,22 @@ public class AdminController {
             //ctx.sessionAttribute("discount", discount);
             boolean updated = true;
 
-                if (updated) {
-                    //Hent opdateret ordre igen for visning
-                    Order updatedOrder = OrderMapper.getOrderById(orderId, connectionPool);
-                    double suggestedPrice = updatedOrder.getOrderPrice()*0.9;
-                    double discount = updatedOrder.getOrderPrice()*0.1;
-                    ctx.sessionAttribute("suggestedPrice", suggestedPrice);
-                    ctx.sessionAttribute("discount", discount);
-                    ctx.sessionAttribute("order", updatedOrder);
-                    ctx.sessionAttribute("user", user);
-                    CarportSvg svg = new CarportSvg(order.getLength(), order.getWidth());
-                    ctx.attribute("svg", svg.toString());
+            if (updated) {
+                //Hent opdateret ordre igen for visning
+                Order updatedOrder = OrderMapper.getOrderById(orderId, connectionPool);
+                double suggestedPrice = updatedOrder.getOrderPrice()*0.9;
+                double discount = updatedOrder.getOrderPrice()*0.1;
+                ctx.sessionAttribute("suggestedPrice", suggestedPrice);
+                ctx.sessionAttribute("discount", discount);
+                ctx.sessionAttribute("order", updatedOrder);
+                ctx.sessionAttribute("user", user);
+                CarportSvg svg = new CarportSvg(order.getLength(), order.getWidth());
+                ctx.attribute("svg", svg.toString());
 
-                    ctx.render("adminStatusSite.html"); //Vis opdateret ordre
-                } else {
-                    ctx.status(500).result("Opdatering fejlede.");
-                }
+                ctx.render("adminStatusSite.html"); //Vis opdateret ordre
+            } else {
+                ctx.status(500).result("Opdatering fejlede.");
+            }
 
         } catch (DatabaseException e) {
             ctx.status(500).result("Fejl: " + e.getMessage());
@@ -147,9 +147,9 @@ public class AdminController {
         if (updatedPrice == null) {
             return "Pris skal være et gyldigt tal. Prøv igen.";
         }
-            if (updatedPrice < 0) {
-                message = "Pris må ikke være negativ. Prøv igen";
-            }
+        if (updatedPrice < 0) {
+            message = "Pris må ikke være negativ. Prøv igen";
+        }
 
         if(validateProcentCalc(updatedPrice, orderPrice) == false){
             message = "Du må max give et tilbud med 25% i afslag på estimeret pris og max 10% over den estimerede pris. Prøv igen";
