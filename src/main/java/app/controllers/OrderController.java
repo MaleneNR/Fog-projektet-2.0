@@ -6,10 +6,7 @@ import app.exceptions.DatabaseException;
 import app.exceptions.IllegalInputException;
 import app.persistence.ConnectionPool;
 import app.persistence.OrderMapper;
-import app.services.CarportSvg;
-import app.services.Dimensions;
-import app.services.Parse;
-import app.services.Svg;
+import app.services.*;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 import org.jetbrains.annotations.NotNull;
@@ -100,32 +97,12 @@ public class OrderController {
 
     public static void showOrder(Context ctx){
         Locale.setDefault(new Locale("US"));
-        String rectStyle ="stroke:black;fill: white";
 
-        CarportSvg svg = new CarportSvg(ctx.sessionAttribute("width"), ctx.sessionAttribute("length"));
-
-//        //Stolper nede
-//        carportSvg.addRectangle(100,555,10,10, rectStyle);
-//        carportSvg.addRectangle(425,555,10,10, rectStyle);
-//        carportSvg.addRectangle(750,555,10,10, rectStyle);
+        DimensionSvg svg = new DimensionSvg(ctx.sessionAttribute("width"),ctx.sessionAttribute("length"));
+        //CarportSvg carportSvg = new CarportSvg(ctx.sessionAttribute("width"), ctx.sessionAttribute("length"));
 
         ctx.attribute("svg", svg.toString());
         ctx.render("viewRequest.html");
-    }
-
-    public static Integer tryParseInt(String value) {  //Overvej at put denne i en anden klasse, hvis vi bruger den i mere end den her
-        try {
-            return Integer.parseInt(value);
-        } catch (NumberFormatException | NullPointerException e) {
-            return null;
-        }
-    }
-
-    public static Boolean tryParseBoolean(String value) {
-        if (value == null || value.startsWith("Med/uden")){
-            return null;
-        }
-        return value.equalsIgnoreCase("ja") || value.startsWith("Med"); //Hvis ja eller med, så returneres true, ellers false
     }
 
 }

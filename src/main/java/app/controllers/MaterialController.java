@@ -7,6 +7,8 @@ import app.exceptions.DatabaseException;
 import app.persistence.ConnectionPool;
 import app.persistence.OrderMapper;
 import app.services.CarportSvg;
+import app.services.DimensionSvg;
+import app.services.Dimensions;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 import org.jetbrains.annotations.NotNull;
@@ -23,7 +25,7 @@ public class MaterialController {
         Order order = OrderMapper.getOrderById(orderid, connectionPool);
         List<OrderDetail> orderDetails = OrderMapper.getOrderDetailsFromViewById(order.getOrderId(), connectionPool);
         order.setOrderDetails(orderDetails);
-        CarportSvg svg = new CarportSvg(order.getWidth(), order.getLength());
+        DimensionSvg svg = new DimensionSvg(order.getWidth(), order.getLength());
 
         ctx.attribute("svg", svg.toString());
         ctx.attribute("order", order);
