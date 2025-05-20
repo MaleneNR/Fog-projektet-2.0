@@ -14,6 +14,8 @@ import app.persistence.UserMapper;
 import io.javalin.Javalin;
 import io.javalin.rendering.template.JavalinThymeleaf;
 
+import java.util.Locale;
+
 public class Main {
 
     private static final String USER = "postgres";
@@ -38,6 +40,7 @@ public class Main {
         //Routing
 
         app.get("/", ctx ->  ctx.render("index.html"));
+        Locale.setDefault(new Locale("US"));
         UserController.addRoutes(app, connectionPool);
         OrderController.addRoutes(app, connectionPool);
         AdminController.addRoutes(app, connectionPool);

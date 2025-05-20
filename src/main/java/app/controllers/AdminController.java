@@ -7,6 +7,7 @@ import app.persistence.ConnectionPool;
 import app.persistence.OrderMapper;
 import app.persistence.UserMapper;
 import app.services.Parse;
+import app.services.CarportSvg;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 
@@ -22,9 +23,12 @@ public class AdminController {
     public static void addRoutes(Javalin app, ConnectionPool connectionPool) {
 
         //app.post("/sendTilbud", ctx -> OrderMapper.updateOrder(ctx, connectionPool));
-        app.post("/sendTilbud", ctx -> { sendOffer(ctx, connectionPool);});
-    }
+        app.post("/sendTilbud", ctx -> {
+            sendOffer(ctx, connectionPool);
+        });
 
+        app.post("/seForesporgsel",ctx ->{editProduct(ctx,connectionPool);});
+}
 
     public static void sendOffer(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
             String message = null;
@@ -43,7 +47,10 @@ public class AdminController {
                     ctx.render("error.html");
                 }
             }
-    }
+        }
+
+
+
 
     public static void editProduct(Context ctx, ConnectionPool connectionPool) {
 
@@ -69,24 +76,33 @@ public class AdminController {
             //ctx.sessionAttribute("discount", discount);
             boolean updated = true;
 
-            if (updated) {
-                //Hent opdateret ordre igen for visning
-                Order updatedOrder = OrderMapper.getOrderById(orderId, connectionPool);
-                double suggestedPrice = updatedOrder.getOrderPrice() * 0.9;
-                double discount = updatedOrder.getOrderPrice() * 0.1;
-                ctx.sessionAttribute("suggestedPrice", suggestedPrice);
-                ctx.sessionAttribute("discount", discount);
-                ctx.sessionAttribute("order", updatedOrder);
-                ctx.sessionAttribute("user", user);
-                ctx.render("adminStatusSite.html"); //Vis opdateret ordre
-            } else {
-                ctx.status(500).result("Opdatering fejlede.");
-            }
+                if (updated) {
+                    //Hent opdateret ordre igen for visning
+                    Order updatedOrder = OrderMapper.getOrderById(orderId, connectionPool);
+                    double suggestedPrice = updatedOrder.getOrderPrice()*0.9;
+                    double discount = updatedOrder.getOrderPrice()*0.1;
+                    ctx.sessionAttribute("suggestedPrice", suggestedPrice);
+                    ctx.sessionAttribute("discount", discount);
+                    ctx.sessionAttribute("order", updatedOrder);
+                    ctx.sessionAttribute("user", user);
+                    CarportSvg svg = new CarportSvg(order.getLength(), order.getWidth());
+                    ctx.attribute("svg", svg.toString());
+
+                    ctx.render("adminStatusSite.html"); //Vis opdateret ordre
+                } else {
+                    ctx.status(500).result("Opdatering fejlede.");
+                }
 
         } catch (DatabaseException e) {
             ctx.status(500).result("Fejl: " + e.getMessage());
         }
     }
+
+
+
+
+
+
 
 
     private static void viewAllOrders(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
@@ -158,7 +174,7 @@ public class AdminController {
         } catch (NumberFormatException e) {
             return "Pris kan ikke indeholde bogstaver eller være ugyldig. Prøv igen.";
         }
-        
+
         return message;
     }
 

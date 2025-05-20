@@ -29,6 +29,10 @@ public class Calculator {
         this.connectionPool = connectionPool;
     }
 
+    public Calculator(int width, int length) {
+        this.width = width;
+        this.length = length;
+    }
 
     public void calcCarport(Order order) throws DatabaseException {
         calcPosts(order);

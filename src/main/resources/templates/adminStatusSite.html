@@ -71,7 +71,7 @@
 
     <div class="offer-right">
         <div class="drawing-box">
-            <img src="https://via.placeholder.com/400x200?text=Tegning+af+Carport" alt="Carport tegning">
+            <div th:utext="${svg}"></div>
         </div>
         <div class="calculation-box">
             <p th:text="'Afslag: '+ ${session.discount}+ ' kr'">
