@@ -27,7 +27,6 @@ public class UserController {
         app.get("/createUser", ctx -> ctx.render("createUser.html"));
         app.get("/login", ctx -> ctx.render("login.html"));
         app.post("/createUser", ctx -> createUser(ctx, connectionPool));
-        app.post("/seForesporgsel", ctx -> AdminController.editProduct(ctx, connectionPool));
         app.get("/index", ctx -> ctx.render("index.html"));
 
     }
