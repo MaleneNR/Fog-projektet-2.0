@@ -22,6 +22,11 @@
         <button type="submit" class="konto-link">Fog konto</button>
     </form>
 </div>
+
+<div class="error-text" th:if="${errorMsg}">
+    <p th:text="${errorMsg}"></p>
+</div>
+
 <div class="offer-page">
 
     <div class="offer-left">
@@ -55,6 +60,7 @@
 
         <h3>Beregn ny pris:</h3>
         <form method="post" action="/sendTilbud">
+            <input type="hidden" name="orderPrice" th:value="${session.order.orderPrice}">
             <input type="text" id="newPrice" name="newPrice" placeholder="Skriv ny pris her">
             <div class="send-offer">
                 <button type="submit">Send tilbud</button>

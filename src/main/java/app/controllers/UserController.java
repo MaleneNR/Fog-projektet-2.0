@@ -79,17 +79,20 @@ public class UserController {
                     ctx.sessionAttribute("height") != null ||
                     ctx.sessionAttribute("shed") != null) {
                 makeRequest(ctx, user, connectionPool);
+
+
+            }else {
+                ctx.attribute("orders", OrderMapper.getAllRequestsByUserId(user.getUserId(), connectionPool));
+                ctx.render("customerRequest.html");
             }
 
-            ctx.attribute("orders", OrderMapper.getAllRequestsByUserId(user.getUserId(), connectionPool));
-            ctx.render("customerRequest.html");
+
+
         } catch (DatabaseException e) {
             ctx.attribute("message", "Log ind var ikke vellykket. Prøv igen eller opret ny bruger.");
             ctx.render("createUserOrLogin.html");
         }
     }
-        //TODO.5 User klassen skal opdateres, så den kan indeholde de nye parametre. Husk konstruktoren!
-        //TODO.6 UserMapper.login() skal opdateres til at tage de nye parametre.
 
 
 

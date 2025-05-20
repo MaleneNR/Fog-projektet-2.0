@@ -7,6 +7,7 @@ import app.exceptions.IllegalInputException;
 import app.persistence.ConnectionPool;
 import app.persistence.OrderMapper;
 import app.services.Dimensions;
+import app.services.Parse;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 import org.jetbrains.annotations.NotNull;
@@ -33,7 +34,7 @@ public class OrderController {
 
     private static void rejectOrder(@NotNull Context ctx, ConnectionPool connectionPool) throws DatabaseException {
         //Opdaterer status til "afvist" i db
-        OrderMapper.updateStatus("Afvist", tryParseInt(ctx.formParam("orderid")),connectionPool);
+        OrderMapper.updateStatus("Afvist", Parse.tryParseInt(ctx.formParam("orderid")),connectionPool);
 
         //Henter brugeren orders på ny og renderer siden igen
         User user = ctx.sessionAttribute("user");
@@ -43,7 +44,7 @@ public class OrderController {
     }
 
     private static void acceptOrder(@NotNull Context ctx, ConnectionPool connectionPool) throws DatabaseException { //TODO
-        int orderId = tryParseInt(ctx.formParam("orderid"));
+        int orderId = Parse.tryParseInt(ctx.formParam("orderid"));
         Boolean updated = OrderMapper.updatePayed(true,orderId, connectionPool);
 
         if(updated){
@@ -62,12 +63,12 @@ public class OrderController {
     private static void showRequest(Context ctx){
         try {
             //Henter alle parametere ind og parse dem ind i rette datatype
-            Boolean shed = tryParseBoolean(ctx.formParam("shed"));
-            Boolean roof = tryParseBoolean(ctx.formParam("plastic-roof"));
-            Integer length = tryParseInt(ctx.formParam("length")); //Integer, da Integer objektet godt kan være null, det kan en primitiv int ikke.
-            Integer height = tryParseInt(ctx.formParam("height"));
-            Integer width = tryParseInt(ctx.formParam("width"));
-            Boolean craftsmen = tryParseBoolean(ctx.formParam("craftsmen"));
+            Boolean shed = Parse.tryParseBoolean(ctx.formParam("shed"));
+            Boolean roof = Parse.tryParseBoolean(ctx.formParam("plastic-roof"));
+            Integer length = Parse.tryParseInt(ctx.formParam("length")); //Integer, da Integer objektet godt kan være null, det kan en primitiv int ikke.
+            Integer height = Parse.tryParseInt(ctx.formParam("height"));
+            Integer width = Parse.tryParseInt(ctx.formParam("width"));
+            Boolean craftsmen = Parse.tryParseBoolean(ctx.formParam("craftsmen"));
 
             if(shed == null || roof == null || length == null || width == null || height == null || craftsmen == null){
                 ctx.attribute("error", "Du manglede en eller flere valg i forbindelse med dit design af ny carport, prøv igen");
@@ -93,19 +94,6 @@ public class OrderController {
 
     }
 
-    public static Integer tryParseInt(String value) {  //Overvej at put denne i en anden klasse, hvis vi bruger den i mere end den her
-        try {
-            return Integer.parseInt(value);
-        } catch (NumberFormatException | NullPointerException e) {
-            return null;
-        }
-    }
 
-    public static Boolean tryParseBoolean(String value) {
-        if (value == null || value.startsWith("Med/uden")){
-            return null;
-        }
-        return value.equalsIgnoreCase("ja") || value.startsWith("Med"); //Hvis ja eller med, så returneres true, ellers false
-    }
 
 }

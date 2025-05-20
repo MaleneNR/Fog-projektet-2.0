@@ -138,14 +138,14 @@ public class Calculator {
         if(order.getLength() <= productMaxWidth){
         bestMatchingProduct = findBestMatchingProduct(products, order.getLength());
 
-        orderDetails.add(new OrderDetail(bestMatchingProduct,quantity, assemblyDescription,bestMatchingProduct.getMaterialId(),order.getOrderId()));}
+        orderDetails.add(new OrderDetail(bestMatchingProduct,quantity, assemblyDescription,bestMatchingProduct.getMaterial().getMaterialId(),order.getOrderId()));}
         else{
             Product firstRow = findBestMatchingProduct(products, productMaxWidth);
-            orderDetails.add(new OrderDetail(firstRow,quantity,assemblyDescription, firstRow.getMaterialId(), order.getOrderId()));
+            orderDetails.add(new OrderDetail(firstRow,quantity,assemblyDescription, firstRow.getMaterial().getMaterialId(), order.getOrderId()));
 
             int overlap = 30;
             Product secondRow = findBestMatchingProduct(products, this.length-productMaxWidth-overlap);
-            orderDetails.add(new OrderDetail(secondRow,quantity,assemblyDescription, secondRow.getMaterialId(), order.getOrderId()));
+            orderDetails.add(new OrderDetail(secondRow,quantity,assemblyDescription, secondRow.getMaterial().getMaterialId(), order.getOrderId()));
         }
 
 
