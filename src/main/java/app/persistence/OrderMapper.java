@@ -86,6 +86,7 @@ public class OrderMapper {
         {
             throw new DatabaseException("Fejl i søgning på alle ordrer, getAllRequests()", e.getMessage());
         }
+        orders.sort(Comparator.comparing(Order::getOrderId).reversed()); //Sorterer efter ordreId;
         return orders;
 
         //Admin skla kunne se alle forespørgelser så alle orders bliver hentet ud fra db via orderMapper
