@@ -79,6 +79,14 @@
             <p th:text="'Beregnet tilbud - 10%: '+ ${session.suggestedPrice} + ' kr'">
             </p>
         </div>
+        <div>
+            <form method="post" action="/deleteOrder">
+            <div class="deletebutton">
+                <button type="submit">Slet ordre</button>
+                <input type="hidden" name="orderId" th:value="${session.order.orderid}">
+            </div>
+            </form>
+        </div>
     </div>
 
 </div>
