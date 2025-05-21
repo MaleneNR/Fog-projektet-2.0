@@ -77,6 +77,7 @@ public class AdminController {
 
             if (order == null) {
                 ctx.status(404).result("Ordre ikke fundet.");
+                ctx.render("error.html");
                 return;
             }
 

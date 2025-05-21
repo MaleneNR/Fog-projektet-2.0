@@ -134,6 +134,10 @@ body {
     background-color: #e6f3d7;
 }
 
+.box.build-yourself form img{
+    object-position: bottom;
+}
+
 .box p {
     margin: 10px 0;
 }
