@@ -245,7 +245,7 @@ return false;
                     int h = rs.getInt("height");
                     int w = rs.getInt("carport_width");
                     boolean shed = rs.getBoolean("shed");
-                    boolean roof = rs.getBoolean("roof");
+                    boolean roof = rs.getBoolean("tiles");
 
                     order = new Order(orderId,status,price,payed,date,user,l,h,w,shed,roof);
                 }

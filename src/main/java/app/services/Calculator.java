@@ -6,7 +6,6 @@ import app.entities.Product;
 import app.exceptions.DatabaseException;
 import app.persistence.ConnectionPool;
 import app.persistence.MaterialMapper;
-import app.persistence.OrderMapper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +15,7 @@ public class Calculator {
     private static final int POSTS = 1;
     private static final int RAFTERS = 2;               //ID for materiale i db, Hardcoded (må vi gerne:))
     private static final int BEAMS = 2;
-    private static final int ROOFPANELS = 3;
+    private static final int TILES = 3;
 
     private List<OrderDetail> orderDetails = new ArrayList<>(); //listen skal bestå af entiteten product, når denne er oprettet
     private int width;
@@ -134,8 +133,8 @@ public class Calculator {
 
     /***** TAG/Trapez-plader *****/
     private void calcRoofPanels(Order order) throws DatabaseException{
-        List<Product> products = MaterialMapper.getProductsByMaterialId(ROOFPANELS,connectionPool);
-        int quantity = calcRoofPanelsQuantity();
+        List<Product> products = MaterialMapper.getProductsByMaterialId(TILES,connectionPool);
+        int quantity = calcTilesQuantity();
         String assemblyDescription = "Tagplader monteres på spær";
         Product bestMatchingProduct;
         int productMaxWidth = 600;  //TODO Kan dette gøres mindre hardcoded?
@@ -156,9 +155,9 @@ public class Calculator {
 
     }
 
-    public int calcRoofPanelsQuantity() throws DatabaseException {
+    public int calcTilesQuantity() throws DatabaseException {
         //Det anbefales at en trapezplade overlægges med 2 bølger ved fortsættelse, dvs. overlap = 12 (cm)
-        int materialWidth = MaterialMapper.getMaterialById(ROOFPANELS,connectionPool).getWidth();
+        int materialWidth = MaterialMapper.getMaterialById(TILES,connectionPool).getWidth();
         int overlap = 12;
         return  (int)Math.ceil(this.length/(materialWidth-overlap));
     }

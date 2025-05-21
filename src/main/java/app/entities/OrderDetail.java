@@ -8,14 +8,6 @@ public class OrderDetail {
     private int materialId;
     private int orderId;
 
-    public OrderDetail(Product product, int quantity, int totalPrice, String assemblyDescription, int materialId, int orderId) {
-        this.product = product;
-        this.quantity = quantity;
-        this.totalPrice = totalPrice;
-        this.assemblyDescription = assemblyDescription;
-        this.materialId = materialId;
-        this.orderId = orderId;
-    }
 
     public OrderDetail(Product product, int quantity, String assemblyDescription, int materialId, int orderId) {
         this.product = product;
