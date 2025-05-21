@@ -17,16 +17,6 @@ public class OrderDetail {
         this.orderId = orderId;
     }
 
-    public OrderDetail(int orderId, Product product, int quantity, String assemblyDescription, int totalPrice) {
-        this.orderId = orderId;
-        this.product = product;
-        this.quantity = quantity;
-        this.assemblyDescription = assemblyDescription;
-        this.totalPrice = totalPrice;
-    }
-
-
-
     public Product getProduct() {
         return product;
     }
