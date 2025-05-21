@@ -35,8 +35,9 @@ public class OrderMapper {
                 int h = rs.getInt("height");
                 int w = rs.getInt("carport_width");
                 boolean shed = rs.getBoolean("shed");
+                boolean roof = rs.getBoolean("tiles");
 
-                orders.add(new Order(orderId,status,price,payed,date,user,l,h,w,shed));
+                orders.add(new Order(orderId,status,price,payed,date,user,l,h,w,shed,roof));
             }
         }
         catch (SQLException e)
@@ -70,8 +71,9 @@ public class OrderMapper {
                 int h = rs.getInt("height");
                 int w = rs.getInt("carport_width");
                 boolean shed = rs.getBoolean("shed");
+                boolean roof = rs.getBoolean("tiles");
 
-                orders.add(new Order(orderId,status,price,payed,date,user,l,h,w,shed));
+                orders.add(new Order(orderId,status,price,payed,date,user,l,h,w,shed,roof));
             }
         }
         catch (SQLException e)
@@ -129,16 +131,12 @@ public class OrderMapper {
             String status = "Modtaget";  //TODO Skal dette hardcodes
             LocalDate dateOfToday = LocalDate.of(LocalDate.now().getYear(), LocalDate.now().getMonth(), LocalDate.now().getDayOfMonth());
 
-        String sql = "INSERT INTO orders (order_status, payed, date, user_id, carport_length, height, carport_width,shed) values (?,?,?,?,?,?,?,?) RETURNING order_id";
-
+        String sql = "INSERT INTO orders (order_status, payed, date, user_id, carport_length, height, carport_width,shed,tiles) values (?,?,?,?,?,?,?,?,?) RETURNING order_id";
+        //(order_price sættes senere (nede i addOrderDetails))
         try (
                 Connection connection = connectionPool.getConnection();
                 PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
         ) {
-            //int orderPrice = 0;
-            //for (OrderDetail orderDetail : getAllOrderDetails(order.getOrderId(), connectionPool) ){
-            //    orderPrice = orderPrice + orderDetail.getTotalPrice(); //TODO orderDetail bliver først lavet længere nede. Den bliver null her på linje 139.
-            //}
             ps.setString(1, status);
             ps.setBoolean(2,false);
             ps.setDate(3, Date.valueOf(dateOfToday)); //Dags dato i (YYYY-MM-DD)-format
@@ -147,6 +145,7 @@ public class OrderMapper {
             ps.setInt(6,order.getHeight());
             ps.setInt(7,order.getWidth());
             ps.setBoolean(8, order.wantShed());
+            ps.setBoolean(9, order.wantRoof());
 
 
             rowsAffected = ps.executeUpdate();
@@ -246,8 +245,9 @@ return false;
                     int h = rs.getInt("height");
                     int w = rs.getInt("carport_width");
                     boolean shed = rs.getBoolean("shed");
+                    boolean roof = rs.getBoolean("roof");
 
-                    order = new Order(orderId,status,price,payed,date,user,l,h,w,shed);
+                    order = new Order(orderId,status,price,payed,date,user,l,h,w,shed,roof);
                 }
             }
             catch (SQLException e)
