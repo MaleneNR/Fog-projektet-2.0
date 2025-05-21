@@ -27,7 +27,7 @@ public class UserMapper {
                 String address = rs.getString("address");
                 int userId = rs.getInt("user_id");
 
-                return new User(userId, email, password, role, name, address, phoneNumber);
+                return new User(userId, email, password, role, name, phoneNumber, address);
             } else {
                 throw new DatabaseException("Fejl i login. Prøv igen");
             }
@@ -88,7 +88,7 @@ public class UserMapper {
                 String address = rs.getString("address");
 
 
-                return new User(userId,email, password, role, navn, address, phoneNumber);
+                return new User(userId,email, password, role, navn, phoneNumber, address);
             } else {
                 throw new DatabaseException("Fejl i login. Prøv igen");
             }
