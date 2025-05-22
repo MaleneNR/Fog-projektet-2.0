@@ -1,0 +1,195 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+class AdminController {
++ addRoutes (Javalin app, ConnectionPool connectionPool)
+- void deleteOrder (Context ctx, Connectionpool connectionpool)
+- void sendOffer (Context ctx, Connectionpool connectionpool)
+- void editProduct (Context ctx, Connectionpool connectionpool)
+- String validateNewPrice (Context ctx)
+- validateInput (String newPrice)
+- boolean validateProcentCalc (int updatedPrice, int orderPrice)
+}
+class OrderController{
++ addRoutes (Javalin app, ConnectionPool connectionPool)
+- void designYourCarport (Context ctx)
+- void rejectOrder (Context ctx, Connectionpool connectionpool)
+- void acceptOrder (Context ctx, Connectionpool connectionpool)
+- void showRequest (Context ctx)
++ void showOrder (Context ctx)
+}
+
+class UserController{
++ addRoutes (Javalin app, ConnectionPool connectionPool)
+- void createUser (Context ctx, Connectionpool connectionpool)
+- void logOut (Context ctx)
+- void logIn (Context ctx, Connectionpool connectionpool)
+- void makeRequest (Context ctx, User user, Connectionpool connectionpool)
+- void logInAdmin (Context ctx, Connectionpool connectionpool)
+}
+
+class MaterialController{
++ addRoutes (Javalin app, ConnectionPool connectionPool)
+- void showFinalOrder(Context ctx, Connectionpool connectionpool)
+}
+class Material{
+- int materialId
+- String material
+- int width
+- int height
+- String unit
+- String description
+- int pricePerUnit
+
+}
+class Order {
+- int orderId
+- String orderStatus
+- int orderPrice
+- boolean payed
+- LocalDate date
+- User user
+- int length
+- int height
+- int width
+- boolean shed
+- int roof
+}
+class OrderDetail {
+- Product product
+- int quantity
+- int totalPrice
+- String assemblyDescription
+- int materialId
+- int orderId
+}
+class Product{
+- int productId
+- int length
+- Material material
+}
+class User{
+- int userId
+- String email
+- String password
+- int role
+- String name
+- String phonenumber
+- String address
+}
+
+
+
+class MaterialMapper {
++ Material getMaterialById(int materialId, ConnectionPool connectionPool)
++ List<product> getProductsByMaterialId (int materialId, ConnectionPool connectionPool)
+}
+class OrderMapper {
++ List<Order> getAllRequests(ConnectionPool connectionPool)
++ List<Order> getAllRequestsByUserId (int userId, ConnectionPool connectionPool)
++ List<OrderDetail> getOrderDetailsFromViewByID(int orderId, ConnectionPool connectionPool)
++ boolean addRequest (Order order, ConnectionPool connectionPool)
+- boolean addOrderDetail (List<OrderDetail> orderDetails, ConnectionPool connectionPool)
++ boolean deleteOrderDetailsAndOrder (int orderId, ConnectionPool connectionPool)
++ Order getOrderById(int orderId, ConnectionPool connectionPool)
++ boolean updatedPayed (boolean newStatusPayed, int orderId, ConnectionPool connectionPool)
++ boolean updatePrice (int newPrice, int orderId, ConnectionPool connectionPool)
++ boolean updateOrder (Order order, int newPrice, ConnectionPool connectionPool)
+}
+class UserMapper {
++ User login(String email, String password, ConnectionPool connectionPool)
++ void createUser (String email, String password, String name, String phonenumber, String address, ConnectionPool connectionPool)
++ User getUserByID (int userId, ConnectionPool connectionPool)
+}
+class Calculator{
+- final int POSTS
+- final int RAFTERS
+- final int BEAMS
+- final int TILES
+- List<OrderDetail> orderDetails
+- int width
+- int length
+- ConnectionPool connectionPool
+
++ void calcCarport(Order order)
+- void calcPosts(Order order)
++ int calcPostsQuantity()
+- void calcBeams (Order order)
+- void calcRafters (Order order)
++ int calcRaftersQuantity()
+- void calcRoofPanels (Order order)
++ int calcTilesQuantity()
++ Product findBestMatchingProduct (List<Product> products, int minLength)
++ List<OrderDetail> getOrderDetails()
+}
+
+
+class CarportSvg {
+- int width
+- int height
+- Svg carportSvg
+- String rectStyle
+- Calculator calculator
+- final int UPPERBEAM_Y
+- final int LOWERBEAM_Y
+
++ void addBeams()
++ void addRafters()
++ void addPosts()
++ void addShed()
+
+}
+class Dimensions{
++ List<Integer> options(int start, int end, int interval)
+}
+
+class DimensionsSvg{
+- double viewboxWidth
+- double viewboxHeight
+- Svg DimensionsSvg
+
+- void addArrows(int carportHeight, int carportWidth)
+}
+class Parse {
++ Integer tryParseInt(String value)
++ Boolean tryParseBoolean(String value)
+}
+
+class Svg{
+- final String SVG_TEMPLATE
+- final String SVG_RECT_TEMPLATE
+- final String SVG_ARROWS_DEFS
+- final String SVG_LINE_TEMPLATE
+- final String SVG_TEXT_TEMPLATE
+
++ void addRectangle (int x, int y, double height, double width, String style)
++ void addLine (int x1, int y1, double x2, int y2, String style)
++ void addArrow(int x1, int y1, double x2, int y2)
++ void addText(int x, int y, String style, int rotation, String text)
++ void addSvg(String InnerSvg)
+}
+
+
+
+
+
+User *-- Order
+Order *-- OrderDetail
+OrderDetail *-- Product
+Product *-- Material
+
+AdminController -- OrderMapper
+MaterialController -- OrderMapper
+OrderController -- OrderMapper
+UserController -- UserMapper
+UserController -- OrderMapper
+OrderMapper -- Calculator
+Calculator -- MaterialMapper
+
+DimensionSvg *-- CarportSvg
+CarportSvg *-- Svg
+
+
+
+
+@enduml

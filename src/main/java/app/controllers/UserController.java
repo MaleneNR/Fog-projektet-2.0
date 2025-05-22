@@ -21,7 +21,6 @@ public class UserController {
 
     public static void addRoutes(Javalin app, ConnectionPool connectionPool) {
         app.post("/login", ctx -> login(ctx, connectionPool));
-        //app.get("/loginPage", ctx -> ctx.render("login.html"));
         app.get("/logout", ctx -> logout(ctx));
         app.get("/createUserOrLogin", ctx -> ctx.render("createUserOrLogin.html")); //TODO:
         app.get("/createUser", ctx -> ctx.render("createUser.html"));
@@ -32,11 +31,11 @@ public class UserController {
     }
 
     private static void createUser(@NotNull Context ctx, ConnectionPool connectionPool) {
-        String email = ctx.formParam("email"); //til thomsd, hvorfor hedder denne username?
+        String email = ctx.formParam("email");
         String password1 = ctx.formParam("password1");
         String password2 = ctx.formParam("password2");
         String name = ctx.formParam("name");
-        String phoneNumber = ctx.formParam("phoneNumber");//hvorfor ikke int
+        String phoneNumber = ctx.formParam("phoneNumber");
         String text = ctx.formParam("address");
 
         //Validerer password
@@ -88,9 +87,6 @@ public class UserController {
             ctx.render("createUserOrLogin.html");
         }
     }
-        //TODO.5 User klassen skal opdateres, så den kan indeholde de nye parametre. Husk konstruktoren!
-        //TODO.6 UserMapper.login() skal opdateres til at tage de nye parametre.
-
 
 
     private static void makeRequest(Context ctx, User user, ConnectionPool connectionPool) throws DatabaseException {
@@ -118,7 +114,7 @@ public class UserController {
 
 
     private static void loginAdmin(@NotNull Context ctx, ConnectionPool connectionPool) throws DatabaseException {
-        List<Order> orderList = OrderMapper.getAllRequests(connectionPool);//skal man kalde viewAllOrders fra admin controller?
+        List<Order> orderList = OrderMapper.getAllRequests(connectionPool);
         ctx.sessionAttribute("orderList", orderList);
         ctx.render("adminIndex.html");
     }

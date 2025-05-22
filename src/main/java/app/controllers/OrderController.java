@@ -76,8 +76,9 @@ public class OrderController {
                 return; //return, så resten af funktionen ikke bliver eksekveret
             }
 
-
             //Sætter dem til sessionAttributter, så vi kan putte dem i db, når bruger har logget ind
+            /*De sendes stadig tilbage som sessionAttribute, da der ikke kan være en ordre endnu
+            - en ordre indeholder nemlig en user, som vi ikke har før de er logget ind*/
             ctx.sessionAttribute("shed", withShed);
             ctx.sessionAttribute("roof", withTiles);
             ctx.sessionAttribute("length", length);
@@ -98,7 +99,7 @@ public class OrderController {
         Locale.setDefault(new Locale("US"));
 
         DimensionSvg svg = new DimensionSvg(ctx.sessionAttribute("width"),ctx.sessionAttribute("length"));
-        //CarportSvg carportSvg = new CarportSvg(ctx.sessionAttribute("width"), ctx.sessionAttribute("length"));
+
 
         ctx.attribute("svg", svg.toString());
     }
