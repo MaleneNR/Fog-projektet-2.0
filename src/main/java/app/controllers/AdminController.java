@@ -87,16 +87,21 @@ public class AdminController {
             //ctx.sessionAttribute("discount", discount);
             boolean updated = true;
 
-                if (updated) {
-                    //Hent opdateret ordre igen for visning
-                    Order updatedOrder = OrderMapper.getOrderById(orderId, connectionPool);
-                    double suggestedPrice = updatedOrder.getOrderPrice()*0.9;
-                    double discount = updatedOrder.getOrderPrice()*0.1;
+
+            if (updated) {
+                //Hent opdateret ordre igen for visning
+                Order updatedOrder = OrderMapper.getOrderById(orderId, connectionPool);
+                double suggestedPrice = updatedOrder.getOrderPrice()*0.9;
+                double discount = updatedOrder.getOrderPrice()*0.1;
+                double min = updatedOrder.getOrderPrice()*0.75;
+                double max = updatedOrder.getOrderPrice()*1.10;
+                ctx.sessionAttribute("min",min);
+                ctx.sessionAttribute("max",max);
                     ctx.sessionAttribute("suggestedPrice", suggestedPrice);
                     ctx.sessionAttribute("discount", discount);
                     ctx.sessionAttribute("order", updatedOrder);
                     ctx.sessionAttribute("user", user);
-
+              
                     DimensionSvg svg = new DimensionSvg(order.getWidth(), order.getLength());
                     ctx.attribute("svg", svg.toString());
 
@@ -107,6 +112,7 @@ public class AdminController {
 
         } catch (DatabaseException e) {
             ctx.status(500).result("Fejl: " + e.getMessage());
+            ctx.render("error.html");
         }
     }
 
