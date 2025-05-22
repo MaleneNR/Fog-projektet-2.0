@@ -119,8 +119,9 @@ public class OrderMapper {
 
 
                 int quantity = rs.getInt("quantity");
+                int totalPrice = rs.getInt("total_price");
                 String assemblyDescription = rs.getString("assembly_description");
-                OrderDetail orderDetail = new OrderDetail(product,quantity,assemblyDescription,materialId,orderId);
+                OrderDetail orderDetail = new OrderDetail(product,quantity,totalPrice,assemblyDescription,materialId,orderId);
 
                 orderDetails.add(orderDetail);
             }

@@ -48,8 +48,12 @@
                 <input class="button" type="password" name="password2" placeholder="Gentag kodeord:" required />
             </div>
 
+            <div class="error-text" th:if="${error}">
+                <p th:text="${error}"></p>
+            </div>
+
             <div class="buttons">
-                <button formaction="/login" type="submit">Login</button>
+                <button formmethod=get formaction="/login" type="submit">Login</button>
                 <button formaction="/createUser" type="submit">Opret bruger</button>
             </div>
 
