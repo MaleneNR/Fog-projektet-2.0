@@ -6,10 +6,7 @@ import app.exceptions.DatabaseException;
 import app.exceptions.IllegalInputException;
 import app.persistence.ConnectionPool;
 import app.persistence.OrderMapper;
-import app.services.CarportSvg;
-import app.services.Dimensions;
-import app.services.Parse;
-import app.services.Svg;
+import app.services.*;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 import org.jetbrains.annotations.NotNull;
@@ -66,14 +63,14 @@ public class OrderController {
     private static void showRequest(Context ctx){
         try {
             //Henter alle parametere ind og parse dem ind i rette datatype
-            Boolean shed = Parse.tryParseBoolean(ctx.formParam("shed"));
-            Boolean roof = Parse.tryParseBoolean(ctx.formParam("plastic-roof"));
+            Boolean withShed = Parse.tryParseBoolean(ctx.formParam("shed"));
+            Boolean withTiles = Parse.tryParseBoolean(ctx.formParam("plastic-roof"));
             Integer length = Parse.tryParseInt(ctx.formParam("length")); //Integer, da Integer objektet godt kan være null, det kan en primitiv int ikke.
             Integer height = Parse.tryParseInt(ctx.formParam("height"));
             Integer width = Parse.tryParseInt(ctx.formParam("width"));
             Boolean craftsmen = Parse.tryParseBoolean(ctx.formParam("craftsmen"));
 
-            if(shed == null || roof == null || length == null || width == null || height == null || craftsmen == null){
+            if(withShed == null || withTiles == null || length == null || width == null || height == null || craftsmen == null){
                 ctx.attribute("error", "Du manglede en eller flere valg i forbindelse med dit design af ny carport, prøv igen");
                 ctx.render("/customMadeSite");
                 return; //return, så resten af funktionen ikke bliver eksekveret
@@ -81,16 +78,15 @@ public class OrderController {
 
 
             //Sætter dem til sessionAttributter, så vi kan putte dem i db, når bruger har logget ind
-            ctx.sessionAttribute("shed", shed);
-            ctx.sessionAttribute("roof", roof);
+            ctx.sessionAttribute("shed", withShed);
+            ctx.sessionAttribute("roof", withTiles);
             ctx.sessionAttribute("length", length);
             ctx.sessionAttribute("width", width);
             ctx.sessionAttribute("height", height);
             ctx.sessionAttribute("craftsmen", craftsmen);
 
             showOrder(ctx);
-            //Viser deres forespørgsel, når de er logget ind
-            //ctx.render("viewRequest.html");
+            ctx.render("viewRequest.html");
         }catch (IllegalInputException e){
             designYourCarport(ctx);
             ctx.status(400).result(e.getMessage());
@@ -100,52 +96,11 @@ public class OrderController {
 
     public static void showOrder(Context ctx){
         Locale.setDefault(new Locale("US"));
-        String rectStyle ="stroke:black;fill: white";
 
-        CarportSvg svg = new CarportSvg(780, 600);
-
-//        //Ramme
-//        carportSvg.addRectangle(0,0 ,600, 780,rectStyle );
-//
-//        //Spær
-//        carportSvg.addRectangle(0,0,600,5,rectStyle);
-//        carportSvg.addRectangle(775,0,600,5,rectStyle);
-//
-//        //Remme
-//        carportSvg.addRectangle(0,35,5,780, rectStyle);
-//        carportSvg.addRectangle(0,560,5,780, rectStyle);
-//
-//        //Stiplede linjer
-//        carportSvg.addLine(55,40,550,565, "stroke:black;stroke-dasharray:10,5");
-//        carportSvg.addLine(55,565,550,40, "stroke:black;stroke-dasharray:10,5");
-//
-//        //Stolper oppe
-//        carportSvg.addRectangle(100,35,10,10, rectStyle);
-//        carportSvg.addRectangle(425,35,10,10, rectStyle);
-//        carportSvg.addRectangle(750,35,10,10, rectStyle);
-//
-//        //Stolper nede
-//        carportSvg.addRectangle(100,555,10,10, rectStyle);
-//        carportSvg.addRectangle(425,555,10,10, rectStyle);
-//        carportSvg.addRectangle(750,555,10,10, rectStyle);
+        DimensionSvg svg = new DimensionSvg(ctx.sessionAttribute("width"),ctx.sessionAttribute("length"));
+        //CarportSvg carportSvg = new CarportSvg(ctx.sessionAttribute("width"), ctx.sessionAttribute("length"));
 
         ctx.attribute("svg", svg.toString());
-        ctx.render("viewRequest.html");
-    }
-
-    public static Integer tryParseInt(String value) {  //Overvej at put denne i en anden klasse, hvis vi bruger den i mere end den her
-        try {
-            return Integer.parseInt(value);
-        } catch (NumberFormatException | NullPointerException e) {
-            return null;
-        }
-    }
-
-    public static Boolean tryParseBoolean(String value) {
-        if (value == null || value.startsWith("Med/uden")){
-            return null;
-        }
-        return value.equalsIgnoreCase("ja") || value.startsWith("Med"); //Hvis ja eller med, så returneres true, ellers false
     }
 
 }

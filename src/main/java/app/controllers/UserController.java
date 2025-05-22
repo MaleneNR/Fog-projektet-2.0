@@ -73,10 +73,11 @@ public class UserController {
             if (user.getRole() == 3 || user.getRole() == 2) {
                 loginAdmin(ctx, connectionPool);
 
-            } else if (ctx.sessionAttribute("length") != null ||  //Hvis alle bare én parameter indeholder noget så går den i makeRequest(), som beder om alle parametre
+            } else if (ctx.sessionAttribute("length") != null ||  //Hvis bare én parameter indeholder noget så går den i makeRequest(), som beder om alle parametre
                     ctx.sessionAttribute("width") != null ||
                     ctx.sessionAttribute("height") != null ||
-                    ctx.sessionAttribute("shed") != null) {
+                    ctx.sessionAttribute("shed") != null ||
+                    ctx.sessionAttribute("roof") != null) {
                 makeRequest(ctx, user, connectionPool);
             } else{
             ctx.attribute("orders", OrderMapper.getAllRequestsByUserId(user.getUserId(), connectionPool));
@@ -96,14 +97,16 @@ public class UserController {
             if (ctx.sessionAttribute("length") == null ||
                     ctx.sessionAttribute("width") == null ||
                     ctx.sessionAttribute("height") == null ||
-                    ctx.sessionAttribute("shed") == null) {
+                    ctx.sessionAttribute("shed") == null ||
+                    ctx.sessionAttribute("roof") == null) {
                 throw new NullPointerException("Length, Width or Height is not set, prøv igen");
             }else {
                 Order order = new Order(user,
                         ctx.sessionAttribute("length"),
                         ctx.sessionAttribute("height"),
                         ctx.sessionAttribute("width"),
-                        ctx.sessionAttribute("shed"));
+                        ctx.sessionAttribute("shed"),
+                        ctx.sessionAttribute("roof"));
 
                 OrderMapper.addRequest(order, connectionPool);
                 ctx.attribute("orders", OrderMapper.getAllRequestsByUserId(user.getUserId(), connectionPool));

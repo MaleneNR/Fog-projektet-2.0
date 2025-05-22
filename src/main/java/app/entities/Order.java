@@ -15,6 +15,7 @@ public class Order {
     private int height;
     private int width;
     private boolean shed;
+    private boolean roof;
     private List<OrderDetail> orderDetails;
 
 
@@ -30,15 +31,16 @@ public class Order {
         this.width = width;
     }
 
-    public Order(User user, int length, int height, int width, boolean shed){
+    public Order(User user, int length, int height, int width, boolean shed, boolean roof){
         this.user = user;
         this.length = length;
         this.height = height;
         this.width = width;
         this.shed = shed;
+        this.roof = roof;
     }
 
-    public Order(int orderId, String orderStatus, int orderPrice, boolean payed, LocalDate date, User user, int length, int height, int width, boolean shed) {
+    public Order(int orderId, String orderStatus, int orderPrice, boolean payed, LocalDate date, User user, int length, int height, int width, boolean shed, boolean roof) {
         this.orderId = orderId;
         this.orderStatus = orderStatus;
         this.orderPrice = orderPrice;
@@ -49,6 +51,7 @@ public class Order {
         this.height = height;
         this.width = width;
         this.shed = shed;
+        this.roof = roof;
     }
 
     public Order(int orderId, String orderStatus, int orderPrice, boolean payed, LocalDate date, User user, int length, int height, int width, boolean shed, List<OrderDetail> orderDetails) {
@@ -67,6 +70,14 @@ public class Order {
 
     public Order(int orderId, String email, LocalDate date) {
 
+    }
+
+    public boolean wantRoof() {
+        return roof;
+    }
+
+    public void setRoof(boolean roof) {
+        this.roof = roof;
     }
 
     public int getOrderId() {

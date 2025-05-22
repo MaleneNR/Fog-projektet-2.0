@@ -58,11 +58,11 @@ class OrderMapperTest {
                 stmt.execute("DELETE FROM test.orders");
                 stmt.execute("DELETE FROM test.users");
 
-                stmt.execute("INSERT INTO test.users (user_id, email, password, role_id) " +
-                        "VALUES  (1, 'malene@hej.dk', '1234', '1'), (2, 'mie@hej.dk', '1234', '3')"); //role_id 1 er kunde, role_id 3 er admin.
+                stmt.execute("INSERT INTO test.users (user_id, email, password, role_id, name, phonenumber, address) " +
+                        "VALUES  (1, 'malene@hej.dk', '1234', '1','Malene','12345678', 'Lyngbyvej 123'), (2, 'mie@hej.dk', '1234', '3', 'Mie', '12345678','Lyngbyvej 456')"); //role_id 1 er kunde, role_id 3 er admin.
 
-                stmt.execute("INSERT INTO test.orders (order_id, carport_width, carport_length, payed, order_status, order_price, user_id, date) " +
-                        "VALUES (1, 600, 780,true, 'Shipped', 20000, 1,current_date), (2, 540, 700,false, 'Waiting', 15000, 2,current_date), (3, 480, 600,false, 'Request', 14000, 1,current_date);") ;
+                stmt.execute("INSERT INTO test.orders (order_id, carport_width, carport_length, payed, order_status, order_price, user_id, date, shed, tiles) " +
+                        "VALUES (1, 600, 780,true, 'Shipped', 20000, 1,current_date, true, false), (2, 540, 700,false, 'Waiting', 15000, 2,current_date,true,true), (3, 480, 600,false, 'Request', 14000, 1,current_date, false, false);") ;
                 // Set sequence to continue from the largest member_id
                 stmt.execute("SELECT setval('test.orders_order_id_seq', COALESCE((SELECT MAX(order_id) + 1 FROM test.orders), 1), false)");
                 stmt.execute("SELECT setval('test.users_user_id_seq', COALESCE((SELECT MAX(user_id) + 1 FROM test.users), 1), false)");
@@ -99,7 +99,7 @@ class OrderMapperTest {
     {
         try
         {
-            User user = new User(1, "malene@hej.dk", "1234", 1);
+            User user = new User(1, "malene@hej.dk", "1234", 1,"Malene","12345678","Lyngbyvej 123");
             Order expected = new Order(1,"Shipped",20000,true, LocalDate.now(),user,780,0,600);
             Order dbOrder = OrderMapper.getOrderById(1, connectionPool);
             assertEquals(expected, dbOrder);
