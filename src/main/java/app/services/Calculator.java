@@ -56,9 +56,16 @@ public class Calculator {
 
     }
 
-    public int calcPostQuantity(){
-        int quantity = 2 * (2 + (this.length-130) / 340);
-        return quantity;
+    public int calcPostQuantity() {
+        int frontBackPosts = 2 * 2; //Standard, der er altid 4 stolper
+        int spacingForExtraPairs = 250; //250 går op, så at der regnes et sæt stolper mere med, hvis remmen brydes op i to
+        int space = this.length - 130;
+
+        if (space <= 0) return frontBackPosts; //default er 4 stolper
+
+        int extraPairs = space / spacingForExtraPairs;
+
+        return frontBackPosts + (extraPairs * 2); //ekstra par = 2 stolper pr. sæt
     }
 
 

@@ -6,9 +6,9 @@ import app.services.Calculator;
 import io.javalin.http.Context;
 
 import java.sql.*;
+import java.sql.Date;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class OrderMapper {
 
@@ -44,7 +44,15 @@ public class OrderMapper {
         {
             throw new DatabaseException("Fejl i søgning på alle ordrer, getAllRequests()", e.getMessage());
         }
-        return orders;
+       Map<String, Integer> statusPriority = new HashMap<>();
+       statusPriority.put("Modtaget", 0);
+       statusPriority.put("Tilbud sendt", 1);
+       statusPriority.put("Betalt", 2);
+
+       //Sorterer dem efter rækkefølgen i hashmappet
+       orders.sort(Comparator.comparing(order -> statusPriority.get(order.getOrderStatus())));
+
+       return orders;
 
         //Admin skla kunne se alle forespørgelser så alle orders bliver hentet ud fra db via orderMapper
     }
@@ -80,6 +88,7 @@ public class OrderMapper {
         {
             throw new DatabaseException("Fejl i søgning på alle ordrer, getAllRequests()", e.getMessage());
         }
+        orders.sort(Comparator.comparing(Order::getOrderId).reversed()); //Sorterer efter ordreId;
         return orders;
 
         //Admin skla kunne se alle forespørgelser så alle orders bliver hentet ud fra db via orderMapper
