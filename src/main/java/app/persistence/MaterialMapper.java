@@ -19,7 +19,7 @@ public class MaterialMapper {
 
         try (
                 Connection connection = connectionPool.getConnection();
-                PreparedStatement ps = connection.prepareStatement(sql);
+                 PreparedStatement ps = connection.prepareStatement(sql);
         )
         {
             ps.setInt(1,materialId);

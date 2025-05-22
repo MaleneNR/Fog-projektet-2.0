@@ -40,7 +40,7 @@ public class AdminController {
 
     }
 
-    public static void sendOffer(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
+    private static void sendOffer(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
 
         String message = validateNewPrice(ctx); //Returnerer en uddybdende fejlbesked, hvis der er noget galt med prisen
         if(message != null) {
@@ -62,7 +62,7 @@ public class AdminController {
     }
 
 
-    public static void editProduct(Context ctx, ConnectionPool connectionPool) {
+    private static void editProduct(Context ctx, ConnectionPool connectionPool) {
 
         try {
             //Hent ordre ID og ny pris fra form

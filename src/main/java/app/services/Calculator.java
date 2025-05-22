@@ -16,7 +16,6 @@ public class Calculator {
     private static final int RAFTERS = 2;               //ID for materiale i db, Hardcoded (må vi gerne:))
     private static final int BEAMS = 2;
     private static final int TILES = 3;
-
     private List<OrderDetail> orderDetails = new ArrayList<>(); //listen skal bestå af entiteten product, når denne er oprettet
     private int width;
     private int length;

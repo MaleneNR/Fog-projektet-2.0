@@ -6,7 +6,6 @@ public class CarportSvg {
     private Svg carportSvg;
     private String rectStyle = "stroke:black;fill: white";
     private Calculator calculator;
-
     private static final int UPPERBEAM_Y = 35;  //stolperne/remme sættes altid 35 cm inde
     private static final int LOWERBEAM_Y = -35; //For spejlvendt at ramme samme længde ind til remmen, så vil det blive 40cm (da vi tæller stolpens/remmens bredde med)
 
