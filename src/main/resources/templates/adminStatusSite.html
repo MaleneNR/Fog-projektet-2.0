@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tilbud - Rediger pris</title>
+    <title th:text="'Ordre #'+${session.order.getOrderId()}"></title>
     <link href="../public/css/css.css" th:href="@{/css/css.css}" rel="stylesheet"/>
 </head>
 <body>
@@ -49,9 +49,8 @@
         </p>
         <p th:text="'Højde: '+ ${session.order.getHeight()}">
         </p>
-
-        <p>Skur: Med skur</p>
-        <p>Materiale: Trykimprægneret</p>
+        <p th:text="'Skur: '+ ${session.order.wantShed()}"></p>
+        <p th:text="'Tag '+ ${session.order.wantRoof}"></p>
 
         <h3>Beregnede pris</h3>
 
@@ -78,6 +77,14 @@
             </p>
             <p th:text="'Beregnet tilbud - 10%: '+ ${session.suggestedPrice} + ' kr'">
             </p>
+        </div>
+        <div>
+            <form method="post" action="/deleteOrder">
+            <div class="deletebutton">
+                <button type="submit">Slet ordre</button>
+                <input type="hidden" name="orderId" th:value="${session.order.orderid}">
+            </div>
+            </form>
         </div>
     </div>
 

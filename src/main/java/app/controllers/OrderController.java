@@ -63,14 +63,14 @@ public class OrderController {
     private static void showRequest(Context ctx){
         try {
             //Henter alle parametere ind og parse dem ind i rette datatype
-            Boolean shed = Parse.tryParseBoolean(ctx.formParam("shed"));
-            Boolean roof = Parse.tryParseBoolean(ctx.formParam("plastic-roof"));
+            Boolean withShed = Parse.tryParseBoolean(ctx.formParam("shed"));
+            Boolean withTiles = Parse.tryParseBoolean(ctx.formParam("plastic-roof"));
             Integer length = Parse.tryParseInt(ctx.formParam("length")); //Integer, da Integer objektet godt kan være null, det kan en primitiv int ikke.
             Integer height = Parse.tryParseInt(ctx.formParam("height"));
             Integer width = Parse.tryParseInt(ctx.formParam("width"));
             Boolean craftsmen = Parse.tryParseBoolean(ctx.formParam("craftsmen"));
 
-            if(shed == null || roof == null || length == null || width == null || height == null || craftsmen == null){
+            if(withShed == null || withTiles == null || length == null || width == null || height == null || craftsmen == null){
                 ctx.attribute("error", "Du manglede en eller flere valg i forbindelse med dit design af ny carport, prøv igen");
                 ctx.render("/customMadeSite");
                 return; //return, så resten af funktionen ikke bliver eksekveret
@@ -78,16 +78,15 @@ public class OrderController {
 
 
             //Sætter dem til sessionAttributter, så vi kan putte dem i db, når bruger har logget ind
-            ctx.sessionAttribute("shed", shed);
-            ctx.sessionAttribute("roof", roof);
+            ctx.sessionAttribute("shed", withShed);
+            ctx.sessionAttribute("roof", withTiles);
             ctx.sessionAttribute("length", length);
             ctx.sessionAttribute("width", width);
             ctx.sessionAttribute("height", height);
             ctx.sessionAttribute("craftsmen", craftsmen);
 
             showOrder(ctx);
-            //Viser deres forespørgsel, når de er logget ind
-            //ctx.render("viewRequest.html");
+            ctx.render("viewRequest.html");
         }catch (IllegalInputException e){
             designYourCarport(ctx);
             ctx.status(400).result(e.getMessage());
@@ -102,7 +101,6 @@ public class OrderController {
         //CarportSvg carportSvg = new CarportSvg(ctx.sessionAttribute("width"), ctx.sessionAttribute("length"));
 
         ctx.attribute("svg", svg.toString());
-        ctx.render("viewRequest.html");
     }
 
 }

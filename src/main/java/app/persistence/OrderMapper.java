@@ -35,8 +35,9 @@ public class OrderMapper {
                 int h = rs.getInt("height");
                 int w = rs.getInt("carport_width");
                 boolean shed = rs.getBoolean("shed");
+                boolean roof = rs.getBoolean("tiles");
 
-                orders.add(new Order(orderId,status,price,payed,date,user,l,h,w,shed));
+                orders.add(new Order(orderId,status,price,payed,date,user,l,h,w,shed,roof));
             }
         }
         catch (SQLException e)
@@ -78,8 +79,9 @@ public class OrderMapper {
                 int h = rs.getInt("height");
                 int w = rs.getInt("carport_width");
                 boolean shed = rs.getBoolean("shed");
+                boolean roof = rs.getBoolean("tiles");
 
-                orders.add(new Order(orderId,status,price,payed,date,user,l,h,w,shed));
+                orders.add(new Order(orderId,status,price,payed,date,user,l,h,w,shed,roof));
             }
         }
         catch (SQLException e)
@@ -120,7 +122,7 @@ public class OrderMapper {
                 int quantity = rs.getInt("quantity");
                 String assemblyDescription = rs.getString("assembly_description");
                 int totalPrice = rs.getInt("total_price");
-                OrderDetail orderDetail = new OrderDetail(orderId, product,quantity,assemblyDescription,totalPrice);
+                OrderDetail orderDetail = new OrderDetail(product,quantity,assemblyDescription,materialId,orderId);
 
                 orderDetails.add(orderDetail);
             }
@@ -138,16 +140,12 @@ public class OrderMapper {
             String status = "Modtaget";  //TODO Skal dette hardcodes
             LocalDate dateOfToday = LocalDate.of(LocalDate.now().getYear(), LocalDate.now().getMonth(), LocalDate.now().getDayOfMonth());
 
-        String sql = "INSERT INTO orders (order_status, payed, date, user_id, carport_length, height, carport_width,shed) values (?,?,?,?,?,?,?,?) RETURNING order_id";
-
+        String sql = "INSERT INTO orders (order_status, payed, date, user_id, carport_length, height, carport_width,shed,tiles) values (?,?,?,?,?,?,?,?,?) RETURNING order_id";
+        //(order_price sættes senere (nede i addOrderDetails))
         try (
                 Connection connection = connectionPool.getConnection();
                 PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
         ) {
-            //int orderPrice = 0;
-            //for (OrderDetail orderDetail : getAllOrderDetails(order.getOrderId(), connectionPool) ){
-            //    orderPrice = orderPrice + orderDetail.getTotalPrice(); //TODO orderDetail bliver først lavet længere nede. Den bliver null her på linje 139.
-            //}
             ps.setString(1, status);
             ps.setBoolean(2,false);
             ps.setDate(3, Date.valueOf(dateOfToday)); //Dags dato i (YYYY-MM-DD)-format
@@ -156,6 +154,7 @@ public class OrderMapper {
             ps.setInt(6,order.getHeight());
             ps.setInt(7,order.getWidth());
             ps.setBoolean(8, order.wantShed());
+            ps.setBoolean(9, order.wantRoof());
 
 
             rowsAffected = ps.executeUpdate();
@@ -228,9 +227,40 @@ public class OrderMapper {
     }
 
 
-    public static boolean deleteOrderDetailsAndOrder (int orderId, ConnectionPool connectionPool){
-        //Admin kan slette ordre fra db
-return false;
+    public static boolean deleteOrderDetailsAndOrder (int orderId, ConnectionPool connectionPool) throws DatabaseException {
+        boolean deleted = false;
+        String orderdetails = "delete from order_details where order_id = ?";
+
+        try (
+                Connection connection = connectionPool.getConnection();
+                PreparedStatement ps1 = connection.prepareStatement(orderdetails)
+        )
+        {
+            ps1.setInt(1, orderId);
+            int rowsAffected = -1;
+            rowsAffected = ps1.executeUpdate();
+            if (rowsAffected > -1){
+                String order = "delete from orders where order_id = ?";
+
+                try (
+                        PreparedStatement ps2 = connection.prepareStatement(order);
+                ){
+                    ps2.setInt(1, orderId);
+                    int orderRowsAffected = ps2.executeUpdate();
+                    if (orderRowsAffected == 1){
+                        deleted = true;
+                    }
+                }
+            }else
+            {
+                throw new DatabaseException("Fejl i sletning af en ordredetajle");
+            }
+        }
+        catch (SQLException e)
+        {
+            throw new DatabaseException("Fejl ved sletning af en ordre", e.getMessage());
+        }
+        return deleted;
     }
 
     public  static Order getOrderById (int orderId, ConnectionPool connectionPool) throws DatabaseException{
@@ -255,8 +285,9 @@ return false;
                     int h = rs.getInt("height");
                     int w = rs.getInt("carport_width");
                     boolean shed = rs.getBoolean("shed");
+                    boolean roof = rs.getBoolean("tiles");
 
-                    order = new Order(orderId,status,price,payed,date,user,l,h,w,shed);
+                    order = new Order(orderId,status,price,payed,date,user,l,h,w,shed,roof);
                 }
             }
             catch (SQLException e)

@@ -134,6 +134,10 @@ body {
     background-color: #e6f3d7;
 }
 
+.box.build-yourself form img{
+    object-position: bottom;
+}
+
 .box p {
     margin: 10px 0;
 }
@@ -687,6 +691,20 @@ body {
 
 .send-offer button:hover {
     background-color: #0e2343;
+}
+
+.deletebutton button{
+    background-color: darkred;
+    color: white;
+    padding: 10px 30px;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 6px;
+}
+
+.deletebutton button:hover{
+    background-color: #4A0000FF ;
 }
 
 

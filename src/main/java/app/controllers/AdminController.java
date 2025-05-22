@@ -11,6 +11,7 @@ import app.services.Parse;
 import app.services.CarportSvg;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
+import org.jetbrains.annotations.NotNull;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -24,13 +25,26 @@ public class AdminController {
     public static void addRoutes(Javalin app, ConnectionPool connectionPool) {
         app.post("/sendTilbud", ctx -> {sendOffer(ctx, connectionPool);});
         app.post("/seForesporgsel",ctx ->{editProduct(ctx,connectionPool);});
+        app.post("/deleteOrder", ctx -> {deleteOrder(ctx, connectionPool);});
+    }
+
+    private static void deleteOrder(@NotNull Context ctx, ConnectionPool connectionPool) throws DatabaseException {
+        int orderId = Parse.tryParseInt(ctx.formParam("orderId"));
+        boolean isDelected = OrderMapper.deleteOrderDetailsAndOrder(orderId,connectionPool);
+        if(isDelected != true){
+            ctx.render("error.html");
+        } else {
+            ctx.sessionAttribute("orderList", OrderMapper.getAllRequests(connectionPool));
+            ctx.render("adminIndex.html");
+        }
+
     }
 
     public static void sendOffer(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
-        String message = null;
-        message = validateNewPrice(ctx);
 
-        if(message != null) {                                   //Hvis message indeholder en error-besked vil dette blive vist
+        String message = validateNewPrice(ctx); //Returnerer en uddybdende fejlbesked, hvis der er noget galt med prisen
+        if(message != null) {
+
             ctx.attribute("errorMsg", message);
             ctx.render("adminStatusSite.html");
         }
@@ -41,7 +55,7 @@ public class AdminController {
                 ctx.sessionAttribute("orderList", orderList); //opdaterer ordrelisten så den nye status kan ses.
                 ctx.render("adminIndex.html");
             } else {
-                ctx.attribute("message", "Ordre kunne ikke opdateres");
+                ctx.attribute("error", "Ordre kunne ikke opdateres");
                 ctx.render("error.html");
             }
         }
@@ -60,6 +74,7 @@ public class AdminController {
 
             if (order == null) {
                 ctx.status(404).result("Ordre ikke fundet.");
+                ctx.render("error.html");
                 return;
             }
 

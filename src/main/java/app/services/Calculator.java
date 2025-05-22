@@ -6,7 +6,6 @@ import app.entities.Product;
 import app.exceptions.DatabaseException;
 import app.persistence.ConnectionPool;
 import app.persistence.MaterialMapper;
-import app.persistence.OrderMapper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +15,7 @@ public class Calculator {
     private static final int POSTS = 1;
     private static final int RAFTERS = 2;               //ID for materiale i db, Hardcoded (må vi gerne:))
     private static final int BEAMS = 2;
-    private static final int ROOFPANELS = 3;
+    private static final int TILES = 3;
 
     private List<OrderDetail> orderDetails = new ArrayList<>(); //listen skal bestå af entiteten product, når denne er oprettet
     private int width;
@@ -38,7 +37,8 @@ public class Calculator {
         calcPosts(order);
         calcBeams(order);
         calcRafters(order);
-        calcRoofPanels(order);
+
+        if(order.wantRoof()){calcRoofPanels(order);}
 
     }
 
@@ -50,7 +50,7 @@ public class Calculator {
         Product bestMatchingProduct = findBestMatchingProduct(products,order.getHeight());
 
 
-        OrderDetail orderDetail = new OrderDetail(bestMatchingProduct,quantity,999,"Stolpe nedgraves 90cm i jord",bestMatchingProduct.getMaterial().getMaterialId(), order.getOrderId());
+        OrderDetail orderDetail = new OrderDetail(bestMatchingProduct,quantity,"Stolpe nedgraves 90cm i jord",bestMatchingProduct.getMaterial().getMaterialId(), order.getOrderId());
 
         orderDetails.add(orderDetail);
 
@@ -79,7 +79,7 @@ public class Calculator {
             Product bestMatchingProduct = findBestMatchingProduct(products, order.getLength());
 
 
-            OrderDetail orderDetail = new OrderDetail(bestMatchingProduct,quantity,888,"Remme i sider, sadles ned i stoplerne",bestMatchingProduct.getMaterial().getMaterialId(), order.getOrderId());
+            OrderDetail orderDetail = new OrderDetail(bestMatchingProduct,quantity,"Remme i sider, sadles ned i stoplerne",bestMatchingProduct.getMaterial().getMaterialId(), order.getOrderId());
             orderDetails.add(orderDetail);
 
 
@@ -94,14 +94,14 @@ public class Calculator {
             int frontBeamLength = ((order.getLength()-130)/2)+100;
             Product frontBeam = findBestMatchingProduct(products, frontBeamLength);
 
-            OrderDetail front = new OrderDetail(frontBeam, quantity,777,"Forreste remme i sider, sadles ned i stoplerne",frontBeam.getMaterial().getMaterialId(),order.getOrderId());
+            OrderDetail front = new OrderDetail(frontBeam, quantity,"Forreste remme i sider, sadles ned i stoplerne",frontBeam.getMaterial().getMaterialId(),order.getOrderId());
 
             orderDetails.add(front);
 
             int backBeamLength = (((order.getLength()-130)/2)+30);
             Product backBeam  = findBestMatchingProduct(products, backBeamLength);
 
-            OrderDetail back = new OrderDetail(backBeam, quantity,777,"Bagerste remme i sider, sadles ned i stoplerne",backBeam.getMaterial().getMaterialId(),order.getOrderId());
+            OrderDetail back = new OrderDetail(backBeam, quantity,"Bagerste remme i sider, sadles ned i stoplerne",backBeam.getMaterial().getMaterialId(),order.getOrderId());
 
             orderDetails.add(back);
         }
@@ -125,7 +125,7 @@ public class Calculator {
         Product bestMatchingProduct = findBestMatchingProduct(products,this.width);
 
 
-        OrderDetail orderDetail = new OrderDetail(bestMatchingProduct, quantity,555,"Spær, monteres på rem",bestMatchingProduct.getMaterial().getMaterialId(),order.getOrderId());
+        OrderDetail orderDetail = new OrderDetail(bestMatchingProduct, quantity,"Spær, monteres på rem",bestMatchingProduct.getMaterial().getMaterialId(),order.getOrderId());
 
         orderDetails.add(orderDetail);
     }
@@ -140,8 +140,8 @@ public class Calculator {
 
     /***** TAG/Trapez-plader *****/
     private void calcRoofPanels(Order order) throws DatabaseException{
-        List<Product> products = MaterialMapper.getProductsByMaterialId(ROOFPANELS,connectionPool);
-        int quantity = calcRoofPanelsQuantity();
+        List<Product> products = MaterialMapper.getProductsByMaterialId(TILES,connectionPool);
+        int quantity = calcTilesQuantity();
         String assemblyDescription = "Tagplader monteres på spær";
         Product bestMatchingProduct;
         int productMaxWidth = 600;  //TODO Kan dette gøres mindre hardcoded?
@@ -162,9 +162,9 @@ public class Calculator {
 
     }
 
-    public int calcRoofPanelsQuantity() throws DatabaseException {
-        //Det anbefales at en trapezplade overlægges med 2 bølger ved fortsættelse, dvs. 12 cm
-        int materialWidth = MaterialMapper.getMaterialById(ROOFPANELS,connectionPool).getWidth();
+    public int calcTilesQuantity() throws DatabaseException {
+        //Det anbefales at en trapezplade overlægges med 2 bølger ved fortsættelse, dvs. overlap = 12 (cm)
+        int materialWidth = MaterialMapper.getMaterialById(TILES,connectionPool).getWidth();
         int overlap = 12;
         return  (int)Math.ceil(this.length/(materialWidth-overlap));
     }
