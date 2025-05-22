@@ -102,7 +102,7 @@ public class AdminController {
                     ctx.sessionAttribute("user", user);
               
                     DimensionSvg svg = new DimensionSvg(order.getWidth(), order.getLength());
-                    ctx.attribute("svg", svg.toString());
+                    ctx.sessionAttribute("svg", svg.toString());
 
                 ctx.render("adminStatusSite.html"); //Vis opdateret ordre
             } else {

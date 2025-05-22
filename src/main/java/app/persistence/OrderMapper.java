@@ -48,6 +48,7 @@ public class OrderMapper {
        statusPriority.put("Modtaget", 0);
        statusPriority.put("Tilbud sendt", 1);
        statusPriority.put("Betalt", 2);
+       statusPriority.put("Afvist", 3);
 
        //Sorterer dem efter rækkefølgen i hashmappet
        orders.sort(Comparator.comparing(order -> statusPriority.get(order.getOrderStatus())));
