@@ -6,6 +6,7 @@ import app.exceptions.DatabaseException;
 import app.persistence.ConnectionPool;
 import app.persistence.OrderMapper;
 import app.persistence.UserMapper;
+import app.services.DimensionSvg;
 import app.services.Parse;
 import app.services.CarportSvg;
 import io.javalin.Javalin;
@@ -21,23 +22,20 @@ import java.util.List;
 
 public class AdminController {
     public static void addRoutes(Javalin app, ConnectionPool connectionPool) {
-
-        //app.post("/sendTilbud", ctx -> OrderMapper.updateOrder(ctx, connectionPool));
-        app.post("/sendTilbud", ctx -> {
-            sendOffer(ctx, connectionPool);
-        });
-
+        app.post("/sendTilbud", ctx -> {sendOffer(ctx, connectionPool);});
         app.post("/seForesporgsel",ctx ->{editProduct(ctx,connectionPool);});
     }
 
     public static void sendOffer(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
         String message = null;
         message = validateNewPrice(ctx);
-        if(message != null) {
+
+        if(message != null) {                                   //Hvis message indeholder en error-besked vil dette blive vist
             ctx.attribute("errorMsg", message);
             ctx.render("adminStatusSite.html");
-        } else{
-            boolean success = OrderMapper.updateOrder(ctx, connectionPool);//her sendes tilbudet til kunden
+        }
+        else {                                                 //Ellers er prisen valid, og ordren opdateres nu db med status "Tilbud sendt"
+            boolean success = OrderMapper.updateOrder(ctx, connectionPool);             //her sendes tilbudet til kunden
             if (success) {
                 List<Order> orderList = OrderMapper.getAllRequests(connectionPool); //henter de opdaterede ordre fra databasen.
                 ctx.sessionAttribute("orderList", orderList); //opdaterer ordrelisten så den nye status kan ses.
@@ -48,8 +46,6 @@ public class AdminController {
             }
         }
     }
-
-
 
 
     public static void editProduct(Context ctx, ConnectionPool connectionPool) {
@@ -76,17 +72,18 @@ public class AdminController {
             //ctx.sessionAttribute("discount", discount);
             boolean updated = true;
 
-            if (updated) {
-                //Hent opdateret ordre igen for visning
-                Order updatedOrder = OrderMapper.getOrderById(orderId, connectionPool);
-                double suggestedPrice = updatedOrder.getOrderPrice()*0.9;
-                double discount = updatedOrder.getOrderPrice()*0.1;
-                ctx.sessionAttribute("suggestedPrice", suggestedPrice);
-                ctx.sessionAttribute("discount", discount);
-                ctx.sessionAttribute("order", updatedOrder);
-                ctx.sessionAttribute("user", user);
-                CarportSvg svg = new CarportSvg(order.getLength(), order.getWidth());
-                ctx.attribute("svg", svg.toString());
+                if (updated) {
+                    //Hent opdateret ordre igen for visning
+                    Order updatedOrder = OrderMapper.getOrderById(orderId, connectionPool);
+                    double suggestedPrice = updatedOrder.getOrderPrice()*0.9;
+                    double discount = updatedOrder.getOrderPrice()*0.1;
+                    ctx.sessionAttribute("suggestedPrice", suggestedPrice);
+                    ctx.sessionAttribute("discount", discount);
+                    ctx.sessionAttribute("order", updatedOrder);
+                    ctx.sessionAttribute("user", user);
+
+                    DimensionSvg svg = new DimensionSvg(order.getWidth(), order.getLength());
+                    ctx.attribute("svg", svg.toString());
 
                 ctx.render("adminStatusSite.html"); //Vis opdateret ordre
             } else {
