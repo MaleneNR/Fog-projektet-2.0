@@ -81,6 +81,10 @@ public class AdminController {
                 Order updatedOrder = OrderMapper.getOrderById(orderId, connectionPool);
                 double suggestedPrice = updatedOrder.getOrderPrice()*0.9;
                 double discount = updatedOrder.getOrderPrice()*0.1;
+                double min = updatedOrder.getOrderPrice()*0.75;
+                double max = updatedOrder.getOrderPrice()*1.10;
+                ctx.sessionAttribute("min",min);
+                ctx.sessionAttribute("max",max);
                 ctx.sessionAttribute("suggestedPrice", suggestedPrice);
                 ctx.sessionAttribute("discount", discount);
                 ctx.sessionAttribute("order", updatedOrder);
@@ -95,6 +99,7 @@ public class AdminController {
 
         } catch (DatabaseException e) {
             ctx.status(500).result("Fejl: " + e.getMessage());
+            ctx.render("error.html");
         }
     }
 
