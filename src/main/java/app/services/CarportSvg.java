@@ -59,8 +59,6 @@ public class CarportSvg {
 
     private void addShed(){
         String spaceStyle = "stroke:black;stroke-dasharray:10,5";
-        //<line x1="55" y1="40" x2="550" y2="565"
-        //              style="stroke:black;stroke-dasharray:10,5"/>
         carportSvg.addLine(55, 40, width*0.7, height-35, spaceStyle);
         carportSvg.addLine(55, height-35,width*0.7, 40, spaceStyle);
     }

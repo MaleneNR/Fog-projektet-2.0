@@ -48,8 +48,10 @@ public class AdminController {
             ctx.attribute("errorMsg", message);
             ctx.render("adminStatusSite.html");
         }
-        else {                                                 //Ellers er prisen valid, og ordren opdateres nu db med status "Tilbud sendt"
-            boolean success = OrderMapper.updateOrder(ctx, connectionPool);             //her sendes tilbudet til kunden
+        else {//Ellers er prisen valid, og ordren opdateres nu db med status "Tilbud sendt"
+            int newPrice = Integer.parseInt(ctx.formParam("newPrice")); //ala det her.
+            Order order = ctx.sessionAttribute("order");
+            boolean success = OrderMapper.updateOrder(order, newPrice, connectionPool);             //her sendes tilbudet til kunden
             if (success) {
                 List<Order> orderList = OrderMapper.getAllRequests(connectionPool); //henter de opdaterede ordre fra databasen.
                 ctx.sessionAttribute("orderList", orderList); //opdaterer ordrelisten så den nye status kan ses.
@@ -81,10 +83,7 @@ public class AdminController {
             //Brug den nuværende status fra ordren (så den ikke ændres her!)
             String currentStatus = order.getOrderStatus();
 
-            //double suggestedPrice = order.getOrderPrice()*0.9;
-            //double discount = order.getOrderPrice()*0.1;
-            //ctx.sessionAttribute("suggestedPrice", suggestedPrice);
-            //ctx.sessionAttribute("discount", discount);
+
             boolean updated = true;
 
 
@@ -123,33 +122,7 @@ public class AdminController {
 
 
 
-    private static void viewAllOrders(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
-        //denne funktions skal admin kunne se ud fra alle forespørgelser der er blevet lagt i db af kunderne
 
-        //funktionen skal tage en ctx og connection pool, så der er adgang til db og så der kan komunikeres med html ind og ud
-
-        //funktionen ska ltil sidst retunere alle ordre der er tilgængelige i db
-
-        //Funktionen henter alt inde fra db via. OrderMapper.getAllRequest()
-
-        //TODO kræver at der ligger ordre fra kunde (hardcode en odre)
-
-        //funktionen ska ltil sidst retunere alle ordre der er tilgængelige i db måske vi en ordre liste
-
-        //derfra skal der routes til statusside.html
-
-
-        // 1. Hent alle ordre fra databasen (via OrderMapper)
-        List<Order> orderList = OrderMapper.getAllRequests(connectionPool);
-
-        // 2. Læg listen af ordrer som attribut (så Thymeleaf kan bruge dem)
-        ctx.attribute("orders", orderList);
-
-        // 3. Vis admin status siden (Thymeleaf HTML skabelon)
-        ctx.render("adminIndex.html");
-
-
-    }
 
     public static String validateNewPrice(Context ctx) {
         String newPrice = ctx.formParam("newPrice");

@@ -54,7 +54,7 @@ public class OrderMapper {
 
        return orders;
 
-        //Admin skla kunne se alle forespørgelser så alle orders bliver hentet ud fra db via orderMapper
+
     }
 
     public static List<Order> getAllRequestsByUserId(int userId, ConnectionPool connectionPool) throws DatabaseException {
@@ -91,13 +91,12 @@ public class OrderMapper {
         orders.sort(Comparator.comparing(Order::getOrderId).reversed()); //Sorterer efter ordreId;
         return orders;
 
-        //Admin skla kunne se alle forespørgelser så alle orders bliver hentet ud fra db via orderMapper
     }
 
 
 
     public static List<OrderDetail> getOrderDetailsFromViewById(int orderId, ConnectionPool connectionPool) throws DatabaseException {
-        String sql = "SELECT * FROM public.orderdetails_view WHERE order_id = ?";
+        String sql = "SELECT * FROM orderdetails_view WHERE order_id = ?";
         List<OrderDetail> orderDetails = new ArrayList<>();
         try (
                 Connection connection = connectionPool.getConnection();
@@ -121,7 +120,6 @@ public class OrderMapper {
 
                 int quantity = rs.getInt("quantity");
                 String assemblyDescription = rs.getString("assembly_description");
-                int totalPrice = rs.getInt("total_price");
                 OrderDetail orderDetail = new OrderDetail(product,quantity,assemblyDescription,materialId,orderId);
 
                 orderDetails.add(orderDetail);
@@ -137,7 +135,7 @@ public class OrderMapper {
         int rowsAffected = 0;
         Boolean orderAdded = false;
 
-            String status = "Modtaget";  //TODO Skal dette hardcodes
+            String status = "Modtaget";
             LocalDate dateOfToday = LocalDate.of(LocalDate.now().getYear(), LocalDate.now().getMonth(), LocalDate.now().getDayOfMonth());
 
         String sql = "INSERT INTO orders (order_status, payed, date, user_id, carport_length, height, carport_width,shed,tiles) values (?,?,?,?,?,?,?,?,?) RETURNING order_id";
@@ -356,52 +354,21 @@ public class OrderMapper {
 
 
 
-
-        //TODO evt lave en update funktion så man kan opdaterer ordre som admin
-
-    public static boolean updateOrder(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
-        int newPrice = Integer.parseInt(ctx.formParam("newPrice")); //ala det her.
-        Order order = ctx.sessionAttribute("order");
+    public static boolean updateOrder(Order order, int newPrice, ConnectionPool connectionPool) throws DatabaseException {
         int orderId = order.getOrderId();
-        String sql = "UPDATE orders SET order_price = ?, payed = ?, order_status = ? WHERE order_id = ?";
+        String sql = "UPDATE orders SET order_price = ?, order_status = ? WHERE order_id = ?";
         try (
                 Connection connection = connectionPool.getConnection();
                 PreparedStatement ps = connection.prepareStatement(sql)
         ) {
             ps.setInt(1, newPrice);
-            ps.setBoolean(2, false);
-            ps.setString(3, "Tilbud sendt");
-            ps.setInt(4, orderId);
+            ps.setString(2, "Tilbud sendt");
+            ps.setInt(3, orderId);
             int rows = ps.executeUpdate();
             return rows > 0;
         } catch (SQLException e) {
             throw new DatabaseException("Fejl i opdatering af ordre i updateOrder()", e.getMessage());
         }
-    }
-
-
-    public static List<Order> getAllOrdersWithEmail(ConnectionPool connectionPool) throws DatabaseException {
-        List<Order> orderList = new ArrayList<>();
-
-        String sql = "SELECT orders.order_id, orders.date, users.email FROM orders orders JOIN users users ON orders.user_id = users.user_id";
-
-        try (
-                Connection conn = connectionPool.getConnection();
-                PreparedStatement ps = conn.prepareStatement(sql);
-                ResultSet rs = ps.executeQuery()
-        ) {
-            while (rs.next()) {
-                int orderId = rs.getInt("order_id");
-                String email = rs.getString("email");
-                LocalDate date = rs.getDate("date").toLocalDate();
-
-                orderList.add(new Order(orderId, email, date));
-            }
-        } catch (SQLException e) {
-            throw new DatabaseException("Kunne ikke hente ordrer med email", e.getMessage());
-        }
-
-        return orderList;
     }
 
 

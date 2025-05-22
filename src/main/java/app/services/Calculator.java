@@ -58,7 +58,7 @@ public class Calculator {
 
     public int calcPostQuantity() {
         int frontBackPosts = 2 * 2; //Standard, der er altid 4 stolper
-        int spacingForExtraPairs = 250; //250 går op, så at der regnes et sæt stolper mere med, hvis remmen brydes op i to
+        int spacingForExtraPairs = 471; //250 går op, så at der regnes et sæt stolper mere med, hvis remmen brydes op i to
         int space = this.length - 130;
 
         if (space <= 0) return frontBackPosts; //default er 4 stolper
@@ -186,8 +186,8 @@ public class Calculator {
 
         if(bestMatchingProduct != null){
         return bestMatchingProduct;}
-        else{
-            throw new RuntimeException();
+        else {
+            throw new RuntimeException("No product found with sufficient length and valid material");
         }
     }
 

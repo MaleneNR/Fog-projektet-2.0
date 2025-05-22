@@ -19,25 +19,6 @@ public class User {
         this.address = address;
     }
 
-    public User(String email, String password, int role, String name, String address, String phoneNumber) {
-        this.email = email;
-        this.password = password;
-        this.role = role;
-        this.phoneNumber = phoneNumber;
-        this.name=name;
-        this.address = address;
-    }
-
-    public User(int userId, String email, String password, int role) {
-        this.userId = userId;
-        this.email = email;
-        this.password = password;
-        this.role = role;
-    }
-
-
-
-
     public int getUserId() {
         return userId;
     }

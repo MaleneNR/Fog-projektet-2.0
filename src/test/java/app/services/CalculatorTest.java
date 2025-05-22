@@ -54,7 +54,7 @@ class CalculatorTest {
     @Test
     void calcPostQuantity_WithLengthBetweenFourAndSixPosts_returnFour() {
         // 1) Arrange
-        Calculator calculator = new Calculator(240,450, connectionPool);
+        Calculator calculator = new Calculator(240,600, connectionPool);
         int expected = 4;
 
         // 2) Act
@@ -67,7 +67,7 @@ class CalculatorTest {
     @Test
     void calcPostQuantity_WithLengthBetweenFourAndSixPosts_returnSix() {
         // 1) Arrange
-        Calculator calculator = new Calculator(240,480, connectionPool);
+        Calculator calculator = new Calculator(240,630, connectionPool);
         int expected = 6;
 
         // 2) Act
