@@ -102,7 +102,7 @@ public class AdminController {
                     ctx.sessionAttribute("user", user);
               
                     DimensionSvg svg = new DimensionSvg(order.getWidth(), order.getLength());
-                    ctx.attribute("svg", svg.toString());
+                    ctx.sessionAttribute("svg", svg.toString());
 
                 ctx.render("adminStatusSite.html"); //Vis opdateret ordre
             } else {
@@ -132,18 +132,21 @@ public class AdminController {
         if (newPrice == null || newPrice.isBlank()) {
             message = "Du skal indtaste en pris. Prøv igen";
         }
-        message = validateInput(newPrice); //tjekker at pris er med punktum, ikke indeholder bogstaver eller mellemrum
+        String inputValidation = validateInput(newPrice);
+        if (inputValidation != null) {
+            return inputValidation;
+        } //tjekker at pris er med punktum, ikke indeholder bogstaver eller mellemrum
 
         Integer updatedPrice = Parse.tryParseInt(newPrice);
         if (updatedPrice == null) {
             return "Pris skal være et gyldigt tal. Prøv igen.";
         }
         if (updatedPrice < 0) {
-            message = "Pris må ikke være negativ. Prøv igen";
+            return "Pris må ikke være negativ. Prøv igen";
         }
 
         if(validateProcentCalc(updatedPrice, orderPrice) == false){
-            message = "Du må max give et tilbud med 25% i afslag på estimeret pris og max 10% over den estimerede pris. Prøv igen";
+            return "Du må max give et tilbud med 25% i afslag på estimeret pris og max 10% over den estimerede pris. Prøv igen";
         }
         return message;
     }
@@ -151,13 +154,12 @@ public class AdminController {
 
 
     public static String validateInput(String newPrice) {
-        String message = null;
         if (newPrice.contains(" ")) {
-            message = "Pris kan ikke indeholde mellemrum. Prøv igen.";
+            return "Pris kan ikke indeholde mellemrum. Prøv igen.";
 
         }
         if (newPrice.contains(",")) {
-            message = "Pris kan ikke indeholde komma (,). Prøv igen.";
+            return "Pris kan ikke indeholde komma (,). Prøv igen.";
         }
 
         try {
@@ -166,7 +168,7 @@ public class AdminController {
             return "Pris kan ikke indeholde bogstaver eller være ugyldig. Prøv igen.";
         }
 
-        return message;
+        return null;
     }
 
     public static boolean validateProcentCalc (int updatedPrice, int orderPrice) {

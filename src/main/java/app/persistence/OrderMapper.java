@@ -48,6 +48,7 @@ public class OrderMapper {
        statusPriority.put("Modtaget", 0);
        statusPriority.put("Tilbud sendt", 1);
        statusPriority.put("Betalt", 2);
+       statusPriority.put("Afvist", 3);
 
        //Sorterer dem efter rækkefølgen i hashmappet
        orders.sort(Comparator.comparing(order -> statusPriority.get(order.getOrderStatus())));
@@ -119,8 +120,9 @@ public class OrderMapper {
 
 
                 int quantity = rs.getInt("quantity");
+                int totalPrice = rs.getInt("total_price");
                 String assemblyDescription = rs.getString("assembly_description");
-                OrderDetail orderDetail = new OrderDetail(product,quantity,assemblyDescription,materialId,orderId);
+                OrderDetail orderDetail = new OrderDetail(product,quantity,totalPrice,assemblyDescription,materialId,orderId);
 
                 orderDetails.add(orderDetail);
             }

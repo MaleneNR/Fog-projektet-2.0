@@ -42,14 +42,14 @@ public class UserController {
         if(password1.equals(password2)){
             try{
                 UserMapper.createUser(email,password1, name, phoneNumber, text, connectionPool);
-                ctx.attribute("message", "Du er hermed oprettet med brugernavn: "+ name + ". Du skal nu logge på");
+                ctx.attribute("message", "Du er hermed oprettet med email: "+ email + ". Du skal nu logge på");
                 ctx.render("login.html");}
             catch (DatabaseException e) {
-                ctx.attribute("message", "Dit brugernavn findes allerede. Prøv igen, eller log ind");
+                ctx.attribute("error", "Dit brugernavn findes allerede. Prøv igen, eller log ind");
                 ctx.render("createUser.html");
             }
         } else {
-            ctx.attribute("message", "Dine to passwords matcher ikke! Prøv igen");
+            ctx.attribute("error", "Dine to passwords matcher ikke! Prøv igen");
             ctx.render("createUser.html");
         }
     }
