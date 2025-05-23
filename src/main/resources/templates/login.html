@@ -33,7 +33,12 @@
             </div>
             <div></div>
             <input class="button" type="password" name="password" placeholder="Password" required/>
-
+            <div th:if="${message}">
+                <p th:text="${message}"></p>
+            </div>
+            <div class="error-text" th:if="${error}">
+                <p th:text="${error}"></p>
+            </div>
             <div class="button-group">
                 <button class="button" type="submit" formaction="/login">Log in</button>
             </div>

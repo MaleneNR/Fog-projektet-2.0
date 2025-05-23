@@ -70,7 +70,7 @@
 
     <div class="offer-right">
         <div class="drawing-box">
-            <div th:utext="${svg}"></div>
+            <div th:utext="${session.svg}"></div>
         </div>
         <div class="calculation-box">
             <p th:text="'Afslag: '+ ${session.discount}+ ' kr'">
