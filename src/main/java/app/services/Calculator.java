@@ -195,5 +195,20 @@ public class Calculator {
         return orderDetails;
     }
 
+    public int getOrderPrice() throws DatabaseException {
+        int orderPrice = 0;
+
+        for(OrderDetail orderDetail : orderDetails){
+
+        //Calculation of totalprice of the product (productLengthInMeter * pricePerUnit)
+        int pricePerUnit = MaterialMapper.getMaterialById(orderDetail.getMaterialId(),connectionPool).getPricePerUnit();
+        int lengthInMeter = orderDetail.getProduct().getLength()/100; //from cm i db
+        orderDetail.setTotalPrice(pricePerUnit * lengthInMeter);
+
+            orderPrice += orderDetail.getQuantity() * orderDetail.getTotalPrice();
+        }
+        return orderPrice;
+    }
+
 
 }

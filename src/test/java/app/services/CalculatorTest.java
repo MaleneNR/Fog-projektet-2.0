@@ -1,11 +1,16 @@
 package app.services;
 
+import app.entities.Order;
 import app.entities.Product;
+import app.entities.User;
+import app.exceptions.DatabaseException;
 import app.persistence.ConnectionPool;
+import app.persistence.MaterialMapper;
 import org.checkerframework.checker.units.qual.C;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -80,6 +85,17 @@ class CalculatorTest {
 
     /***** Rafters/Spær *****/
     @Test
+    void calcRaftersQuantity_OverMaxLength() {
+        Calculator calculator = new Calculator(600, 840, connectionPool);
+        int expected = 15;
+
+        int actual = calculator.calcRaftersQuantity();
+
+        assertEquals(expected, actual);
+    }
+
+
+    @Test
     void calcRaftersQuantity_WithMaxLength() {
         Calculator calculator = new Calculator(600, 780, connectionPool);
         int expected = 14;
@@ -100,6 +116,17 @@ class CalculatorTest {
     }
 
     @Test
+    void calcRaftersQuantity_UnderMinLength() {
+        Calculator calculator = new Calculator(240, 50, connectionPool);
+        //Spær tilføjes for hver 60. cm + et spær i enden
+        int expected = 1;
+
+        int actual = calculator.calcRaftersQuantity();
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
     void findBestMatchingProduct() {
         Calculator calculator = new Calculator(240, 250, connectionPool);
         List<Product> products = List.of(new Product(240), new Product(270), new Product(300));
@@ -112,4 +139,24 @@ class CalculatorTest {
 
 
     }
+
+    @Test
+    void calcOrderPrice() throws DatabaseException {
+
+        User user = new User(1, "malene@hej.dk", "1234", 1,"Malene","12345678","Lyngbyvej 123");
+        Order order = new Order(1,"Modtaget",20000,true, LocalDate.now(),user,780,270,600, true, true);
+        Calculator calculator = new Calculator(600, 780, connectionPool);
+        calculator.calcCarport(order);
+        int expectedPrice = MaterialMapper.getMaterialById(1, connectionPool).getPricePerUnit()*(order.getHeight()/100) * calculator.calcPostQuantity();
+        expectedPrice += MaterialMapper.getMaterialById(2, connectionPool).getPricePerUnit()*(order.getWidth()/100)*(calculator.calcRaftersQuantity());
+        expectedPrice += MaterialMapper.getMaterialById(2, connectionPool).getPricePerUnit()*(order.getLength()/100)*2;
+        expectedPrice += MaterialMapper.getMaterialById(3, connectionPool).getPricePerUnit()*(calculator.calcTilesQuantity());
+
+        int actual = calculator.getOrderPrice();
+
+
+        assertEquals(expectedPrice, actual);
+    }
+
+
 }

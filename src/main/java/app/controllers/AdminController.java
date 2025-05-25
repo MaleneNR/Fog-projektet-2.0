@@ -44,14 +44,13 @@ public class AdminController {
 
         String message = validateNewPrice(ctx); //Returnerer en uddybdende fejlbesked, hvis der er noget galt med prisen
         if(message != null) {
-
             ctx.attribute("errorMsg", message);
             ctx.render("adminStatusSite.html");
         }
         else {//Ellers er prisen valid, og ordren opdateres nu db med status "Tilbud sendt"
             int newPrice = Integer.parseInt(ctx.formParam("newPrice")); //ala det her.
             Order order = ctx.sessionAttribute("order");
-            boolean success = OrderMapper.updateOrder(order, newPrice, connectionPool);             //her sendes tilbudet til kunden
+            boolean success = OrderMapper.updateOrder(order, newPrice, connectionPool);  //her sendes tilbudet til kunden
             if (success) {
                 List<Order> orderList = OrderMapper.getAllRequests(connectionPool); //henter de opdaterede ordre fra databasen.
                 ctx.sessionAttribute("orderList", orderList); //opdaterer ordrelisten så den nye status kan ses.
@@ -90,10 +89,10 @@ public class AdminController {
             if (updated) {
                 //Hent opdateret ordre igen for visning
                 Order updatedOrder = OrderMapper.getOrderById(orderId, connectionPool);
-                double suggestedPrice = updatedOrder.getOrderPrice()*0.9;
-                double discount = updatedOrder.getOrderPrice()*0.1;
-                double min = updatedOrder.getOrderPrice()*0.75;
-                double max = updatedOrder.getOrderPrice()*1.10;
+                int suggestedPrice = (int)(updatedOrder.getOrderPrice()*0.9);
+                int discount = (int)(updatedOrder.getOrderPrice()*0.1);
+                int min = (int)(updatedOrder.getOrderPrice()*0.75);
+                int max = (int)(updatedOrder.getOrderPrice()*1.10);
                 ctx.sessionAttribute("min",min);
                 ctx.sessionAttribute("max",max);
                     ctx.sessionAttribute("suggestedPrice", suggestedPrice);
@@ -135,7 +134,7 @@ public class AdminController {
         String inputValidation = validateInput(newPrice);
         if (inputValidation != null) {
             return inputValidation;
-        } //tjekker at pris er med punktum, ikke indeholder bogstaver eller mellemrum
+        } //tjekker at pris ikke indeholder bogstaver, komma/punktum eller mellemrum
 
         Integer updatedPrice = Parse.tryParseInt(newPrice);
         if (updatedPrice == null) {
@@ -162,10 +161,14 @@ public class AdminController {
             return "Pris kan ikke indeholde komma (,). Prøv igen.";
         }
 
+        if (newPrice.contains(".")) {
+            return "Pris kan ikke indeholde punktum (.). Prøv igen.";
+        }
+
         try {
             Integer.parseInt(newPrice);
         } catch (NumberFormatException e) {
-            return "Pris kan ikke indeholde bogstaver eller være ugyldig. Prøv igen.";
+            return "Pris kan ikke indeholde bogstaver (eks. 'kr'). Prøv igen.";
         }
 
         return null;

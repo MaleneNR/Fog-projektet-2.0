@@ -185,8 +185,9 @@ UserController -- UserMapper
 UserController -- OrderMapper
 OrderMapper -- Calculator
 Calculator -- MaterialMapper
+OrderController -- Dimensions
 
-DimensionSvg *-- CarportSvg
+DimensionsSvg *-- CarportSvg
 CarportSvg *-- Svg
 
 
