@@ -142,19 +142,22 @@ class CalculatorTest {
 
     @Test
     void calcOrderPrice() throws DatabaseException {
-
+        //Arrange
         User user = new User(1, "malene@hej.dk", "1234", 1,"Malene","12345678","Lyngbyvej 123");
         Order order = new Order(1,"Modtaget",20000,true, LocalDate.now(),user,780,270,600, true, true);
         Calculator calculator = new Calculator(600, 780, connectionPool);
         calculator.calcCarport(order);
+
         int expectedPrice = MaterialMapper.getMaterialById(1, connectionPool).getPricePerUnit()*(order.getHeight()/100) * calculator.calcPostQuantity();
         expectedPrice += MaterialMapper.getMaterialById(2, connectionPool).getPricePerUnit()*(order.getWidth()/100)*(calculator.calcRaftersQuantity());
         expectedPrice += MaterialMapper.getMaterialById(2, connectionPool).getPricePerUnit()*(order.getLength()/100)*2;
-        expectedPrice += MaterialMapper.getMaterialById(3, connectionPool).getPricePerUnit()*(calculator.calcTilesQuantity());
+                                                        //30 pga. der er et overlap på 30 cm, hvis man skal have to rækker tagplader
+        expectedPrice += MaterialMapper.getMaterialById(3,connectionPool).getPricePerUnit()*((order.getLength()+30)/100)* calculator.calcTilesQuantity();
 
+        //Act
         int actual = calculator.getOrderPrice();
 
-
+        //Assert
         assertEquals(expectedPrice, actual);
     }
 
