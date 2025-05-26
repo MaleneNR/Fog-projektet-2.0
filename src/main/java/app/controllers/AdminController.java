@@ -48,7 +48,7 @@ public class AdminController {
             ctx.render("adminStatusSite.html");
         }
         else {//Ellers er prisen valid, og ordren opdateres nu db med status "Tilbud sendt"
-            int newPrice = Integer.parseInt(ctx.formParam("newPrice")); //ala det her.
+            int newPrice = Integer.parseInt(ctx.formParam("newPrice"));
             Order order = ctx.sessionAttribute("order");
             boolean success = OrderMapper.updateOrder(order, newPrice, connectionPool);  //her sendes tilbudet til kunden
             if (success) {

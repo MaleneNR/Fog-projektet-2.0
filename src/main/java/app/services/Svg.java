@@ -41,7 +41,6 @@ public class Svg {
     private static final String SVG_ARROW_TEMPLATE = "";
 
     private static final String SVG_TEXT_TEMPLATE = "<text style=\"%s\" transform=\"translate(%d,%d) rotate(%d)\">%s</text>";
-
     private StringBuilder svg = new StringBuilder();
 
     public Svg(int x, int y, String viewBox, String width, String height){
