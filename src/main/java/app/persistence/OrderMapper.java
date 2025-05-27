@@ -169,9 +169,14 @@ public class OrderMapper {
                         Calculator calculator = new Calculator(order.getWidth(),order.getLength(),connectionPool);
                         calculator.calcCarport(order); //Kalder alle beregningsmetoder i calculatorklassen, hvor de tilføjer til en liste af orderdetails
                         List<OrderDetail> orderDetails = calculator.getOrderDetails(); //Her får vi så listen
-                        if(addOrderDetail(orderDetails,connectionPool) == true){
+                        int orderPrice = calculator.getOrderPrice();
+
+                        //Hvis pris er opdateret og orderDetails er tilføjet i db, så er ordren fuldkommen tilføjet:)
+                        if(updatePrice(orderPrice,orderId,connectionPool)){
+                            if(addOrderDetail(orderDetails,connectionPool)){
                             orderAdded = true;
-                        }
+                        }}
+
                     }
                 }
             } else {
@@ -187,8 +192,6 @@ public class OrderMapper {
     private static boolean addOrderDetail(List<OrderDetail> orderDetails, ConnectionPool connectionPool) {
         int affectedRows = 0;
         Boolean orderDetailsAdded = false;
-        int orderPrice = 0;
-        int currentOrderId = orderDetails.get(0).getOrderId();
 
         String sql = "INSERT INTO order_details (product_id, quantity, total_price, assembly_description, material_id, order_id) values (?,?,?,?,?,?)";
 
@@ -197,11 +200,6 @@ public class OrderMapper {
                 PreparedStatement ps = connection.prepareStatement(sql);
         ) {
             for (OrderDetail orderDetail : orderDetails) {
-
-                //Calculation of totalprice (productLengthInMeter * pricePerUnit)
-                int pricePerUnit = MaterialMapper.getMaterialById(orderDetail.getMaterialId(),connectionPool).getPricePerUnit();
-                int lengthInMeter = orderDetail.getProduct().getLength()/100; //from cm i db
-                orderDetail.setTotalPrice(pricePerUnit * lengthInMeter);
 
                 //Update order_details with every detail from the list
                 ps.setInt(1, orderDetail.getProduct().getProductId());
@@ -212,15 +210,12 @@ public class OrderMapper {
                 ps.setInt(6, orderDetail.getOrderId());
                 affectedRows += ps.executeUpdate();
 
-                //Calculation of orderPrice (total_price * quantity)
-                orderPrice += orderDetail.getQuantity() * orderDetail.getTotalPrice();
             }
             if (affectedRows == orderDetails.size()){
                 orderDetailsAdded = true;
-                updatePrice(orderPrice,currentOrderId,connectionPool);
             }
 
-        } catch (SQLException | DatabaseException e) {
+        } catch (SQLException e) {
             throw new RuntimeException(e);
         }
         return orderDetailsAdded;

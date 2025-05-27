@@ -30,7 +30,7 @@ public class CarportSvg {
     private void addRafters(){
         int calculatedRafters = calculator.calcRaftersQuantity();
 
-        for(int i = 0; i<=this.width; i += width/calculatedRafters){
+        for(int i = 0; i<=this.width; i += (width/calculatedRafters)){
         carportSvg.addRectangle(i,0,this.height,5,rectStyle);}
 
     }
